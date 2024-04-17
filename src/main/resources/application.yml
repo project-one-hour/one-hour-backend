@@ -1,1 +1,3 @@
-spring.application.name=one_hour_api_server
+spring:
+  application:
+    name: one_hour_api_server
