@@ -1,3 +1,5 @@
 spring:
   application:
     name: one_hour_api_server
+  profiles:
+    active: local
