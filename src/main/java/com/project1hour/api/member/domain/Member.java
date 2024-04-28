@@ -26,19 +26,21 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(nullable = false, unique = true, length = 10)
+    @Column(unique = true, length = 10)
     private String nickname;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(length = 10)
     private Gender gender;
 
-    @Column(nullable = false)
     private LocalDate birthday;
 
     @Enumerated(EnumType.STRING)
-    @Column(nullable = false, length = 10)
+    @Column(length = 10)
     private Mbti mbti;
+
+    @Enumerated(EnumType.STRING)
+    private SignUpStatus signUpStatus;
 
     @Embedded
     private CommonField commonField = new CommonField();
