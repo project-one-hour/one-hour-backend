@@ -1,4 +1,4 @@
-package com.project1hour.api.global;
+package com.project1hour.api.global.config;
 
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.jpa.repository.config.EnableJpaAuditing;
