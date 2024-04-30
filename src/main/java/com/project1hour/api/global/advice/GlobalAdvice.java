@@ -1,7 +1,7 @@
 package com.project1hour.api.global.advice;
 
 
-import static com.project1hour.api.global.advice.GlobalErrorCode.METHOD_ARGUMENT_NOT_VALID;
+import static com.project1hour.api.global.advice.ErrorCode.METHOD_ARGUMENT_NOT_VALID;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -30,6 +30,12 @@ public class GlobalAdvice {
         log.error("ERROR CODE {} : {}", e.getErrorCode(), e.getMessage(), e);
 
         return ResponseEntity.status(e.getStatusCode())
+                .body(ErrorResponse.of(e.getMessage(), e.getErrorCode()));
+    }
+
+    @ExceptionHandler(InfraStructureException.class)
+    public ResponseEntity<ErrorResponse> handleInfraStructureException(InfraStructureException e) {
+        return ResponseEntity.internalServerError()
                 .body(ErrorResponse.of(e.getMessage(), e.getErrorCode()));
     }
 }

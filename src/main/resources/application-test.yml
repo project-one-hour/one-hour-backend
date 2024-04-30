@@ -18,3 +18,11 @@ logging:
     org:
       hibernate:
         SQL: debug
+
+oauth2:
+  kakao:
+    url:
+      profile: https://kapi.kakao.com/v2/user/me
+  apple:
+    url:
+      profile:
