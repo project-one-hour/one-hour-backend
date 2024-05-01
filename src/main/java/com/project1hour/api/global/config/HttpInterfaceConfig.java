@@ -21,7 +21,7 @@ public class HttpInterfaceConfig {
     }
 
     @Bean
-    public KakaoApiFetcher kakaoRestApiClient() {
+    public KakaoApiFetcher KakaoApiFetcher() {
         return createApiClient(KakaoApiFetcher.class, restTemplate());
     }
 
