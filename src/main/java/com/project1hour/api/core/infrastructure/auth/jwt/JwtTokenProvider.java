@@ -2,6 +2,7 @@ package com.project1hour.api.core.infrastructure.auth.jwt;
 
 import com.project1hour.api.core.domain.auth.Authority;
 import com.project1hour.api.core.domain.auth.TokenProvider;
+import com.project1hour.api.core.exception.auth.ExpiredTokenException;
 import com.project1hour.api.core.exception.auth.InvalidTokenSignatureException;
 import com.project1hour.api.core.exception.auth.MalformedTokenException;
 import com.project1hour.api.core.exception.auth.UnsupportedTokenException;
@@ -70,7 +71,7 @@ public class JwtTokenProvider implements TokenProvider {
             throw new UnsupportedTokenException();
         } catch (ExpiredJwtException e) {
             log.info("Expired JWT token");
-            throw new MalformedTokenException();
+            throw new ExpiredTokenException();
         } catch (MalformedJwtException e) {
             log.info("Malformed JWT token");
             throw new MalformedTokenException();
