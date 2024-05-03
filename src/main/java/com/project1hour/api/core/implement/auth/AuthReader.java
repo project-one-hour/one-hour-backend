@@ -19,5 +19,4 @@ public class AuthReader {
 
         return optionalAuthProvider.map(authProvider -> authProvider.getMember().getId());
     }
-
 }
