@@ -46,4 +46,8 @@ public class AuthProvider {
         this.providerId = providerId;
         this.member = member;
     }
+
+    public void updateEmail(final String email) {
+        this.email = email;
+    }
 }

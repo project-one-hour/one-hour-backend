@@ -1,5 +1,6 @@
 package com.project1hour.api.core.application.auth;
 
+import com.project1hour.api.core.implement.auth.AuthProcessor;
 import com.project1hour.api.core.implement.auth.AuthReader;
 import com.project1hour.api.core.implement.auth.SocialProfileReader;
 import com.project1hour.api.core.implement.auth.TokenProcessor;
@@ -18,12 +19,14 @@ public class AuthService {
     private final MemberProcessor memberProcessor;
     private final TokenProcessor tokenProcessor;
     private final SocialProfileReader socialInfoReader;
+    private final AuthProcessor authProcessor;
 
     public TokenResponse createToken(final String provider, final String token) {
         SocialInfo socialInfo = socialInfoReader.read(provider, token);
 
-        Optional<Long> optionalMemberId = authReader.findExistsMemberId(socialInfo.getProviderId());
+        Optional<Long> optionalMemberId = authReader.readExistsMemberId(socialInfo);
         if (optionalMemberId.isPresent()) {
+            authProcessor.updateAuthProfile(socialInfo);
             return tokenProcessor.createMemberToken(optionalMemberId.get(), false);
         }
         Long newMemberId = memberProcessor.createJustAuthenticatedMember(socialInfo);

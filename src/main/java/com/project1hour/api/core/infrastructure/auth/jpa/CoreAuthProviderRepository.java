@@ -18,12 +18,12 @@ public class CoreAuthProviderRepository implements AuthProviderRepository {
     }
 
     @Override
-    public boolean existsByProviderId(final String providerId) {
-        return jpaAuthProviderRepository.existsByProviderId(providerId);
+    public Optional<AuthProvider> findByProviderId(final String providerId) {
+        return jpaAuthProviderRepository.findByProviderId(providerId);
     }
 
     @Override
-    public Optional<AuthProvider> findByProviderId(final String providerId) {
-        return jpaAuthProviderRepository.findByProviderId(providerId);
+    public Optional<AuthProvider> findByEmail(final String email) {
+        return jpaAuthProviderRepository.findByEmail(email);
     }
 }

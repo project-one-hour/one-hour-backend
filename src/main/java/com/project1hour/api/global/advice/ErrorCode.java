@@ -6,9 +6,6 @@ public enum ErrorCode {
     OAUTH_PROVIDER_NOT_FOUND("A000", "입력받은 inputProvider에 해당하는 Provider가 존재하지 않는 경우"),
     AUTH_PROVIDER_NOT_FOUND("A001", "찾고자 하는 AuthProvider를 찾을 수 없는 경우"),
 
-    // Member 관련
-    MEMBER_NOT_FOUND("M000", "회원을 찾을 수 없는 경우"),
-
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우"),
     INVALID_TOKEN_SIGNATURE("I001", "JWT 토큰 시그니처가 잘못된 경우"),

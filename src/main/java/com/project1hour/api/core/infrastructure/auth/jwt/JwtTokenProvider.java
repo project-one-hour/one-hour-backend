@@ -2,7 +2,6 @@ package com.project1hour.api.core.infrastructure.auth.jwt;
 
 import com.project1hour.api.core.domain.auth.Authority;
 import com.project1hour.api.core.domain.auth.TokenProvider;
-import com.project1hour.api.core.exception.auth.ExpiredTokenException;
 import com.project1hour.api.core.exception.auth.InvalidTokenSignatureException;
 import com.project1hour.api.core.exception.auth.MalformedTokenException;
 import com.project1hour.api.core.exception.auth.UnsupportedTokenException;
@@ -52,6 +51,32 @@ public class JwtTokenProvider implements TokenProvider {
                 .compact();
     }
 
+    // TODO 파싱 정보 변경하기
+    @Override
+    public Long extractAuthInfo(final String token) {
+        try {
+            Jws<Claims> claimsJws = Jwts.parser()
+                    .verifyWith(signingKey)
+                    .build()
+                    .parseSignedClaims(token);
+
+            return (Long) claimsJws.getPayload()
+                    .get(AUTHORIZATION_ID);
+        } catch (SignatureException e) {
+            log.info("Invalid JWT signature");
+            throw new InvalidTokenSignatureException();
+        } catch (UnsupportedJwtException e) {
+            log.info("Unsupported JWT token");
+            throw new UnsupportedTokenException();
+        } catch (ExpiredJwtException e) {
+            log.info("Expired JWT token");
+            throw new MalformedTokenException();
+        } catch (MalformedJwtException e) {
+            log.info("Malformed JWT token");
+            throw new MalformedTokenException();
+        }
+    }
+
     private Date issuedNow() {
         LocalDateTime now = LocalDateTime.now();
 
@@ -65,42 +90,5 @@ public class JwtTokenProvider implements TokenProvider {
         return Date.from(now.atZone(ZoneId.systemDefault())
                 .plus(validityInMilliseconds, ChronoUnit.MILLIS)
                 .toInstant());
-    }
-
-    // TODO validate, paring 로직 간소화
-    public Long getParsedAuthInfo(final String token) {
-        try {
-            Jws<Claims> claimsJws = Jwts.parser()
-                    .verifyWith(signingKey)
-                    .build()
-                    .parseSignedClaims(token);
-
-            return (Long) claimsJws.getPayload()
-                    .get(AUTHORIZATION_ID);
-        } catch (ExpiredJwtException e) {
-            return (Long) e.getClaims()
-                    .get(AUTHORIZATION_ID);
-        }
-    }
-
-    public void validateToken(final String token) {
-        try {
-            Jwts.parser()
-                    .verifyWith(signingKey)
-                    .build()
-                    .parseSignedClaims(token);
-        } catch (SignatureException e) {
-            log.info("Invalid JWT signature");
-            throw new InvalidTokenSignatureException();
-        } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token");
-            throw new UnsupportedTokenException();
-        } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token");
-            throw new ExpiredTokenException();
-        } catch (MalformedJwtException e) {
-            log.info("Malformed JWT token");
-            throw new MalformedTokenException();
-        }
     }
 }

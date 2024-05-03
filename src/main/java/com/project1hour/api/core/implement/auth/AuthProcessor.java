@@ -3,6 +3,7 @@ package com.project1hour.api.core.implement.auth;
 import com.project1hour.api.core.domain.auth.AuthProvider;
 import com.project1hour.api.core.domain.auth.AuthProviderRepository;
 import com.project1hour.api.core.domain.member.Member;
+import com.project1hour.api.core.exception.auth.AuthProviderNotFoundException;
 import com.project1hour.api.core.implement.auth.dto.SocialInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -24,5 +25,13 @@ public class AuthProcessor {
                 .build();
 
         authProviderRepository.save(authProvider);
+    }
+
+    @Transactional
+    public void updateAuthProfile(final SocialInfo socialInfo) {
+        AuthProvider authProvider = authProviderRepository.findByProviderId(socialInfo.getProviderId())
+                .orElseThrow(AuthProviderNotFoundException::new);
+
+        authProvider.updateEmail(socialInfo.getEmail());
     }
 }

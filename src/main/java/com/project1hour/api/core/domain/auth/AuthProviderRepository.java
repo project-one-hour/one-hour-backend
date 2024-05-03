@@ -6,7 +6,7 @@ public interface AuthProviderRepository {
 
     AuthProvider save(AuthProvider authProvider);
 
-    boolean existsByProviderId(String providerId);
-
     Optional<AuthProvider> findByProviderId(String providerId);
+
+    Optional<AuthProvider> findByEmail(String email);
 }

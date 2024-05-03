@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaAuthProviderRepository extends JpaRepository<AuthProvider, Long> {
 
-    boolean existsByProviderId(String providerId);
-
     Optional<AuthProvider> findByProviderId(String providerId);
+
+    Optional<AuthProvider> findByEmail(String email);
 }
