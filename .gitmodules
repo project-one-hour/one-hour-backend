@@ -1,4 +1,4 @@
-[submodule "submodule"]
-	path = submodule
-	url = https://github.com/project-1hour/submodule.git
+[submodule "submodule-backend"]
+	path = submodule-backend
+	url = https://github.com/project-one-hour/submodule-backend.git
 	branch = main

@@ -5,6 +5,7 @@ spring:
     password:
 
   jpa:
+    open-in-view: false
     hibernate:
       ddl-auto: create
       naming:
@@ -18,3 +19,17 @@ logging:
     org:
       hibernate:
         SQL: debug
+
+oauth2:
+  kakao:
+    url:
+      profile: https://kapi.kakao.com/v2/user/me
+  apple:
+    url:
+      profile:
+
+jwt:
+  token:
+    secret-key: dWJFREY0UW1IWXNCWWRpZU4yRzJxNkRTOUltM09Dd1RCM1B4b0hBcFpCUWlqRXNMVHN6aEg2dmNtT2YvbE9PaQptcjVkdWRnSUNwakRpWkNTY2dNeld3PT0K
+    expire-length:
+      access: 604800000
