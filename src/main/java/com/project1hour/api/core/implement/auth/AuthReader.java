@@ -14,10 +14,10 @@ public class AuthReader {
     private final AuthProviderRepository authProviderRepository;
 
     @Transactional
-    public Optional<Long> findExistsMemberId(final String providerId) {
+    public Optional<Long> readExistsMemberId(final String providerId) {
         Optional<AuthProvider> optionalAuthProvider = authProviderRepository.findByProviderId(providerId);
 
-        return optionalAuthProvider.map(AuthProvider::getId);
+        return optionalAuthProvider.map(authProvider -> authProvider.getMember().getId());
     }
 
 }
