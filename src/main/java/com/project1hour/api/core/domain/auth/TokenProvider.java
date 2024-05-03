@@ -4,5 +4,7 @@ public interface TokenProvider {
 
     String generateAccessToken(String subject, Authority authority);
 
-    Long extractAuthInfo(String token);
+    String extractSubject(String token);
+
+    Authority extractAuthority(String token);
 }

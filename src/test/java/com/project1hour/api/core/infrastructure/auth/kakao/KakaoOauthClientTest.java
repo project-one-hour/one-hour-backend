@@ -29,7 +29,6 @@ import org.springframework.web.client.RestTemplate;
 
 @SpringBootTest
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
-@SuppressWarnings("NonAsciiCharacters")
 class KakaoOauthClientTest {
 
     private MockRestServiceServer mockRestServiceServer;

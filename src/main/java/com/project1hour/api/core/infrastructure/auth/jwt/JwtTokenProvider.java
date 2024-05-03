@@ -8,7 +8,6 @@ import com.project1hour.api.core.exception.auth.MalformedTokenException;
 import com.project1hour.api.core.exception.auth.UnsupportedTokenException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.Jws;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.MalformedJwtException;
 import io.jsonwebtoken.UnsupportedJwtException;
@@ -28,7 +27,6 @@ import org.springframework.stereotype.Component;
 @Component
 public class JwtTokenProvider implements TokenProvider {
 
-    private static final String AUTHORIZATION_ID = "id";
     private static final String AUTHORITY = "Authority";
 
     private final SecretKey signingKey;
@@ -52,17 +50,24 @@ public class JwtTokenProvider implements TokenProvider {
                 .compact();
     }
 
-    // TODO 파싱 정보 변경하기
     @Override
-    public Long extractAuthInfo(final String token) {
+    public String extractSubject(final String token) {
+        return extractBody(token).getSubject();
+    }
+
+    @Override
+    public Authority extractAuthority(final String token) {
+        String authorityValue = extractBody(token).get(AUTHORITY, String.class);
+        return Authority.valueOf(authorityValue);
+    }
+
+    private Claims extractBody(final String token) {
         try {
-            Jws<Claims> claimsJws = Jwts.parser()
+            return Jwts.parser()
                     .verifyWith(signingKey)
                     .build()
-                    .parseSignedClaims(token);
-
-            return (Long) claimsJws.getPayload()
-                    .get(AUTHORIZATION_ID);
+                    .parseSignedClaims(token)
+                    .getPayload();
         } catch (SignatureException e) {
             log.info("Invalid JWT signature");
             throw new InvalidTokenSignatureException();
