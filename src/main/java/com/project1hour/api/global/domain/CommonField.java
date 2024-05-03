@@ -25,7 +25,7 @@ public class CommonField {
     private LocalDateTime updatedAt;
 
     @LastModifiedBy
-    private Long updatedBt;
+    private Long updatedBy;
 
     @Column(updatable = false)
     private LocalDateTime deletedAt;

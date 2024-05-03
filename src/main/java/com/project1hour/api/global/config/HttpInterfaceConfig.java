@@ -1,6 +1,6 @@
 package com.project1hour.api.global.config;
 
-import com.project1hour.api.auth.infrastructure.kakao.KakaoApiFetcher;
+import com.project1hour.api.core.infrastructure.auth.kakao.KakaoApiFetcher;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
