@@ -26,7 +26,6 @@ public class AuthService {
 
         Optional<Long> optionalMemberId = authReader.readExistsMemberId(socialInfo);
         if (optionalMemberId.isPresent()) {
-            System.out.println(optionalMemberId.get());
             authProcessor.updateAuthProfile(socialInfo);
             return tokenProcessor.createMemberToken(optionalMemberId.get(), false);
         }

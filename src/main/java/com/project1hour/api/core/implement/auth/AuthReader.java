@@ -17,7 +17,6 @@ public class AuthReader {
     public Optional<Long> readExistsMemberId(final SocialInfo socialInfo) {
         Optional<AuthProvider> existsAuthProvider = authProviderRepository.findByProviderId(
                 socialInfo.getProviderId());
-
         if (existsAuthProvider.isEmpty()) {
             existsAuthProvider = authProviderRepository.findByEmail(socialInfo.getEmail());
         }
