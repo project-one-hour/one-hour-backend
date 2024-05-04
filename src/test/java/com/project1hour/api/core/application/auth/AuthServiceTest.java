@@ -50,6 +50,7 @@ class AuthServiceTest {
 
             @Test
             void 예외를_발생시킨다() {
+                // expect
                 assertThatThrownBy(() -> authService.createToken("invalidProvider", "token"))
                         .isInstanceOf(OauthProviderNotFound.class)
                         .hasMessage("지원하는 소셜 로그인이 없습니다.");

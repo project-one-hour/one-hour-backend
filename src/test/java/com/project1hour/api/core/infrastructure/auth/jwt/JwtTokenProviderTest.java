@@ -32,6 +32,39 @@ class JwtTokenProviderTest {
     }
 
     @Test
+    void 토큰에서_subject를_추출할_수_있다() {
+        // given
+        String validToken = Jwts.builder()
+                .subject("1")
+                .expiration(new Date(new Date().getTime() + 360000))
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
+                .compact();
+
+        // when
+        String subject = jwtTokenProvider.extractSubject(validToken);
+
+        // then
+        assertThat(subject).isEqualTo("1");
+    }
+
+    @Test
+    void 토큰에서_Authority를_추출할_수_있다() {
+        // given
+        String validToken = Jwts.builder()
+                .subject("1")
+                .expiration(new Date(new Date().getTime() + 360000))
+                .signWith(Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8)))
+                .claim("Authority", Authority.MEMBER)
+                .compact();
+
+        // when
+        Authority authority = jwtTokenProvider.extractAuthority(validToken);
+
+        // then
+        assertThat(authority).isEqualTo(Authority.MEMBER);
+    }
+
+    @Test
     void 만료된_토큰이라면_예외가_발생합니다() {
         // given
         String expiredToken = Jwts.builder()

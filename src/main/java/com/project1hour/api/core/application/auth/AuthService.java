@@ -16,10 +16,10 @@ import org.springframework.stereotype.Service;
 public class AuthService {
 
     private final AuthReader authReader;
+    private final AuthProcessor authProcessor;
     private final MemberProcessor memberProcessor;
     private final TokenProcessor tokenProcessor;
     private final SocialProfileReader socialInfoReader;
-    private final AuthProcessor authProcessor;
 
     public TokenResponse createToken(final String provider, final String token) {
         SocialInfo socialInfo = socialInfoReader.read(provider, token);
