@@ -14,7 +14,13 @@ jib {
         image = 'openjdk:21-jdk'
     }
     to {
-        image = 'asia-northeast3-docker.pkg.dev/one-hour-project-422510/one-hour-cloud-run-deploy-server/one-hour-server:latest'
+        String region = System.getenv("REGION")
+        String projectId = System.getenv("PROJECT_ID")
+        String artifactRegistry = System.getenv("ARTIFACT_REGISTRY")
+        String service = System.getenv("SERVICE")
+
+        image = String.format("%s-docker.pkg.dev/%s/%s/%s:latest", region, projectId, artifactRegistry, service)
+
         auth {
             username = '_json_key'
             password = System.getenv("GOOGLE_AR_CLIENT_SECRET") ?: ''
