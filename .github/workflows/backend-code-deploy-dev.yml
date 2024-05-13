@@ -51,9 +51,6 @@ on:
   push:
     branches: [ "develop" ]
 
-defaults:
-  run:
-    working-directory: 'github-action-jib-to-google-cloud-run'
 env:
   PROJECT_ID: one-hour-project-422510 # Google Cloud project id
   SERVICE: one-hour-dev # Cloud Run service name
