@@ -14,23 +14,27 @@ jib {
         image = 'openjdk:21-jdk'
     }
     to {
-        String region = System.getenv("REGION")
-        String projectId = System.getenv("PROJECT_ID")
-        String artifactRegistry = System.getenv("ARTIFACT_REGISTRY")
-        String service = System.getenv("SERVICE")
+        String region = System.getenv('REGION')
+        String projectId = System.getenv('PROJECT_ID')
+        String artifactRegistry = System.getenv('ARTIFACT_REGISTRY')
+        String service = System.getenv('SERVICE')
 
-        image = String.format("%s-docker.pkg.dev/%s/%s/%s:latest", region, projectId, artifactRegistry, service)
+        image = String.format('%s-docker.pkg.dev/%s/%s/%s:latest', region, projectId, artifactRegistry, service)
 
         auth {
             username = '_json_key'
-            password = System.getenv("GOOGLE_AR_CLIENT_SECRET") ?: ''
+            password = System.getenv('GOOGLE_AR_CLIENT_SECRET') ?: ''
         }
     }
     container {
-        environment = [
-                "SPRING_PROFILE_ACTIVE": System.getenv("SPRING_PROFILES_ACTIVE")
+
+        def profilesActive = System.getenv('SPRING_PROFILES_ACTIVE')
+
+        jvmFlags = [
+                String.format('-Dspring.profiles.active=%s', profilesActive),
+                '-Xms512m',
+                '-Xmx512m'
         ]
-        jvmFlags = ['-Xms512m', '-Xmx512m']
     }
 }
 
