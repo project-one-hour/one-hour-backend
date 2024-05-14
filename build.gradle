@@ -3,11 +3,40 @@ plugins {
     id 'org.springframework.boot' version '3.2.4'
     id 'io.spring.dependency-management' version '1.1.4'
     id "org.asciidoctor.jvm.convert" version "3.3.2"
-
+    id "com.google.cloud.tools.jib" version "3.4.2"
 }
 
 group = 'com.project-1hour'
 version = '0.0.1-SNAPSHOT'
+
+jib {
+    from {
+        image = 'openjdk:21-jdk'
+    }
+    to {
+        String region = System.getenv('REGION')
+        String projectId = System.getenv('PROJECT_ID')
+        String artifactRegistry = System.getenv('ARTIFACT_REGISTRY')
+        String service = System.getenv('SERVICE')
+
+        image = String.format('%s-docker.pkg.dev/%s/%s/%s:latest', region, projectId, artifactRegistry, service)
+
+        auth {
+            username = '_json_key'
+            password = System.getenv('GOOGLE_AR_CLIENT_SECRET') ?: ''
+        }
+    }
+    container {
+
+        def profilesActive = System.getenv('SPRING_PROFILES_ACTIVE')
+
+        jvmFlags = [
+                String.format('-Dspring.profiles.active=%s', profilesActive),
+                '-Xms512m',
+                '-Xmx512m'
+        ]
+    }
+}
 
 java {
     sourceCompatibility = '21'
