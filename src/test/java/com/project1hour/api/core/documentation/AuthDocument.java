@@ -6,6 +6,8 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.payload.PayloadDocumentation.requestFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
+import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.restdocs.request.RequestDocumentation.pathParameters;
 
 import com.project1hour.api.core.implement.auth.dto.TokenResponse;
 import com.project1hour.api.core.presentation.auth.dto.OauthAccessTokenRequest;
@@ -22,18 +24,21 @@ public class AuthDocument extends DocumentationTest {
 
         @Test
         void 로그인에_성공하면_회원_토큰을_반환한다() {
-            OauthAccessTokenRequest tokenRequest = new OauthAccessTokenRequest("KAKAO", "oauth-accessToken-or-idToken");
+            OauthAccessTokenRequest tokenRequest = new OauthAccessTokenRequest("oauth-accessToken-or-idToken");
             TokenResponse tokenResponse = new TokenResponse("jwt.token.response", true);
             given(authService.createToken(any(), any())).willReturn(tokenResponse);
 
             docsGiven.contentType(MediaType.APPLICATION_JSON_VALUE)
+                    .pathParam("provider", "kakao")
                     .body(tokenRequest)
-                    .when().post("/api/oauth/login")
+                    .when().post("/api/auth/{provider}")
                     .then().log().all()
                     .apply(document("member/oauth-login/success",
+
+                            pathParameters(
+                                    parameterWithName("provider").description("kakao, apple과 같은 social provider")
+                            ),
                             requestFields(
-                                    fieldWithPath("provider").type(JsonFieldType.STRING)
-                                            .description("Social Login Provider"),
                                     fieldWithPath("token").type(JsonFieldType.STRING)
                                             .description("Social Provider AccessToken (or IdToken)")),
                             responseFields(

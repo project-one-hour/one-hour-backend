@@ -6,6 +6,7 @@ import com.project1hour.api.core.presentation.auth.dto.OauthAccessTokenRequest;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -18,9 +19,10 @@ public class AuthController {
 
     private final AuthService authService;
 
-    @PostMapping("/oauth/login")
-    public ResponseEntity<TokenResponse> login(@Valid @RequestBody final OauthAccessTokenRequest request) {
-        TokenResponse response = authService.createToken(request.provider(), request.token());
+    @PostMapping("/auth/{provider}")
+    public ResponseEntity<TokenResponse> login(@PathVariable final String provider,
+                                               @Valid @RequestBody final OauthAccessTokenRequest request) {
+        TokenResponse response = authService.createToken(provider, request.token());
 
         return ResponseEntity.ok(response);
     }

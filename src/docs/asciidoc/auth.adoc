@@ -5,4 +5,4 @@
 
 === 로그인
 
-operation::member/oauth-login/success[snippets='http-request,http-response,request-fields,response-fields']
+operation::member/oauth-login/success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
