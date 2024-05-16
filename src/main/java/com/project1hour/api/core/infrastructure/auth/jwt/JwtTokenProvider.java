@@ -1,7 +1,7 @@
 package com.project1hour.api.core.infrastructure.auth.jwt;
 
-import com.project1hour.api.core.domain.auth.Authority;
 import com.project1hour.api.core.domain.auth.TokenProvider;
+import com.project1hour.api.core.domain.member.Authority;
 import com.project1hour.api.core.exception.auth.ExpiredTokenException;
 import com.project1hour.api.core.exception.auth.InvalidTokenSignatureException;
 import com.project1hour.api.core.exception.auth.MalformedTokenException;

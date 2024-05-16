@@ -1,7 +1,7 @@
 package com.project1hour.api.core.implement.auth;
 
-import com.project1hour.api.core.domain.auth.Authority;
 import com.project1hour.api.core.domain.auth.TokenProvider;
+import com.project1hour.api.core.domain.member.Authority;
 import com.project1hour.api.core.implement.auth.dto.TokenResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;

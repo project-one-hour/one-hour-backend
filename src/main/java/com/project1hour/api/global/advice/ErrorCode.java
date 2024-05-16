@@ -5,6 +5,8 @@ public enum ErrorCode {
     // Auth 관련
     OAUTH_PROVIDER_NOT_FOUND("A000", "요청으로 넘겨준 provider에 해당하는 Social Provider가 일치하지 않는 경우"),
     AUTH_PROVIDER_NOT_FOUND("A001", "기존 가입자의 소셜로그인 정보를 찾을 수 없는 경우"),
+    AUTH_TOKEN_NOT_FOUND("A002", "요청 헤더에 JWT 토큰이 없는 경우 (Bearer xxx)"),
+    UNAUTHORIZED_PATH("A003", "해당 API에 접근할 수 있는 권한이 없는 사용자의 경우"),
 
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우"),
