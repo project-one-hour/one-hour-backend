@@ -8,6 +8,8 @@ public enum ErrorCode {
     AUTH_TOKEN_NOT_FOUND("A002", "요청 헤더에 JWT 토큰이 없는 경우 (Bearer xxx)"),
     UNAUTHORIZED_PATH("A003", "해당 API에 접근할 수 있는 권한이 없는 사용자의 경우"),
 
+    MEMBER_NOT_FOUND("M001", "사용자 조회 시, 입력 받은 id의 사용자가 존재하지 않는 경우"),
+
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우"),
     INVALID_TOKEN_SIGNATURE("I001", "JWT 토큰 시그니처가 잘못된 경우"),

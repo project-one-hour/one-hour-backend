@@ -7,6 +7,6 @@ import com.project1hour.api.global.advice.InfraStructureException;
 public class ExpiredTokenException extends InfraStructureException {
 
     public ExpiredTokenException() {
-        super("만료된 토큰입니다.", EXPIRED_TOKEN.getErrorCode());
+        super("만료된 토큰입니다.", EXPIRED_TOKEN);
     }
 }

@@ -20,8 +20,7 @@ public class RestTemplateErrorHandler implements ResponseErrorHandler {
 
     @Override
     public void handleError(final ClientHttpResponse response) throws IOException {
-        throw new InfraStructureException("해당 사용자의 프로필을 요청할 수 없습니다.",
-                CAN_NOT_EXCHANGE_OAUTH_PROFILE.getErrorCode());
+        throw new InfraStructureException("해당 사용자의 프로필을 요청할 수 없습니다.", CAN_NOT_EXCHANGE_OAUTH_PROFILE);
     }
 
     @Override

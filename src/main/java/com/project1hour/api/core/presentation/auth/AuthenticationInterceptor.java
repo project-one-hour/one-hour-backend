@@ -27,9 +27,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
             throws Exception {
 
         String token = JwtTokenExtractor.extractToken(request)
-                .orElseThrow(
-                        () -> new UnauthorizedException("헤더에 토큰 값이 존재하지 않습니다.", AUTH_TOKEN_NOT_FOUND.getErrorCode())
-                );
+                .orElseThrow(() -> new UnauthorizedException("헤더에 토큰 값이 존재하지 않습니다.", AUTH_TOKEN_NOT_FOUND));
 
         String subject = tokenProvider.extractSubject(token);
         authenticatoinContext.setPrincipal(subject);
@@ -46,7 +44,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private void authorize(final Authority authority) {
         if (!authority.isMember()) {
-            throw new UnauthorizedException("회원만 요청할 수 있는 경로(API) 입니다.", UNAUTHORIZED_PATH.getErrorCode());
+            throw new UnauthorizedException("회원만 요청할 수 있는 경로(API) 입니다.", UNAUTHORIZED_PATH);
         }
     }
 
