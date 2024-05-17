@@ -44,6 +44,12 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private SignUpStatus signUpStatus;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+    @Enumerated(EnumType.STRING)
+    private MarketingInfoStatus marketingInfoStatus;
+
     @Embedded
     private CommonField commonField = new CommonField();
 

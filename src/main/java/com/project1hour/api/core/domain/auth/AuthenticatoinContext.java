@@ -9,11 +9,11 @@ public class AuthenticatoinContext {
 
     private String principal;
 
-    public String getPrincipal() {
-        return principal;
-    }
-
     public void setPrincipal(final String principal) {
         this.principal = principal;
+    }
+
+    public String getPrincipal() {
+        return principal;
     }
 }

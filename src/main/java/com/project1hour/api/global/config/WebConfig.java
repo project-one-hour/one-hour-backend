@@ -1,5 +1,6 @@
 package com.project1hour.api.global.config;
 
+import com.project1hour.api.core.presentation.auth.AuthenticationArgumentResolver;
 import com.project1hour.api.core.presentation.auth.AuthenticationInterceptor;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -13,6 +14,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 public class WebConfig implements WebMvcConfigurer {
 
     private final AuthenticationInterceptor authenticationInterceptor;
+    private final AuthenticationArgumentResolver authenticationArgumentResolver;
 
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
@@ -22,6 +24,6 @@ public class WebConfig implements WebMvcConfigurer {
 
     @Override
     public void addArgumentResolvers(final List<HandlerMethodArgumentResolver> resolvers) {
-        WebMvcConfigurer.super.addArgumentResolvers(resolvers);
+        resolvers.add(authenticationArgumentResolver);
     }
 }
