@@ -42,13 +42,13 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
         return true;
     }
 
+    private boolean isNotMemberOnlyPath(final HandlerMethod handlerMethod) {
+        return !handlerMethod.hasMethodAnnotation(MemberOnly.class);
+    }
+
     private void authorize(final Authority authority) {
         if (!authority.isMember()) {
             throw new UnauthorizedException("회원만 요청할 수 있는 경로(API) 입니다.", UNAUTHORIZED_PATH);
         }
-    }
-
-    private boolean isNotMemberOnlyPath(final HandlerMethod handlerMethod) {
-        return !handlerMethod.hasMethodAnnotation(MemberOnly.class);
     }
 }

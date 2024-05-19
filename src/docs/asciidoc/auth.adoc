@@ -1,8 +1,6 @@
 [[oauth-login]]
 == 소셜
 
-소셜에서 발생하는 에러코드는 `A` 로 시작합니다.
-
 === 로그인
 
-operation::member/oauth-login/success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']
+operation::auth/oauth-login/success[snippets='http-request,http-response,path-parameters,request-fields,response-fields']

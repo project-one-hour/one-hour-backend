@@ -20,7 +20,7 @@ import org.springframework.restdocs.payload.JsonFieldType;
 public class AuthDocument extends DocumentationTest {
 
     @Nested
-    class 소셜로그인을_요청한다 {
+    class 소셜로그인 {
 
         @Test
         void 로그인에_성공하면_회원_토큰을_반환한다() {
@@ -33,7 +33,7 @@ public class AuthDocument extends DocumentationTest {
                     .body(tokenRequest)
                     .when().post("/api/auth/{provider}")
                     .then().log().all()
-                    .apply(document("member/oauth-login/success",
+                    .apply(document("auth/oauth-login/success",
 
                             pathParameters(
                                     parameterWithName("provider").description("kakao, apple과 같은 social provider")

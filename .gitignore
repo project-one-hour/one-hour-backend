@@ -29,6 +29,7 @@ application-local.yml
 application-dev.yml
 application-staging.yml
 application-prod.yml
+schema_local.sql
 
 ### NetBeans ###
 /nbproject/private/
