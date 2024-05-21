@@ -4,10 +4,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project1hour.api.core.domain.member.Authority;
-import com.project1hour.api.core.exception.auth.ExpiredTokenException;
-import com.project1hour.api.core.exception.auth.InvalidTokenSignatureException;
-import com.project1hour.api.core.exception.auth.MalformedTokenException;
-import com.project1hour.api.core.exception.auth.UnsupportedTokenException;
+import com.project1hour.api.global.advice.InfraStructureException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.security.Keys;
 import java.nio.charset.StandardCharsets;
@@ -75,7 +72,7 @@ class JwtTokenProviderTest {
 
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject(expiredToken))
-                .isInstanceOf(ExpiredTokenException.class)
+                .isInstanceOf(InfraStructureException.class)
                 .hasMessage("만료된 토큰입니다.");
     }
 
@@ -83,7 +80,7 @@ class JwtTokenProviderTest {
     void 유효하지_않은_토큰이라면_예외가_발생합니다() {
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject("invalidToken"))
-                .isInstanceOf(MalformedTokenException.class)
+                .isInstanceOf(InfraStructureException.class)
                 .hasMessage("유효하지 않은 토큰입니다.");
     }
 
@@ -98,7 +95,7 @@ class JwtTokenProviderTest {
 
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject(invalidSinatureToken))
-                .isInstanceOf(InvalidTokenSignatureException.class)
+                .isInstanceOf(InfraStructureException.class)
                 .hasMessage("잘못된 토큰 시그니처 입니다.");
     }
 
@@ -112,7 +109,7 @@ class JwtTokenProviderTest {
 
         // expect
         assertThatThrownBy(() -> jwtTokenProvider.extractSubject(unsupportToken))
-                .isInstanceOf(UnsupportedTokenException.class)
+                .isInstanceOf(InfraStructureException.class)
                 .hasMessage("지원하지 않는 토큰 형식입니다.");
     }
 }

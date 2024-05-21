@@ -27,7 +27,10 @@ public enum ErrorCode {
     EXPIRED_TOKEN("I003", "JWT 검증 시, JWT 토큰이 만료된 경우"),
     MALFORMED_TOKEN("I004", "JWT 검증 시, 유효하지 않은 JWT 토큰인 경우"),
 
-    // Global 예외 관련
+    // Error
+    INTERNAL_SERVER_ERROR("ER001", "예기치 못한 예외가 발생한 경우"),
+
+    // Global 예외 관련,
     METHOD_ARGUMENT_NOT_VALID("G000", "API 요청 시, request-fields의 값이 NULL인 경우");
 
     private final String errorCode;

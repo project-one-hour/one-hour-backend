@@ -1,8 +1,9 @@
 package com.project1hour.api.core.implement.auth;
 
 import com.project1hour.api.core.domain.auth.OauthClient;
-import com.project1hour.api.core.exception.auth.OauthProviderNotFound;
 import com.project1hour.api.core.implement.auth.dto.SocialInfo;
+import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.NotFoundException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
@@ -17,7 +18,7 @@ public class SocialProfileReader {
         OauthClient oauthClient = oauthClients.stream()
                 .filter(client -> client.isSupport(provider))
                 .findAny()
-                .orElseThrow(OauthProviderNotFound::new);
+                .orElseThrow(() -> new NotFoundException("지원하는 소셜 로그인이 없습니다.", ErrorCode.OAUTH_PROVIDER_NOT_FOUND));
 
         return oauthClient.requestSocialProfileByToken(token);
     }

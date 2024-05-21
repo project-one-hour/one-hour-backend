@@ -3,8 +3,9 @@ package com.project1hour.api.core.implement.auth;
 import com.project1hour.api.core.domain.auth.AuthProvider;
 import com.project1hour.api.core.domain.auth.AuthProviderRepository;
 import com.project1hour.api.core.domain.member.Member;
-import com.project1hour.api.core.exception.auth.AuthProviderNotFoundException;
 import com.project1hour.api.core.implement.auth.dto.SocialInfo;
+import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.NotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -29,7 +30,7 @@ public class AuthProcessor {
 
     public void updateAuthProfile(final SocialInfo socialInfo) {
         AuthProvider authProvider = authProviderRepository.findByProviderId(socialInfo.getProviderId())
-                .orElseThrow(AuthProviderNotFoundException::new);
+                .orElseThrow(() -> new NotFoundException("Auth 정보를 찾을 수 없습니다.", ErrorCode.AUTH_PROVIDER_NOT_FOUND));
 
         authProvider.updateEmail(socialInfo.getEmail());
     }
