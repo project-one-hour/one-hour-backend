@@ -8,8 +8,10 @@ import com.project1hour.api.core.implement.interest.InterestReader;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
+import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class MemberInterestProcessor {
 
