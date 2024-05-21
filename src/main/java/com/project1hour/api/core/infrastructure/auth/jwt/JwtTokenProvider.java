@@ -2,10 +2,8 @@ package com.project1hour.api.core.infrastructure.auth.jwt;
 
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.member.Authority;
-import com.project1hour.api.core.exception.auth.ExpiredTokenException;
-import com.project1hour.api.core.exception.auth.InvalidTokenSignatureException;
-import com.project1hour.api.core.exception.auth.MalformedTokenException;
-import com.project1hour.api.core.exception.auth.UnsupportedTokenException;
+import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.InfraStructureException;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.ExpiredJwtException;
 import io.jsonwebtoken.Jwts;
@@ -69,17 +67,13 @@ public class JwtTokenProvider implements TokenProvider {
                     .parseSignedClaims(token)
                     .getPayload();
         } catch (SignatureException e) {
-            log.info("Invalid JWT signature");
-            throw new InvalidTokenSignatureException();
+            throw new InfraStructureException("잘못된 토큰 시그니처 입니다.", ErrorCode.INVALID_TOKEN_SIGNATURE);
         } catch (UnsupportedJwtException e) {
-            log.info("Unsupported JWT token");
-            throw new UnsupportedTokenException();
+            throw new InfraStructureException("지원하지 않는 토큰 형식입니다.", ErrorCode.UNSUPPORTED_TOKEN);
         } catch (ExpiredJwtException e) {
-            log.info("Expired JWT token");
-            throw new ExpiredTokenException();
+            throw new InfraStructureException("만료된 토큰입니다.", ErrorCode.EXPIRED_TOKEN);
         } catch (MalformedJwtException e) {
-            log.info("Malformed JWT token");
-            throw new MalformedTokenException();
+            throw new InfraStructureException("유효하지 않은 토큰입니다.", ErrorCode.MALFORMED_TOKEN);
         }
     }
 

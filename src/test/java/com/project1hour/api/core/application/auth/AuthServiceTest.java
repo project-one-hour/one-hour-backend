@@ -9,10 +9,11 @@ import static org.mockito.BDDMockito.given;
 
 import com.project1hour.api.core.domain.auth.AuthProvider;
 import com.project1hour.api.core.domain.auth.AuthProviderRepository;
-import com.project1hour.api.core.exception.auth.OauthProviderNotFound;
 import com.project1hour.api.core.implement.auth.SocialProfileReader;
 import com.project1hour.api.core.implement.auth.dto.KakaoSocialInfoResponse;
 import com.project1hour.api.core.implement.auth.dto.TokenResponse;
+import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
@@ -45,14 +46,15 @@ class AuthServiceTest {
 
             @BeforeEach
             void setUp() {
-                given(socialProfileReader.read(any(), any())).willThrow(new OauthProviderNotFound());
+                given(socialProfileReader.read(any(), any())).willThrow(
+                        new NotFoundException("지원하는 소셜 로그인이 없습니다.", ErrorCode.OAUTH_PROVIDER_NOT_FOUND));
             }
 
             @Test
             void 예외를_발생시킨다() {
                 // expect
                 assertThatThrownBy(() -> authService.createToken("invalidProvider", "token"))
-                        .isInstanceOf(OauthProviderNotFound.class)
+                        .isInstanceOf(NotFoundException.class)
                         .hasMessage("지원하는 소셜 로그인이 없습니다.");
             }
         }

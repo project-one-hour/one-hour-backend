@@ -41,6 +41,7 @@ public class GlobalAdvice {
 
     @ExceptionHandler(InfraStructureException.class)
     public ResponseEntity<ErrorResponse> handleInfraStructure(InfraStructureException e) {
+        log.warn("ERROR CODE {} : {}", e.getErrorCode(), e.getMessage());
         return ResponseEntity.internalServerError()
                 .body(ErrorResponse.of(e.getMessage(), e.getErrorCode()));
     }
