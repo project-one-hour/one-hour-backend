@@ -34,7 +34,7 @@ public class GlobalAdvice {
 
     @ExceptionHandler(BusinessException.class)
     public ResponseEntity<ErrorResponse> handleBusiness(BusinessException e) {
-        log.info("ERROR CODE {} : {}", e.getErrorCode(), e.getMessage(), e);
+        log.info("ERROR CODE {} : {}", e.getErrorCode(), e.getMessage());
         return ResponseEntity.status(e.getStatusCode())
                 .body(ErrorResponse.of(e.getMessage(), e.getErrorCode()));
     }
