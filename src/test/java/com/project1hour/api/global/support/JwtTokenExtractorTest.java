@@ -30,6 +30,7 @@ class JwtTokenExtractorTest {
         assertThat(token).isEmpty();
 
     }
+
     @ParameterizedTest
     @ValueSource(strings = {"", "asdf", "jwt.token.value", "Beaaa jwt.token.value"})
     void 헤더_형식이_일치하지_않으면_빈값을_반환한다(String invalidHeader) {

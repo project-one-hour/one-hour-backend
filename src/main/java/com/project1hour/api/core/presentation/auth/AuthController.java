@@ -23,7 +23,6 @@ public class AuthController {
     public ResponseEntity<TokenResponse> login(@PathVariable final String provider,
                                                @Valid @RequestBody final OauthAccessTokenRequest request) {
         TokenResponse response = authService.createToken(provider, request.token());
-
         return ResponseEntity.ok(response);
     }
 }

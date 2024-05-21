@@ -24,4 +24,9 @@ public class CoreInterestRepository implements InterestRepository {
 
         return interests;
     }
+
+    @Override
+    public List<Interest> getAll() {
+        return jpaInterestRepository.findAll();
+    }
 }

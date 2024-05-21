@@ -14,10 +14,10 @@ jib {
         image = 'openjdk:21-jdk'
     }
     to {
-        String region = System.getenv('REGION')
-        String projectId = System.getenv('PROJECT_ID')
-        String artifactRegistry = System.getenv('ARTIFACT_REGISTRY')
-        String service = System.getenv('SERVICE')
+        def region = System.getenv('REGION')
+        def projectId = System.getenv('PROJECT_ID')
+        def artifactRegistry = System.getenv('ARTIFACT_REGISTRY')
+        def service = System.getenv('SERVICE')
 
         image = String.format('%s-docker.pkg.dev/%s/%s/%s:latest', region, projectId, artifactRegistry, service)
 

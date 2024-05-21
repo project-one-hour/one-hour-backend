@@ -82,7 +82,8 @@ public class MemberDocument extends DocumentationTest {
                     .then().log().all()
                     .apply(document("member/duplicate-nickname-check/success",
                             pathParameters(parameterWithName("nickname").description("중복 검사할 닉네임")),
-                            responseFields(fieldWithPath("isDuplicate").description("중복 여부"))
+                            responseFields(
+                                    fieldWithPath("isDuplicate").type(JsonFieldType.BOOLEAN).description("중복 여부"))
                     ))
                     .statusCode(HttpStatus.OK.value());
         }
