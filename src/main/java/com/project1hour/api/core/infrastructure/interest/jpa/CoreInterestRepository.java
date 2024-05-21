@@ -16,13 +16,7 @@ public class CoreInterestRepository implements InterestRepository {
 
     @Override
     public List<Interest> getAllByName(final List<String> interestsName) {
-        List<Interest> interests = jpaInterestRepository.findByNameIn(interestsName);
-
-        if (interests.size() != interestsName.size()) {
-            throw new BadRequestException("존재하지 않는 관심사가 포함되어 있습니다.", ErrorCode.INCLUDE_NOT_EXISTS_INTEREST);
-        }
-
-        return interests;
+        return jpaInterestRepository.findByNameIn(interestsName);
     }
 
     @Override
