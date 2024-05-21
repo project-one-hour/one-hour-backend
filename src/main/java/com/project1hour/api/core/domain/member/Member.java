@@ -1,5 +1,9 @@
 package com.project1hour.api.core.domain.member;
 
+import com.project1hour.api.core.domain.member.profileinfo.Birthday;
+import com.project1hour.api.core.domain.member.profileinfo.Gender;
+import com.project1hour.api.core.domain.member.profileinfo.Mbti;
+import com.project1hour.api.core.domain.member.profileinfo.Nickname;
 import com.project1hour.api.global.domain.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -28,14 +32,15 @@ public class Member {
     @Column(name = "member_id")
     private Long id;
 
-    @Column(unique = true, length = 10)
-    private String nickname;
+    @Embedded
+    private Nickname nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
     private Gender gender;
 
-    private LocalDate birthday;
+    @Embedded
+    private Birthday birthday;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10)
@@ -44,23 +49,51 @@ public class Member {
     @Enumerated(EnumType.STRING)
     private SignUpStatus signUpStatus;
 
+    @Enumerated(EnumType.STRING)
+    private Authority authority;
+
+    @Enumerated(EnumType.STRING)
+    private MarketingInfoStatus marketingInfoStatus;
+
     @Embedded
     private CommonField commonField = new CommonField();
 
     @Builder
-    public Member(final Long id, final String nickname, final Gender gender, final LocalDate birthday, final Mbti mbti,
-                  final SignUpStatus signUpStatus) {
+    public Member(final Long id, final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
+                  final SignUpStatus signUpStatus, final Authority authority,
+                  final MarketingInfoStatus marketingInfoStatus) {
         this.id = id;
         this.nickname = nickname;
         this.gender = gender;
         this.birthday = birthday;
         this.mbti = mbti;
         this.signUpStatus = signUpStatus;
+        this.authority = authority;
+        this.marketingInfoStatus = marketingInfoStatus;
     }
 
     public static Member createJustAuthenticatedMember() {
         return Member.builder()
+                .authority(Authority.MEMBER)
                 .signUpStatus(SignUpStatus.AUTHENTICATED)
                 .build();
+    }
+
+    public Member signUp(final String nickname, final String gender, final LocalDate birthday, final String mbti,
+                         final boolean allowingMarketingInfo) {
+        return Member.builder()
+                .id(id)
+                .nickname(new Nickname(nickname))
+                .gender(Gender.find(gender))
+                .birthday(new Birthday(birthday))
+                .mbti(Mbti.find(mbti))
+                .signUpStatus(SignUpStatus.SIGNED_UP)
+                .authority(authority)
+                .marketingInfoStatus(MarketingInfoStatus.selectStatus(allowingMarketingInfo))
+                .build();
+    }
+
+    public boolean isAlreadySignedUp() {
+        return signUpStatus == SignUpStatus.SIGNED_UP;
     }
 }

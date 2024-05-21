@@ -29,7 +29,7 @@ public class AuthService {
             authProcessor.updateAuthProfile(socialInfo);
             return tokenProcessor.createMemberToken(optionalMemberId.get(), false);
         }
-        Long newMemberId = memberProcessor.createJustAuthenticatedMember(socialInfo);
+        Long newMemberId = memberProcessor.saveJustAuthenticatedMember(socialInfo);
         return tokenProcessor.createMemberToken(newMemberId, true);
     }
 }

@@ -40,11 +40,13 @@ public class AuthProvider {
     private Member member;
 
     @Builder
-    public AuthProvider(final String email, final Provider provider, final String providerId, final Member member) {
+    public AuthProvider(final Long id, final String email, final Member member, final Provider provider,
+                        final String providerId) {
+        this.id = id;
         this.email = email;
+        this.member = member;
         this.provider = provider;
         this.providerId = providerId;
-        this.member = member;
     }
 
     public void updateEmail(final String email) {

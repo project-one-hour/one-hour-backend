@@ -10,12 +10,12 @@ import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 @Component
+@Transactional
 @RequiredArgsConstructor
 public class AuthProcessor {
 
     private final AuthProviderRepository authProviderRepository;
 
-    @Transactional
     public void save(final Member savedMember, final SocialInfo socialInfo) {
         AuthProvider authProvider = AuthProvider.builder()
                 .email(socialInfo.getEmail())
@@ -27,7 +27,6 @@ public class AuthProcessor {
         authProviderRepository.save(authProvider);
     }
 
-    @Transactional
     public void updateAuthProfile(final SocialInfo socialInfo) {
         AuthProvider authProvider = authProviderRepository.findByProviderId(socialInfo.getProviderId())
                 .orElseThrow(AuthProviderNotFoundException::new);

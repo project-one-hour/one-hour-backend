@@ -8,5 +8,6 @@
 :docinfo: shared-head
 
 include::auth.adoc[]
-
+include::member.adoc[]
+include::interest.adoc[]
 include::errorCode.adoc[]
