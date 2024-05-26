@@ -2,11 +2,8 @@ package com.project1hour.api.core.infrastructure.member.jpa;
 
 import com.project1hour.api.core.domain.member.MemberInterest;
 import com.project1hour.api.core.domain.member.MemberInterestRepository;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
-import org.springframework.jdbc.core.BatchPreparedStatementSetter;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Repository;
 
