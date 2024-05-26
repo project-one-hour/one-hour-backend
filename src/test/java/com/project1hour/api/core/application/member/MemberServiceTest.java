@@ -1,6 +1,7 @@
 package com.project1hour.api.core.application.member;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project1hour.api.core.domain.member.Authority;
@@ -27,7 +28,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.transaction.annotation.Transactional;
 
-
 @SpringBootTest
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -41,6 +41,35 @@ class MemberServiceTest {
 
     @Nested
     class signUp_메소드는 {
+
+        @Nested
+        class 정상적인_요청이_들어오면 {
+
+            private Long memberId;
+
+            @BeforeEach
+            void setUp() {
+                Member member = Member.createJustAuthenticatedMember();
+                memberRepository.save(member);
+                memberId = member.getId();
+            }
+
+            @Test
+            void 회원가입을_성공한다() {
+                // given
+                NewMemberInfo newMemberInfo = new NewMemberInfo(
+                        "닉네임",
+                        "MALE",
+                        LocalDate.of(1998, 10, 8),
+                        "ENTJ",
+                        List.of("맛집탐방", "카페투어", "디저트", "와인/바", "여행"),
+                        true
+                );
+
+                // when
+                assertThatNoException().isThrownBy(() -> memberService.signUp(memberId, newMemberInfo));
+            }
+        }
 
         @Nested
         class 닉네임이_형식에_일치하지_않는다면 {
