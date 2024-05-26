@@ -4,5 +4,5 @@ import java.util.List;
 
 public interface MemberInterestRepository {
 
-    List<MemberInterest> saveAll(List<MemberInterest> memberInterests);
+    void saveAll(List<MemberInterest> memberInterests);
 }
