@@ -24,6 +24,7 @@ public class AuthProvider {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "auth_provider_id")
     private Long id;
 
     private String email;

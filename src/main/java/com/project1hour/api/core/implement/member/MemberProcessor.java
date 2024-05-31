@@ -7,6 +7,7 @@ import com.project1hour.api.core.implement.auth.dto.SocialInfo;
 import com.project1hour.api.core.implement.member.dto.NewMemberInfo;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
+import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,5 +41,11 @@ public class MemberProcessor {
         );
 
         memberRepository.save(signedUpMember);
+    }
+
+    public void updateNewProfileImages(final Member member, final List<String> imageUrls) {
+        Member updatedMember = member.addNewProfileImages(imageUrls);
+
+        memberRepository.save(updatedMember);
     }
 }
