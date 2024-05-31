@@ -8,7 +8,9 @@ import com.project1hour.api.core.application.interest.InterestService;
 import com.project1hour.api.core.application.member.MemberService;
 import com.project1hour.api.core.domain.auth.AuthenticatoinContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
+import com.project1hour.api.core.domain.image.ImageUploader;
 import com.project1hour.api.core.presentation.auth.AuthController;
+import com.project1hour.api.core.presentation.image.ImageController;
 import com.project1hour.api.core.presentation.interest.InterestController;
 import com.project1hour.api.core.presentation.member.MemberController;
 import io.restassured.module.mockmvc.RestAssuredMockMvc;
@@ -27,7 +29,8 @@ import org.springframework.web.context.WebApplicationContext;
 @WebMvcTest({
         AuthController.class,
         MemberController.class,
-        InterestController.class
+        InterestController.class,
+        ImageController.class
 })
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -43,6 +46,9 @@ public class DocumentationTest {
 
     @MockBean
     protected InterestService interestService;
+
+    @MockBean
+    protected ImageUploader imageUploader;
 
     @MockBean
     protected TokenProvider tokenProvider;

@@ -1,0 +1,9 @@
+[[interest]]
+
+== 이미지
+
+=== 이미지 업로드
+
+만약 특정 이미지 업로드 API가 존재하면 해당 API를 사용해주세요.
+
+operation::image/upload/success[snippets='http-request,http-response,request-parts,response-fields']

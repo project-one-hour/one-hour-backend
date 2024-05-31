@@ -10,4 +10,5 @@
 include::auth.adoc[]
 include::member.adoc[]
 include::interest.adoc[]
+include::image.adoc[]
 include::errorCode.adoc[]
