@@ -25,7 +25,7 @@ class ImageFileTest {
     @Test
     void 이미지_파일이_비어있다면_예외가_발생한다() {
         // given
-        MockMultipartFile file = new MockMultipartFile("name", new byte[0]);
+        MockMultipartFile file = new MockMultipartFile("name1", "image1.jpg", "image/jpg", new byte[0]);
 
         // expect
         assertThatThrownBy(() -> ImageFile.from(file))
@@ -36,7 +36,7 @@ class ImageFileTest {
     @Test
     void 이미지_파일의_이름이_비어있으면_예외가_발생한다() {
         // given
-        MockMultipartFile file = new MockMultipartFile(" ", new byte[10]);
+        MockMultipartFile file = new MockMultipartFile("image1", "", "image/jpg", new byte[10]);
 
         // expect
         assertThatThrownBy(() -> ImageFile.from(file))
@@ -48,11 +48,13 @@ class ImageFileTest {
     @ValueSource(strings = {"image.gif", "image.webp", "image.dummy"})
     void 지원하지_않는_이미지_확장자라면_예외가_발생한다(String originalFileName) {
         // given
-        MockMultipartFile file = new MockMultipartFile("name", originalFileName, "image", originalFileName.getBytes());
+        String extension = StringUtils.getFilenameExtension(originalFileName);
+        MockMultipartFile file = new MockMultipartFile("name", originalFileName, "image/" + extension,
+                originalFileName.getBytes());
 
         // expect
         assertThatThrownBy(() -> ImageFile.from(file))
                 .isInstanceOf(BadRequestException.class)
-                .hasMessage("불가능한 이미지 확장자 입니다. extension = " + StringUtils.getFilenameExtension(originalFileName));
+                .hasMessage("불가능한 이미지 확장자 입니다. extension = " + extension);
     }
 }

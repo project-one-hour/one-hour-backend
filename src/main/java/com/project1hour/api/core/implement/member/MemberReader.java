@@ -13,8 +13,8 @@ public class MemberReader {
 
     private final MemberRepository memberRepository;
 
-    public Member read(final Long authenticatedMemberId) {
-        return memberRepository.getById(authenticatedMemberId);
+    public Member read(final Long memberId) {
+        return memberRepository.getById(memberId);
     }
 
     public boolean isExistsNickname(final String nickname) {

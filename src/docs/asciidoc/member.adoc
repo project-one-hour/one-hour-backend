@@ -8,3 +8,7 @@ operation::member/signup/success[snippets='http-request,http-response,request-fi
 === 닉네임 중복확인
 
 operation::member/duplicate-nickname-check/success[snippets='http-request,http-response,path-parameters,response-fields']
+
+=== 회원 프로필 이미지 업로드
+
+operation::member/upload-profile-images/success[snippets='http-request,http-response,request-parts,response-fields']

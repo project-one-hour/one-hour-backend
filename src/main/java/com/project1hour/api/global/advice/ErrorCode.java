@@ -16,9 +16,18 @@ public enum ErrorCode {
     INVALID_AGE_LIMIT("M004", "회원가입 시, 사용자가 올해 기준 법정 성인 연령이 아닌 경우"),
     INVALID_GENDER_VALUE("M005", "회원가입 시, 성별을 찾을 수 없는 경우 ('MALE', 'FEMALE' 만 가능)"),
     INVALID_MBTI_VALUE("M006", "회원가입 시, MBTI가 잘못 입력된 경우"),
+    INVALID_MEMBER_PROFILE_IMAGE_SIZE("M007", "프로필 사진 업로드시, 프로필 사진이 1개 이상 3가 이하가 아닌 경우"),
+    ALREADY_UPLOAD_NEW_PROFILE_IMAGE("M008", "프로필 사진 업로드시, 이미 최초 프로필 사진 등록을 완료한 경우(최초 회원가입 프로필 사진 등록)"),
 
     // Interest 관련
     INCLUDE_NOT_EXISTS_INTEREST("R001", "회원가입 시, 입력한 5개의 관심사 중에 존재하지 않는 관심사가 포함된 경우"),
+
+    // Image 관련
+    CAN_NOT_READ_IMAGE("IM00", "이미지 업로드시 이미지를 읽을 수 없는 경우"),
+    NULL_IMAGE("IM01", "이미지 업로드시, 이미지가 NULL인 경우"),
+    EMPTY_IMAGE("IM02", "이미지 업로드시, 이미지의 크기가 0인 경우"),
+    INVALID_IMAGE_NAME("IM03", "이미지 업로드시, 이미지의 이름이 비어있거나 NULL인 경우"),
+    INVALID_IMAGE_EXTENSION("IM04", "이미지 업로드시, PNG JPEG JPG SVG 확장자가 아닌 파일인 경우"),
 
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우(Provider 서버 예외)"),
@@ -26,6 +35,7 @@ public enum ErrorCode {
     UNSUPPORTED_TOKEN("I002", "JWT 검증 시, 토큰 형식이 JWT가 아닌 경우"),
     EXPIRED_TOKEN("I003", "JWT 검증 시, JWT 토큰이 만료된 경우"),
     MALFORMED_TOKEN("I004", "JWT 검증 시, 유효하지 않은 JWT 토큰인 경우"),
+    CAN_NOT_UPLOAD_IMAGE_TO_S3("I005", "이미지 업로드시, AWS S3에 이미지를 업로드할 수 없는 경우"),
 
     // Error
     INTERNAL_SERVER_ERROR("ER001", "예기치 못한 예외가 발생한 경우"),

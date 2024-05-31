@@ -32,7 +32,7 @@ public class S3ImageUploader implements ImageUploader {
     public String upload(final ImageFile imageFile) {
         try {
             S3Resource resource = s3Template.upload(bucket, savePath + imageFile.randomName(),
-                    imageFile.getImageInputStream());
+                    imageFile.imageInputStream());
 
             return cdnUrl + resource.getFilename();
         } catch (S3Exception e) {

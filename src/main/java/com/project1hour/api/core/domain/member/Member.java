@@ -4,6 +4,7 @@ import com.project1hour.api.core.domain.member.profileinfo.Birthday;
 import com.project1hour.api.core.domain.member.profileinfo.Gender;
 import com.project1hour.api.core.domain.member.profileinfo.Mbti;
 import com.project1hour.api.core.domain.member.profileinfo.Nickname;
+import com.project1hour.api.core.domain.member.profileinfo.ProfileImage;
 import com.project1hour.api.global.domain.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
@@ -15,6 +16,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import java.time.LocalDate;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -56,11 +58,14 @@ public class Member {
     private MarketingInfoStatus marketingInfoStatus;
 
     @Embedded
+    private ProfileImage profileImage;
+
+    @Embedded
     private CommonField commonField = new CommonField();
 
     @Builder
     public Member(final Long id, final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
-                  final SignUpStatus signUpStatus, final Authority authority,
+                  final SignUpStatus signUpStatus, final Authority authority, final ProfileImage profileImage,
                   final MarketingInfoStatus marketingInfoStatus) {
         this.id = id;
         this.nickname = nickname;
@@ -69,6 +74,7 @@ public class Member {
         this.mbti = mbti;
         this.signUpStatus = signUpStatus;
         this.authority = authority;
+        this.profileImage = profileImage;
         this.marketingInfoStatus = marketingInfoStatus;
     }
 
@@ -93,7 +99,25 @@ public class Member {
                 .build();
     }
 
+    public Member addNewProfileImages(final List<String> imageUrls) {
+        return Member.builder()
+                .id(id)
+                .nickname(nickname)
+                .gender(gender)
+                .birthday(birthday)
+                .mbti(mbti)
+                .signUpStatus(signUpStatus)
+                .authority(authority)
+                .profileImage(ProfileImage.from(imageUrls))
+                .marketingInfoStatus(marketingInfoStatus)
+                .build();
+    }
+
     public boolean isAlreadySignedUp() {
         return signUpStatus == SignUpStatus.SIGNED_UP;
+    }
+
+    public boolean hasAnyProfileImage() {
+        return profileImage != null;
     }
 }

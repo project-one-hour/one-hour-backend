@@ -1,18 +1,16 @@
 package com.project1hour.api.core.documentation;
 
+import static com.project1hour.api.FakeImageGenerator.createFakeImage;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
-import static org.springframework.restdocs.payload.PayloadDocumentation.requestPartFields;
 import static org.springframework.restdocs.payload.PayloadDocumentation.responseFields;
 import static org.springframework.restdocs.request.RequestDocumentation.partWithName;
 import static org.springframework.restdocs.request.RequestDocumentation.requestParts;
 
 import com.project1hour.api.core.domain.member.Authority;
-import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.util.UUID;
 import org.junit.jupiter.api.Nested;
@@ -48,17 +46,6 @@ class ImageDocument extends DocumentationTest {
                             )
                     ))
                     .statusCode(HttpStatus.OK.value());
-        }
-
-        private static File createFakeImage() throws IOException {
-            File fakeImage = File.createTempFile("image", ".jpg");
-            try (BufferedWriter writer = new BufferedWriter(new FileWriter(fakeImage))) {
-                writer.write("Dummy Value");
-                writer.flush();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
-            return fakeImage;
         }
     }
 }

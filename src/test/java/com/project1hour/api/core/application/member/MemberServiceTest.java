@@ -3,7 +3,10 @@ package com.project1hour.api.core.application.member;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.BDDMockito.given;
 
+import com.project1hour.api.core.domain.image.ImageUploader;
 import com.project1hour.api.core.domain.member.Authority;
 import com.project1hour.api.core.domain.member.Member;
 import com.project1hour.api.core.domain.member.MemberRepository;
@@ -16,18 +19,26 @@ import com.project1hour.api.core.implement.member.dto.NewMemberInfo;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.NotFoundException;
 import java.time.LocalDate;
+import java.util.Collections;
 import java.util.List;
+import java.util.UUID;
+import java.util.stream.Stream;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.Arguments;
+import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 @Transactional
@@ -39,6 +50,9 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    private ImageUploader imageUploader;
 
     @Nested
     class signUp_메소드는 {
@@ -331,6 +345,79 @@ class MemberServiceTest {
 
                 // then
                 assertThat(isDuplicate).isFalse();
+            }
+        }
+    }
+
+    @Nested
+    class uploadProfileImages_메소드는 {
+
+        @Nested
+        class 회원가입시_사용자의_프로필_이미지를_업로드_할_수_있다면 {
+
+            private Long memberId;
+
+            @BeforeEach
+            void setUp() {
+                Member member = Member.builder().build();
+                memberRepository.save(member);
+                memberId = member.getId();
+
+                given(imageUploader.upload(any())).willReturn("https://cdn.net/" + UUID.randomUUID() + ".jpg");
+            }
+
+            @Test
+            void 등록된_프로필_이미지_URL을_반환한다() {
+                // when
+                List<String> actualUrls = memberService.uploadProfileImages(memberId,
+                        List.of(new MockMultipartFile("name1", "image1.jpg", "image/jpg", new byte[10]),
+                                new MockMultipartFile("name2", "image2.jpg", "image/jpg", new byte[10]),
+                                new MockMultipartFile("name3", "image3.jpg", "image/jpg", new byte[10])));
+
+                // then
+                assertThat(actualUrls).extracting((value) -> value.startsWith("https://cdn.net/"))
+                        .containsExactly(true, true, true);
+            }
+        }
+
+        @Nested
+        class 회원가입시_사용자의_프로필_이미지가_없거나_3장_이상이라면 {
+
+            private Long memberId;
+
+            @BeforeEach
+            void setUp() {
+                Member member = Member.builder().build();
+                memberRepository.save(member);
+                memberId = member.getId();
+            }
+
+            @ParameterizedTest
+            @MethodSource("getExpectedUrls")
+            void 예외가_발생한다(List<MultipartFile> files, List<String> expectedUrls) {
+                // expect
+                assertThatThrownBy(() -> memberService.uploadProfileImages(memberId, files))
+                        .isInstanceOf(BadRequestException.class)
+                        .hasMessage("프로필 이미지는 1장 이상 3장 이하여야 합니다. size = " + expectedUrls.size());
+            }
+
+            private static Stream<Arguments> getExpectedUrls() {
+                return Stream.of(
+                        Arguments.arguments(Collections.emptyList(), Collections.emptyList()),
+                        Arguments.arguments(
+                                List.of(
+                                        new MockMultipartFile("name1", "image1.jpg", "image/jpg", new byte[10]),
+                                        new MockMultipartFile("name2", "image2.jpg", "image/jpg", new byte[10]),
+                                        new MockMultipartFile("name3", "image3.jpg", "image/jpg", new byte[10]),
+                                        new MockMultipartFile("name4", "image4.jpg", "image/jpg", new byte[10])
+                                ),
+                                List.of(
+                                        "https://cdn.net/image1.png",
+                                        "https://cdn.net/image2.png",
+                                        "https://cdn.net/image3.png",
+                                        "https://cdn.net/image4.png"
+                                )
+                        ));
             }
         }
     }

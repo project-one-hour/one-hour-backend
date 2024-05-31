@@ -8,27 +8,12 @@ import java.util.Objects;
 import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-import lombok.Getter;
 import org.springframework.util.StringUtils;
 import org.springframework.web.multipart.MultipartFile;
 
-@Getter
-public class ImageFile {
+public record ImageFile(String originalFileName, String contentType, String extension, InputStream imageInputStream) {
 
     private static final Pattern IMAGE_EXTENSION_REGX = Pattern.compile("^(png|jpeg|jpg|svg)$");
-
-    private final String originalFileName;
-    private final String contentType;
-    private final String extension;
-    private final InputStream imageInputStream;
-
-    public ImageFile(final String originalFileName, final String contentType, final String extension,
-                     final InputStream imageInputStream) {
-        this.originalFileName = originalFileName;
-        this.contentType = contentType;
-        this.extension = extension;
-        this.imageInputStream = imageInputStream;
-    }
 
     public static ImageFile from(final MultipartFile multipartFile) {
         validateNullFile(multipartFile);
