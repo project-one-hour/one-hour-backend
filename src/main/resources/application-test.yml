@@ -19,6 +19,8 @@ spring:
     defer-datasource-initialization: true
   cloud:
     aws:
+      region:
+        static: ap-northeast-2
       credentials:
         access-key: DUMMYACCESSKEY
         secret-key: dummysecretkey
