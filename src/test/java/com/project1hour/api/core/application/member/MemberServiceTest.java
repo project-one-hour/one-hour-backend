@@ -159,7 +159,7 @@ class MemberServiceTest {
         class 가입시_법정_성인_연령이_아니라면 {
 
             private static LocalDate MINIMUM_ADULT_BIRTH = LocalDate.of(
-                    LocalDate.now().minusYears(9).getYear(),
+                    LocalDate.now().minusYears(19).getYear(),
                     LocalDate.MAX.getMonth(),
                     LocalDate.MAX.getDayOfMonth()
             );
