@@ -30,7 +30,7 @@ class ImageDocument extends DocumentationTest {
             File fakeImage = createFakeImage();
             given(imageUploader.upload(any())).willReturn("https://cdn.net/" + UUID.randomUUID() + ".png");
             given(tokenProvider.extractAuthority("jwt.token.here")).willReturn(Authority.MEMBER);
-            given(authenticatoinContext.getPrincipal()).willReturn("1");
+            given(authenticationContext.getPrincipal()).willReturn("1");
 
             docsGiven.contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer jwt.token.here")

@@ -37,14 +37,14 @@ public class ProfileImage {
         validateSize(imageUrls);
 
         ProfileImageBuilder builder = ProfileImage.builder();
-        if (imageUrls.size() == 1) {
+        if (imageUrls.size() >= 1) {
             builder.firstProfileImageUrl(imageUrls.get(FIRST_IMAGE_IDX));
         }
-        if (imageUrls.size() == 2) {
-            builder.firstProfileImageUrl(imageUrls.get(SECOND_IMAGE_IDX));
+        if (imageUrls.size() >= 2) {
+            builder.secondProfileImageUrl(imageUrls.get(SECOND_IMAGE_IDX));
         }
-        if (imageUrls.size() == 3) {
-            builder.firstProfileImageUrl(imageUrls.get(THIRD_IMAGE_IDX));
+        if (imageUrls.size() >= 3) {
+            builder.thirdProfileImageUrl(imageUrls.get(THIRD_IMAGE_IDX));
         }
 
         return builder.build();

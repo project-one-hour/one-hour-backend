@@ -6,7 +6,7 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import com.project1hour.api.core.application.auth.AuthService;
 import com.project1hour.api.core.application.interest.InterestService;
 import com.project1hour.api.core.application.member.MemberService;
-import com.project1hour.api.core.domain.auth.AuthenticatoinContext;
+import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.image.ImageUploader;
 import com.project1hour.api.core.presentation.auth.AuthController;
@@ -54,7 +54,7 @@ public class DocumentationTest {
     protected TokenProvider tokenProvider;
 
     @MockBean
-    protected AuthenticatoinContext authenticatoinContext;
+    protected AuthenticationContext authenticationContext;
 
     @BeforeEach
     void setUp(final WebApplicationContext webApplicationContext,

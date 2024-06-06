@@ -1,6 +1,6 @@
 package com.project1hour.api.core.presentation.auth;
 
-import com.project1hour.api.core.domain.auth.AuthenticatoinContext;
+import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.MethodParameter;
 import org.springframework.stereotype.Component;
@@ -13,7 +13,7 @@ import org.springframework.web.method.support.ModelAndViewContainer;
 @RequiredArgsConstructor
 public class AuthenticationArgumentResolver implements HandlerMethodArgumentResolver {
 
-    private final AuthenticatoinContext authenticationContext;
+    private final AuthenticationContext authenticationContext;
 
     @Override
     public boolean supportsParameter(final MethodParameter parameter) {

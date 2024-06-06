@@ -38,7 +38,7 @@ public class MemberDocument extends DocumentationTest {
             doNothing().when(memberService).signUp(any(), any());
             given(tokenProvider.extractSubject("jwt.token.here")).willReturn("1");
             given(tokenProvider.extractAuthority("jwt.token.here")).willReturn(Authority.MEMBER);
-            given(authenticatoinContext.getPrincipal()).willReturn("1");
+            given(authenticationContext.getPrincipal()).willReturn("1");
 
             SignUpRequest signUpRequest = new SignUpRequest(
                     "닉네임",
@@ -105,7 +105,7 @@ public class MemberDocument extends DocumentationTest {
                     List.of("https://cdn.net/" + UUID.randomUUID() + ".png"));
             given(tokenProvider.extractSubject("jwt.token.here")).willReturn("1");
             given(tokenProvider.extractAuthority("jwt.token.here")).willReturn(Authority.MEMBER);
-            given(authenticatoinContext.getPrincipal()).willReturn("1");
+            given(authenticationContext.getPrincipal()).willReturn("1");
 
             docsGiven.contentType(MediaType.APPLICATION_JSON_VALUE)
                     .header(HttpHeaders.AUTHORIZATION, "Bearer jwt.token.here")
