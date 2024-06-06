@@ -1,6 +1,7 @@
 package com.project1hour.api.core.application.interest;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import com.project1hour.api.core.domain.interest.Interest;
 import java.util.List;
@@ -10,10 +11,9 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = NONE)
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class InterestServiceTest {

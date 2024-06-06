@@ -1,7 +1,9 @@
 package com.project1hour.api.core.domain.member;
 
 import com.project1hour.api.core.domain.interest.Interest;
+import com.project1hour.api.global.domain.CommonField;
 import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
@@ -14,9 +16,13 @@ import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@SQLDelete(sql = "UPDATE member_interest SET deleted_at = now() WHERE member_interest_id = ?")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class MemberInterest {
 
@@ -32,6 +38,9 @@ public class MemberInterest {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "interest_id")
     private Interest interest;
+
+    @Embedded
+    private CommonField commonField = new CommonField();
 
     @Builder
     public MemberInterest(final Long id, final Interest interest, final Member member) {

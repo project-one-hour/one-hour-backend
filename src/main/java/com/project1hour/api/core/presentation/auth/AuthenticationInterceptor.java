@@ -3,7 +3,7 @@ package com.project1hour.api.core.presentation.auth;
 import static com.project1hour.api.global.advice.ErrorCode.AUTH_TOKEN_NOT_FOUND;
 import static com.project1hour.api.global.advice.ErrorCode.UNAUTHORIZED_PATH;
 
-import com.project1hour.api.core.domain.auth.AuthenticatoinContext;
+import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.member.Authority;
 import com.project1hour.api.global.advice.UnauthorizedException;
@@ -20,7 +20,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 public class AuthenticationInterceptor implements HandlerInterceptor {
 
     private final TokenProvider tokenProvider;
-    private final AuthenticatoinContext authenticatoinContext;
+    private final AuthenticationContext authenticationContext;
 
     @Override
     public boolean preHandle(final HttpServletRequest request, final HttpServletResponse response, final Object handler)
@@ -30,7 +30,7 @@ public class AuthenticationInterceptor implements HandlerInterceptor {
                 .orElseThrow(() -> new UnauthorizedException("헤더에 토큰 값이 존재하지 않습니다.", AUTH_TOKEN_NOT_FOUND));
 
         String subject = tokenProvider.extractSubject(token);
-        authenticatoinContext.setPrincipal(subject);
+        authenticationContext.setPrincipal(subject);
 
         if (isNotMemberOnlyPath((HandlerMethod) handler)) {
             return true;

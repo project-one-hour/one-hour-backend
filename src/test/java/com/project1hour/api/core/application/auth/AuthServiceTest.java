@@ -6,9 +6,11 @@ import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.eq;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
 import com.project1hour.api.core.domain.auth.AuthProvider;
 import com.project1hour.api.core.domain.auth.AuthProviderRepository;
+import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.implement.auth.SocialProfileReader;
 import com.project1hour.api.core.implement.auth.dto.KakaoSocialInfoResponse;
 import com.project1hour.api.core.implement.auth.dto.TokenResponse;
@@ -21,11 +23,10 @@ import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.transaction.annotation.Transactional;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = NONE)
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class AuthServiceTest {
@@ -35,6 +36,9 @@ class AuthServiceTest {
 
     @Autowired
     private AuthProviderRepository authProviderRepository;
+
+    @MockBean
+    AuthenticationContext authenticationContext;
 
     @MockBean
     private SocialProfileReader socialProfileReader;

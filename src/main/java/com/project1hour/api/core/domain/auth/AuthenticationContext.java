@@ -5,7 +5,7 @@ import org.springframework.web.context.annotation.RequestScope;
 
 @Component
 @RequestScope
-public class AuthenticatoinContext {
+public class AuthenticationContext {
 
     private String principal;
 
