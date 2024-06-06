@@ -5,7 +5,9 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
+import static org.springframework.boot.test.context.SpringBootTest.WebEnvironment.NONE;
 
+import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.image.ImageUploader;
 import com.project1hour.api.core.domain.member.Authority;
 import com.project1hour.api.core.domain.member.Member;
@@ -15,6 +17,7 @@ import com.project1hour.api.core.domain.member.profileinfo.Birthday;
 import com.project1hour.api.core.domain.member.profileinfo.Gender;
 import com.project1hour.api.core.domain.member.profileinfo.Mbti;
 import com.project1hour.api.core.domain.member.profileinfo.Nickname;
+import com.project1hour.api.core.domain.member.profileinfo.ProfileImage;
 import com.project1hour.api.core.implement.member.dto.NewMemberInfo;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.NotFoundException;
@@ -34,13 +37,12 @@ import org.junit.jupiter.params.provider.MethodSource;
 import org.junit.jupiter.params.provider.ValueSource;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-@SpringBootTest(webEnvironment = WebEnvironment.NONE)
+@SpringBootTest(webEnvironment = NONE)
 @Transactional
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 class MemberServiceTest {
@@ -50,6 +52,9 @@ class MemberServiceTest {
 
     @Autowired
     private MemberRepository memberRepository;
+
+    @MockBean
+    private AuthenticationContext authenticationContext;
 
     @MockBean
     private ImageUploader imageUploader;
@@ -418,6 +423,31 @@ class MemberServiceTest {
                                         "https://cdn.net/image4.png"
                                 )
                         ));
+            }
+        }
+
+        @Nested
+        class 회원이_이미_가입시_프로필_사진_등록을_완료했다면 {
+
+            private Long memberId;
+
+            @BeforeEach
+            void setUp() {
+                Member member = Member.builder()
+                        .profileImage(ProfileImage.from(List.of("https://cdn.net/image1")))
+                        .build();
+                memberRepository.save(member);
+                memberId = member.getId();
+            }
+
+            @Test
+            void 예외가_발생한다() {
+                // expect
+                assertThatThrownBy(() -> memberService.uploadProfileImages(memberId,
+                        List.of(new MockMultipartFile("name1", "image1.jpg", "image/jpg", new byte[10]))))
+                        .isInstanceOf(BadRequestException.class)
+                        .hasMessage("이미 최초 프로필 등록을 완료했습니다.");
+
             }
         }
     }
