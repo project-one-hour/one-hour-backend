@@ -13,7 +13,7 @@ import org.junit.jupiter.api.Test;
 class BirthdayTest {
 
     private static LocalDate MINIMUM_ADULT_BIRTH = LocalDate.of(
-            LocalDate.now().minusYears(9).getYear(),
+            LocalDate.now().minusYears(19).getYear(),
             LocalDate.MAX.getMonth(),
             LocalDate.MAX.getDayOfMonth()
     );
