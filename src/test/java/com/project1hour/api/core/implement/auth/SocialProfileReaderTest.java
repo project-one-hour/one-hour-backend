@@ -20,7 +20,7 @@ class SocialProfileReaderTest {
     @Test
     void 일치하는_Provider를_찾을_수_없다면_예외가_발생한다() {
         // expect
-        assertThatThrownBy(() -> socialProfileReader.read("invalidProvider", "token"))
+        assertThatThrownBy(() -> socialProfileReader.read("inKAKAO", "token"))
                 .isInstanceOf(NotFoundException.class)
                 .hasMessageContaining("지원하는 소셜 로그인이 없습니다.");
     }

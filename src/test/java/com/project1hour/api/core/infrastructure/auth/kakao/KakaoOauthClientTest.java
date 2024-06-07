@@ -10,9 +10,8 @@ import static org.springframework.test.web.client.response.MockRestResponseCreat
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import com.project1hour.api.core.domain.member.Provider;
-import com.project1hour.api.core.implement.auth.dto.KakaoSocialInfoResponse;
-import com.project1hour.api.core.implement.auth.dto.SocialInfo;
 import com.project1hour.api.global.advice.InfraStructureException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -90,7 +89,7 @@ class KakaoOauthClientTest {
 
             @BeforeEach
             void setUp() throws JsonProcessingException {
-                SocialInfo socialInfo = new KakaoSocialInfoResponse("123456789", "kakao@email.com");
+                SocialInfo socialInfo = new KakaoSocialInfo("123456789", "kakao@email.com");
                 mockRestServiceServer.expect(requestTo("https://kapi.kakao.com/v2/user/me"))
                         .andExpect(method(HttpMethod.GET))
                         .andRespond(withStatus(HttpStatus.OK)

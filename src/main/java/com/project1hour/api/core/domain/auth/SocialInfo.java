@@ -1,4 +1,4 @@
-package com.project1hour.api.core.implement.auth.dto;
+package com.project1hour.api.core.domain.auth;
 
 import com.project1hour.api.core.domain.member.Provider;
 

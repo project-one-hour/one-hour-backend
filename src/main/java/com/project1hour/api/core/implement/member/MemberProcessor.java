@@ -1,9 +1,9 @@
 package com.project1hour.api.core.implement.member;
 
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import com.project1hour.api.core.domain.member.Member;
 import com.project1hour.api.core.domain.member.MemberRepository;
 import com.project1hour.api.core.implement.auth.AuthProcessor;
-import com.project1hour.api.core.implement.auth.dto.SocialInfo;
 import com.project1hour.api.core.implement.member.dto.NewMemberInfo;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;

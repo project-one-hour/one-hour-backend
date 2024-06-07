@@ -3,7 +3,7 @@ package com.project1hour.api.core.infrastructure.auth.apple;
 import static com.project1hour.api.core.domain.member.Provider.APPLE;
 
 import com.project1hour.api.core.domain.auth.OauthClient;
-import com.project1hour.api.core.implement.auth.dto.SocialInfo;
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

@@ -1,16 +1,17 @@
-package com.project1hour.api.core.implement.auth.dto;
+package com.project1hour.api.core.infrastructure.auth.kakao;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import com.project1hour.api.core.domain.member.Provider;
 import java.util.Map;
 
-public class KakaoSocialInfoResponse implements SocialInfo {
+public class KakaoSocialInfo implements SocialInfo {
 
     @JsonProperty("id")
     private final String providerId;
     private String email;
 
-    public KakaoSocialInfoResponse(final String providerId, final String email) {
+    public KakaoSocialInfo(final String providerId, final String email) {
         this.providerId = providerId;
         this.email = email;
     }
