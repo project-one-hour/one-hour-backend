@@ -3,7 +3,7 @@ package com.project1hour.api.core.infrastructure.auth.kakao;
 import static com.project1hour.api.core.domain.member.Provider.KAKAO;
 
 import com.project1hour.api.core.domain.auth.OauthClient;
-import com.project1hour.api.core.implement.auth.dto.SocialInfo;
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import java.net.URI;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;

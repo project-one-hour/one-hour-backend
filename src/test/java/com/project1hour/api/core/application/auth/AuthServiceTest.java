@@ -12,8 +12,10 @@ import com.project1hour.api.core.domain.auth.AuthProvider;
 import com.project1hour.api.core.domain.auth.AuthProviderRepository;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.implement.auth.SocialProfileReader;
-import com.project1hour.api.core.implement.auth.dto.KakaoSocialInfoResponse;
 import com.project1hour.api.core.implement.auth.dto.TokenResponse;
+import com.project1hour.api.core.infrastructure.auth.apple.AppleSocialInfo;
+import com.project1hour.api.core.infrastructure.auth.kakao.KakaoSocialInfo;
+import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.NotFoundException;
 import org.junit.jupiter.api.BeforeEach;
@@ -56,9 +58,9 @@ class AuthServiceTest {
             }
 
             @Test
-            void 예외를_발생시킨다() {
+            void 예외가_발생한다() {
                 // expect
-                assertThatThrownBy(() -> authService.createToken("invalidProvider", "token"))
+                assertThatThrownBy(() -> authService.createToken("inKAKAO", "token"))
                         .isInstanceOf(NotFoundException.class)
                         .hasMessage("지원하는 소셜 로그인이 없습니다.");
             }
@@ -70,14 +72,14 @@ class AuthServiceTest {
             @BeforeEach
             void setUp() {
                 given(socialProfileReader.read(any(), any())).willReturn(
-                        new KakaoSocialInfoResponse("providerId", "test@mail.com")
+                        new KakaoSocialInfo("providerId", "test@mail.com")
                 );
             }
 
             @Test
-            void 토큰값과_새로운_회워여부의_boolean값을_true로_반환한다() {
+            void 토큰값과_새로운_회원여부의_boolean값을_true로_반환한다() {
                 // when
-                TokenResponse token = authService.createToken("validProvider", "validToken");
+                TokenResponse token = authService.createToken("KAKAO", "validToken");
 
                 // then
                 assertAll(
@@ -85,6 +87,7 @@ class AuthServiceTest {
                         () -> assertThat(token.isNew()).isTrue()
                 );
             }
+
         }
 
         @Nested
@@ -93,15 +96,15 @@ class AuthServiceTest {
             @BeforeEach
             void setUp() {
                 given(socialProfileReader.read(any(), any())).willReturn(
-                        new KakaoSocialInfoResponse("providerId", "test@mail.com")
+                        new KakaoSocialInfo("providerId", "test@mail.com")
                 );
-                authService.createToken("validProvider", "validToken");
+                authService.createToken("KAKAO", "validToken");
             }
 
             @Test
             void 토큰값과_새로운_회원여부의_boolean값을_false로_반환한다() {
                 // when
-                TokenResponse token = authService.createToken("validProvider", "validToken");
+                TokenResponse token = authService.createToken("KAKAO", "validToken");
 
                 // then
                 assertAll(
@@ -109,17 +112,18 @@ class AuthServiceTest {
                         () -> assertThat(token.isNew()).isFalse()
                 );
             }
+
         }
 
         @Nested
-        class 동일한_이메일을_사용하는_다른_소셜로그인_이력이_존재하면 {
+        class 동일한_이메일을_사용하는_기존_소셜로그인_이력이_존재하면 {
 
             @BeforeEach
             void setUp() {
                 given(socialProfileReader.read(any(), any())).willReturn(
-                        new KakaoSocialInfoResponse("providerId", "test@mail.com")
+                        new KakaoSocialInfo("providerId", "test@mail.com")
                 );
-                authService.createToken("validProvider", "validToken");
+                authService.createToken("KAKAO", "validToken");
             }
 
             @Test
@@ -133,6 +137,7 @@ class AuthServiceTest {
                         () -> assertThat(token.isNew()).isFalse()
                 );
             }
+
         }
 
         @Nested
@@ -141,20 +146,46 @@ class AuthServiceTest {
             @BeforeEach
             void setUp() {
                 given(socialProfileReader.read(any(), eq("originalEmailToken"))).willReturn(
-                        new KakaoSocialInfoResponse("providerId", "test@mail.com"));
+                        new KakaoSocialInfo("providerId", "test@mail.com"));
                 given(socialProfileReader.read(any(), eq("newEmailToken"))).willReturn(
-                        new KakaoSocialInfoResponse("providerId", "new@mail.com"));
-                authService.createToken("validProvider", "originalEmailToken");
+                        new KakaoSocialInfo("providerId", "new@mail.com"));
+                authService.createToken("KAKAO", "originalEmailToken");
             }
 
             @Test
             void 새로운_이메일로_업데이트한다() {
                 // when
-                authService.createToken("validProvider", "newEmailToken");
-                AuthProvider authProvider = authProviderRepository.findByProviderId("providerId").get();
+                authService.createToken("KAKAO", "newEmailToken");
+                AuthProvider authProvider = authProviderRepository.findByProviderIdOrEmail("providerId", "new@mail.com")
+                        .get();
 
                 // then
-                assertThat(authProvider.getEmail()).isEqualTo("new@mail.com");
+                assertAll(
+                        () -> assertThat(authProvider).extracting(AuthProvider::getProviderId).isEqualTo("providerId"),
+                        () -> assertThat(authProvider).extracting(AuthProvider::getEmail).isEqualTo("new@mail.com")
+                );
+            }
+
+        }
+
+        @Nested
+        class 동일한_이메일을_사용한_다른_소셜로그인_이력이_존재하면 {
+
+            @BeforeEach
+            void setUp() {
+                given(socialProfileReader.read(any(), eq("originalEmailToken"))).willReturn(
+                        new AppleSocialInfo("providerId", "test@mail.com"));
+                given(socialProfileReader.read(any(), eq("otherProviderSameEmailToken"))).willReturn(
+                        new KakaoSocialInfo("providerId", "test@mail.com"));
+                authService.createToken("APPLE", "originalEmailToken");
+            }
+
+            @Test
+            void 예외가_발생한다() {
+                // expect
+                assertThatThrownBy(() -> authService.createToken("KAKAO", "otherProviderSameEmailToken"))
+                        .isInstanceOf(BadRequestException.class)
+                        .hasMessage("이미 APPLE로 소셜로그인을 한 내역이 있습니다. current = KAKAO");
             }
         }
     }

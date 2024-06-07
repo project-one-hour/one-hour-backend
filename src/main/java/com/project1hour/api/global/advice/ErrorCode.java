@@ -7,6 +7,7 @@ public enum ErrorCode {
     AUTH_PROVIDER_NOT_FOUND("A001", "소셜로그인 시, 기존 가입자의 소셜로그인 정보를 찾을 수 없는 경우"),
     AUTH_TOKEN_NOT_FOUND("A002", "API 요청 시, 요청 헤더에 JWT 토큰이 없는 경우 (Bearer jwt.token.here)"),
     UNAUTHORIZED_PATH("A003", "API요청 시, 해당 API에 접근할 수 있는 권한이 없는 사용자의 경우"),
+    OTHER_AUTH_AUTHENTICATED("A004", "소셜로그인 시, 현재 Provider와 다른 Provider로 소셜로그인을 진행한 이력이 있는 경우"),
 
     // Member 관련
     MEMBER_NOT_FOUND("M000", "사용자 조회 시, 입력 받은 id의 사용자가 존재하지 않는 경우"),

@@ -1,7 +1,7 @@
 package com.project1hour.api.core.implement.auth;
 
 import com.project1hour.api.core.domain.auth.OauthClient;
-import com.project1hour.api.core.implement.auth.dto.SocialInfo;
+import com.project1hour.api.core.domain.auth.SocialInfo;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.NotFoundException;
 import java.util.List;
