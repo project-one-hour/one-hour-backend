@@ -32,8 +32,8 @@ jib {
 
         jvmFlags = [
                 String.format('-Dspring.profiles.active=%s', profilesActive),
-                '-Xms512m',
-                '-Xmx512m'
+                '-Xms1024m',
+                '-Xmx1024m'
         ]
     }
 }
