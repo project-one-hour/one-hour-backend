@@ -10,8 +10,6 @@ public interface JpaAuthProviderRepository extends JpaRepository<AuthProvider, L
 
     Optional<AuthProvider> findByProviderIdOrEmail(String providerId, String email);
 
-    Optional<AuthProvider> findByEmail(String email);
-
     @Query("UPDATE AuthProvider a SET a.email = :email WHERE a.providerId = :providerId ")
     @Modifying(flushAutomatically = true, clearAutomatically = true)
     void updateEmailByProviderId(String providerId, String email);

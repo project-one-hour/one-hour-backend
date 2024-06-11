@@ -4,7 +4,6 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 import com.project1hour.api.core.application.auth.AuthService;
-import com.project1hour.api.core.application.interest.InterestService;
 import com.project1hour.api.core.application.member.MemberService;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
@@ -43,9 +42,6 @@ public class DocumentationTest {
 
     @MockBean
     protected MemberService memberService;
-
-    @MockBean
-    protected InterestService interestService;
 
     @MockBean
     protected ImageUploader imageUploader;
