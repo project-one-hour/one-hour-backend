@@ -17,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class MemberProcessor {
 
+    private final MemberInterestProcessor memberInterestProcessor;
     private final AuthProcessor authProcessor;
     private final MemberRepository memberRepository;
 
@@ -40,7 +41,8 @@ public class MemberProcessor {
                 newMemberInfo.isAllowingMarketingInfo()
         );
 
-        memberRepository.save(signedUpMember);
+        Member savedMember = memberRepository.save(signedUpMember);
+        memberInterestProcessor.saveAll(newMemberInfo.interests(), savedMember);
     }
 
     public void updateNewProfileImages(final Member member, final List<String> imageUrls) {

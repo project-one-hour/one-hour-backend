@@ -82,7 +82,7 @@ class MemberServiceTest {
                         "MALE",
                         LocalDate.of(1998, 10, 8),
                         "ENTJ",
-                        List.of("맛집탐방", "카페투어", "디저트", "와인/바", "여행"),
+                        List.of("맛집", "커피", "디저트", "와인/바", "여행"),
                         true
                 );
 

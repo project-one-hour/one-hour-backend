@@ -5,6 +5,8 @@ import com.project1hour.api.global.domain.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -35,25 +37,25 @@ public class MemberInterest {
     @JoinColumn(name = "member_id")
     private Member member;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "interest_id")
+    @Enumerated(value = EnumType.STRING)
     private Interest interest;
 
     @Embedded
     private CommonField commonField = new CommonField();
 
     @Builder
-    public MemberInterest(final Long id, final Interest interest, final Member member) {
+    public MemberInterest(final Long id, final Member member, final Interest interest) {
         this.id = id;
-        this.interest = interest;
         this.member = member;
+        this.interest = interest;
     }
 
-    public static List<MemberInterest> createNewMemberInterests(final List<Interest> interests, final Member member) {
+    public static List<MemberInterest> createNewMemberInterests(final List<Interest> interests,
+                                                                final Member member) {
         return interests.stream()
-                .map(o -> MemberInterest.builder()
-                        .interest(o)
+                .map(interest -> MemberInterest.builder()
                         .member(member)
+                        .interest(interest)
                         .build())
                 .toList();
     }

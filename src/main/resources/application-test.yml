@@ -3,9 +3,6 @@ spring:
     url: jdbc:h2:mem:db?MODE=MYSQL
     username: sa
     password:
-  sql:
-    init:
-      mode: always
 
   jpa:
     open-in-view: false
@@ -16,7 +13,7 @@ spring:
     properties:
       hibernate:
         format_sql: true
-    defer-datasource-initialization: true
+
   cloud:
     aws:
       region:
