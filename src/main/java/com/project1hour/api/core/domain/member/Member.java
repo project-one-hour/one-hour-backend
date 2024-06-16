@@ -53,9 +53,11 @@ public class Member {
     private Mbti mbti;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private SignUpStatus signUpStatus;
 
     @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
     private Authority authority;
 
     @Enumerated(EnumType.STRING)

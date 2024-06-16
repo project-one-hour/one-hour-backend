@@ -324,6 +324,8 @@ class MemberServiceTest {
             @BeforeEach
             void setUp() {
                 Member member = Member.builder()
+                        .signUpStatus(SignUpStatus.SIGNED_UP)
+                        .authority(Authority.MEMBER)
                         .nickname(new Nickname("닉네임"))
                         .build();
 
@@ -364,7 +366,10 @@ class MemberServiceTest {
 
             @BeforeEach
             void setUp() {
-                Member member = Member.builder().build();
+                Member member = Member.builder()
+                        .signUpStatus(SignUpStatus.SIGNED_UP)
+                        .authority(Authority.MEMBER)
+                        .build();
                 memberRepository.save(member);
                 memberId = member.getId();
 
@@ -392,7 +397,10 @@ class MemberServiceTest {
 
             @BeforeEach
             void setUp() {
-                Member member = Member.builder().build();
+                Member member = Member.builder()
+                        .signUpStatus(SignUpStatus.SIGNED_UP)
+                        .authority(Authority.MEMBER)
+                        .build();
                 memberRepository.save(member);
                 memberId = member.getId();
             }
@@ -434,6 +442,8 @@ class MemberServiceTest {
             @BeforeEach
             void setUp() {
                 Member member = Member.builder()
+                        .signUpStatus(SignUpStatus.SIGNED_UP)
+                        .authority(Authority.MEMBER)
                         .profileImage(ProfileImage.from(List.of("https://cdn.net/image1")))
                         .build();
                 memberRepository.save(member);
