@@ -38,6 +38,7 @@ public class MemberInterest {
     private Member member;
 
     @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private Interest interest;
 
     @Embedded
