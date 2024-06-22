@@ -1,14 +1,18 @@
 package com.project1hour.api.core.domain.bungae;
 
 import com.project1hour.api.core.domain.interest.Category;
+import com.project1hour.api.core.domain.member.Member;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -68,6 +72,10 @@ public class Bungae {
     private String description;
 
     private String coverImageUrl;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "host_id", nullable = false)
+    private Member host;
 
     @Builder
     public Bungae(final Long id, final GenderFilterType genderFilterType, final int startAge, final int endAge,
