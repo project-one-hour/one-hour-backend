@@ -58,8 +58,4 @@ public class AuthProvider {
         this.provider = provider;
         this.providerId = providerId;
     }
-
-    public void updateEmail(final String email) {
-        this.email = email;
-    }
 }

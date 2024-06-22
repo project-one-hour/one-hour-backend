@@ -47,7 +47,6 @@ public class MemberProcessor {
 
     public void updateNewProfileImages(final Member member, final List<String> imageUrls) {
         Member updatedMember = member.addNewProfileImages(imageUrls);
-
         memberRepository.save(updatedMember);
     }
 }

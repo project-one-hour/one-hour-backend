@@ -53,6 +53,7 @@ public class GlobalAdvice {
         StringWriter out = new StringWriter();
         PrintWriter printWriter = new PrintWriter(out);
         e.printStackTrace(printWriter);
+
         log.error("Stack Trace : {}", out);
         return ResponseEntity.internalServerError()
                 .body(ErrorResponse.of(e.getMessage(), ErrorCode.INTERNAL_SERVER_ERROR.getErrorCode()));

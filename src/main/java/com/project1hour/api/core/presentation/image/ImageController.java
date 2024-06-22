@@ -26,6 +26,7 @@ public class ImageController {
                 .map(imageUploader::upload)
                 .toList();
         SavedImagesResponse response = new SavedImagesResponse(imageUrls);
+
         return ResponseEntity.ok(response);
     }
 }
