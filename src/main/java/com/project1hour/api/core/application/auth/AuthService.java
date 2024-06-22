@@ -32,11 +32,13 @@ public class AuthService {
 
     private TokenResponse createExistsMemberToken(final Member member, final SocialInfo socialInfo) {
         authProcessor.updateAuthProfile(socialInfo);
+
         return tokenProcessor.createMemberToken(member.getId(), false);
     }
 
     private TokenResponse createNewMemberToken(final SocialInfo socialInfo) {
         Long newMemberId = memberProcessor.saveJustAuthenticatedMember(socialInfo);
+
         return tokenProcessor.createMemberToken(newMemberId, true);
     }
 }

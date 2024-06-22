@@ -18,6 +18,7 @@ public class InterestController {
     public ResponseEntity<InterestsResponse> getAll() {
         List<String> interestNames = Interest.findAll();
         InterestsResponse response = new InterestsResponse(interestNames);
+
         return ResponseEntity.ok(response);
     }
 }

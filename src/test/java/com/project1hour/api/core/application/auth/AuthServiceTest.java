@@ -40,7 +40,7 @@ class AuthServiceTest {
     private AuthProviderRepository authProviderRepository;
 
     @MockBean
-    AuthenticationContext authenticationContext;
+    private AuthenticationContext authenticationContext;
 
     @MockBean
     private SocialProfileReader socialProfileReader;

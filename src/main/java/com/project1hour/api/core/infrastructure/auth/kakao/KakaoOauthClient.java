@@ -31,6 +31,7 @@ public class KakaoOauthClient implements OauthClient {
     @Override
     public SocialInfo requestSocialProfileByToken(final String accessToken) {
         URI uri = URI.create(profileUrl);
+
         return kakaoApiFetcher.fetchKakaoUserInfo(uri, BEARER_PREFIX + accessToken);
     }
 }

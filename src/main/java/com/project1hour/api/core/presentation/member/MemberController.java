@@ -31,6 +31,7 @@ public class MemberController {
     public ResponseEntity<DuplicatedNicknameResponse> isDuplicate(@Valid @PathVariable final String nickname) {
         boolean isDuplicate = memberService.isDuplicate(nickname);
         DuplicatedNicknameResponse response = new DuplicatedNicknameResponse(isDuplicate);
+
         return ResponseEntity.ok(response);
     }
 
@@ -39,6 +40,7 @@ public class MemberController {
     public ResponseEntity<Void> signup(@Login final Long memberId,
                                        @Valid @RequestBody final SignUpRequest request) {
         memberService.signUp(memberId, request.toNewMemberInfo());
+
         return ResponseEntity.ok()
                 .build();
     }
