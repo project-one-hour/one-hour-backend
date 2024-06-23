@@ -39,11 +39,10 @@ public class Credit {
     @JoinColumn(name = "member_id", nullable = false)
     private Member member;
 
-    @Column
     private int creditCount;
 
     @Embedded
-    private CommonField commonField;
+    private CommonField commonField = new CommonField();
 
     @Builder
     public Credit(final Long id, final int creditCount, final Member member) {
