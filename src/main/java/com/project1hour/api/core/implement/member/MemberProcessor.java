@@ -4,6 +4,7 @@ import com.project1hour.api.core.domain.auth.SocialInfo;
 import com.project1hour.api.core.domain.member.Member;
 import com.project1hour.api.core.domain.member.MemberRepository;
 import com.project1hour.api.core.implement.auth.AuthProcessor;
+import com.project1hour.api.core.implement.credit.CreditProcessor;
 import com.project1hour.api.core.implement.member.dto.NewMemberInfo;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
@@ -19,6 +20,7 @@ public class MemberProcessor {
 
     private final MemberInterestProcessor memberInterestProcessor;
     private final AuthProcessor authProcessor;
+    private final CreditProcessor creditProcessor;
     private final MemberRepository memberRepository;
 
     public Long saveJustAuthenticatedMember(final SocialInfo socialInfo) {
@@ -42,7 +44,9 @@ public class MemberProcessor {
         );
 
         Member savedMember = memberRepository.save(signedUpMember);
+
         memberInterestProcessor.saveAll(newMemberInfo.interests(), savedMember);
+        creditProcessor.giveWelcomeCredit(savedMember);
     }
 
     public void updateNewProfileImages(final Member member, final List<String> imageUrls) {
