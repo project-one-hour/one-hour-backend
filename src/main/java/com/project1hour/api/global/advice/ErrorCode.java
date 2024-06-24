@@ -20,6 +20,9 @@ public enum ErrorCode {
     INVALID_MEMBER_PROFILE_IMAGE_SIZE("M007", "프로필 사진 업로드시, 프로필 사진이 1개 이상 3가 이하가 아닌 경우"),
     ALREADY_UPLOAD_NEW_PROFILE_IMAGE("M008", "프로필 사진 업로드시, 이미 최초 프로필 사진 등록을 완료한 경우(최초 회원가입 프로필 사진 등록)"),
 
+    // Credit 관련
+    CREDIT_NOT_FOUND("C000", "Credit 조회 시, 특정 사용자의 Credit정보를 찾을 수 없는 경우"),
+
     // Interest 관련
     INCLUDE_NOT_EXISTS_INTEREST("R001", "회원가입 시, 입력한 5개의 관심사 중에 존재하지 않는 관심사가 포함된 경우"),
 

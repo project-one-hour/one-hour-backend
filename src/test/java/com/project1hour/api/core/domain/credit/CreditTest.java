@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 class CreditTest {
 
     @Test
-    void 웰컴_크레딧을_받을_수_있다() {
+    void 웰컴_재화를_받을_수_있다() {
         // given
         Member member = Member.builder()
                 .build();
@@ -20,5 +20,33 @@ class CreditTest {
 
         // then
         assertThat(welcomeCredit.getCreditCount()).isEqualTo(6);
+    }
+
+    @Test
+    void hasMoreCredit_메소드는_기존_재화_개수보다_크다면_false를_반환한다() {
+        // given
+        Credit credit = Credit.builder()
+                .creditCount(5)
+                .build();
+
+        // when
+        boolean hasMoreCredit = credit.hasMoreCredit(6);
+
+        // then
+        assertThat(hasMoreCredit).isFalse();
+    }
+
+    @Test
+    void hasMoreCredit메소드는_기존_재화_개수보다_작거나_같다면_true를_반환한다() {
+        // given
+        Credit credit = Credit.builder()
+                .creditCount(5)
+                .build();
+
+        // when
+        boolean hasMoreCredit = credit.hasMoreCredit(5);
+
+        // then
+        assertThat(hasMoreCredit).isTrue();
     }
 }

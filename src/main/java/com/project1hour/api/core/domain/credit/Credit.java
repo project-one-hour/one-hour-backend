@@ -57,4 +57,8 @@ public class Credit {
                 .member(member)
                 .build();
     }
+
+    public boolean hasMoreCredit(int creditCount) {
+        return this.creditCount >= creditCount;
+    }
 }
