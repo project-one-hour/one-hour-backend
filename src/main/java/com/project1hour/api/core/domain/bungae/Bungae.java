@@ -38,6 +38,10 @@ public class Bungae {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
+    private BungaeType bungaeType;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private GenderFilterType genderFilterType;
 
     @Column(nullable = false)
