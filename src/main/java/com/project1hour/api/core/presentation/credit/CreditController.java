@@ -2,6 +2,7 @@ package com.project1hour.api.core.presentation.credit;
 
 import com.project1hour.api.core.application.credit.CreditService;
 import com.project1hour.api.core.presentation.auth.Login;
+import com.project1hour.api.core.presentation.auth.MemberOnly;
 import com.project1hour.api.core.presentation.credit.dto.CreditCheckRequest;
 import com.project1hour.api.core.presentation.credit.dto.CreditCheckResponse;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ public class CreditController {
     private final CreditService creditService;
 
     @PostMapping("/check")
+    @MemberOnly
     public ResponseEntity<CreditCheckResponse> checkCredit(@Login final Long memberId,
                                                            @RequestBody final CreditCheckRequest request) {
         boolean result = creditService.canUseCredit(memberId, request.creditCount());
