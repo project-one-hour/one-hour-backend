@@ -1,0 +1,6 @@
+[[bungae]]
+== 번개
+
+=== 특정 타입 번개 카테고리 조회
+
+operation::bunages/findCategories/success[snippets='http-request,http-response,query-parameters,response-fields']

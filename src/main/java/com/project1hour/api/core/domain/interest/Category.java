@@ -1,5 +1,6 @@
 package com.project1hour.api.core.domain.interest;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -48,5 +49,12 @@ public enum Category {
         this.name = name;
         this.type = type;
         this.interests = interests;
+    }
+
+    public static List<String> findCategoryTypeNames(final String inputBungaeType) {
+        return Arrays.stream(values())
+                .filter(category -> category.type.equals(inputBungaeType))
+                .map(category -> category.name)
+                .toList();
     }
 }

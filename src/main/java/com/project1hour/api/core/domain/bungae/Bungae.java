@@ -38,6 +38,10 @@ public class Bungae {
 
     @Enumerated(value = EnumType.STRING)
     @Column(nullable = false)
+    private BungaeType bungaeType;
+
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
     private GenderFilterType genderFilterType;
 
     @Column(nullable = false)
@@ -81,11 +85,13 @@ public class Bungae {
     private Member host;
 
     @Builder
-    public Bungae(final Long id, final GenderFilterType genderFilterType, final int startAge, final int endAge,
-                  final MannerLevel levelLowerBound, final Point location, final String locationName,
-                  final Category category, final int maxParticipants, final int startDelayMinutes,
-                  final String title, final String description, final String coverImageUrl) {
+    public Bungae(final Long id, final BungaeType bungaeType, final GenderFilterType genderFilterType,
+                  final int startAge, final int endAge, final MannerLevel levelLowerBound, final Point location,
+                  final String locationName, final Category category, final int maxParticipants,
+                  final int startDelayMinutes, final String title, final String description,
+                  final String coverImageUrl) {
         this.id = id;
+        this.bungaeType = bungaeType;
         this.genderFilterType = genderFilterType;
         this.startAge = startAge;
         this.endAge = endAge;

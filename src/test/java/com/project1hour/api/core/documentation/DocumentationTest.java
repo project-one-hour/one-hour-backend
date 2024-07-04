@@ -4,12 +4,14 @@ import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.docu
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
 import com.project1hour.api.core.application.auth.AuthService;
+import com.project1hour.api.core.application.bungae.BungaeService;
 import com.project1hour.api.core.application.credit.CreditService;
 import com.project1hour.api.core.application.member.MemberService;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.image.ImageUploader;
 import com.project1hour.api.core.presentation.auth.AuthController;
+import com.project1hour.api.core.presentation.bungae.BungaeController;
 import com.project1hour.api.core.presentation.credit.CreditController;
 import com.project1hour.api.core.presentation.image.ImageController;
 import com.project1hour.api.core.presentation.interest.InterestController;
@@ -32,7 +34,8 @@ import org.springframework.web.context.WebApplicationContext;
         MemberController.class,
         InterestController.class,
         ImageController.class,
-        CreditController.class
+        CreditController.class,
+        BungaeController.class,
 })
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -48,6 +51,9 @@ public class DocumentationTest {
 
     @MockBean
     protected CreditService creditService;
+
+    @MockBean
+    protected BungaeService bungaeService;
 
     @MockBean
     protected ImageUploader imageUploader;
