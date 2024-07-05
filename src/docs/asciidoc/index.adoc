@@ -10,6 +10,7 @@
 include::auth.adoc[]
 include::member.adoc[]
 include::interest.adoc[]
+include::bungae.adoc[]
 include::credit.adoc[]
 include::image.adoc[]
 include::errorCode.adoc[]
