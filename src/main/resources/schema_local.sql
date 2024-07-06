@@ -56,6 +56,7 @@ create table member_interest
 create table bungae
 (
     bungae_id           bigint                                                                                                                                                             not null auto_increment,
+    bungae_type         enum ('MEET','CHAT')                                                                                                                                               not null,
     gender_filter_type  enum ('NONE','FEMALE','MALE')                                                                                                                                      not null,
     start_age           integer                                                                                                                                                            not null,
     end_age             integer                                                                                                                                                            not null,
