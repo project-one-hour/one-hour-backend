@@ -29,7 +29,7 @@ application-local.yml
 application-dev.yml
 application-staging.yml
 application-prod.yml
-docker-compose.yml
+docker-compose.yaml
 
 ### NetBeans ###
 /nbproject/private/
