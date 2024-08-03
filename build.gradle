@@ -69,6 +69,9 @@ dependencies {
     // hibernate-spatial
     implementation 'org.hibernate.orm:hibernate-spatial'
 
+    // TSID
+    implementation 'io.hypersistence:hypersistence-utils-hibernate-60:3.5.1'
+
     // jwt
     implementation 'io.jsonwebtoken:jjwt-api:0.12.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.12.5'
@@ -99,6 +102,16 @@ task copySecret(type: Copy) {
         from './submodule-backend'
         include '*.yml'
         into 'src/main/resources'
+    }
+}
+
+// 로컬 개발 환경에서만 사용
+// TODO : 배포 시 테스크 분리 고려
+task copyDockerCompose(type: Copy) {
+    copy {
+        from './submodule-backend'
+        include 'docker-compose.yaml'
+        into "${projectDir}"
     }
 }
 
