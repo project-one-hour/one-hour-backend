@@ -1,7 +1,5 @@
 package com.project1hour.api.core.application.user;
 
-import static com.project1hour.api.core.domain.user.entity.UserTest.ADULT_BIRTH;
-import static com.project1hour.api.core.domain.user.entity.UserTest.ALL_ALLOWED;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
@@ -15,7 +13,9 @@ import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
+import com.project1hour.api.core.domain.user.value.ServiceConsent;
 import com.project1hour.api.global.advice.BadRequestException;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
@@ -33,6 +33,17 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @SpringBootTest(webEnvironment = WebEnvironment.NONE)
 public class UserRegistrationUseCaseTest {
+
+    public static final ServiceConsent ALL_ALLOWED = ServiceConsent.of()
+            .marketingConsentAllowed(true)
+            .notificationConsentAllowed(true)
+            .build();
+
+    public static final LocalDate ADULT_BIRTH = LocalDate.of(
+            LocalDate.now().minusYears(19).getYear(),
+            LocalDate.MAX.getMonth(),
+            LocalDate.MAX.getDayOfMonth()
+    );
 
     @Autowired
     private UserRegistrationUseCase userRegistrationUseCase;

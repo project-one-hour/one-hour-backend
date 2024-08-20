@@ -1,7 +1,7 @@
 package com.project1hour.api.core.application.user;
 
-import static com.project1hour.api.core.domain.user.entity.UserTest.ADULT_BIRTH;
-import static com.project1hour.api.core.domain.user.entity.UserTest.ALL_ALLOWED;
+import static com.project1hour.api.core.application.user.UserRegistrationUseCaseTest.ADULT_BIRTH;
+import static com.project1hour.api.core.application.user.UserRegistrationUseCaseTest.ALL_ALLOWED;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
