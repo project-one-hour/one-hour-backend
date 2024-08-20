@@ -28,12 +28,20 @@ public enum ErrorCode {
     // Interest 관련
     INCLUDE_NOT_EXISTS_INTEREST("R001", "회원가입 시, 입력한 5개의 관심사 중에 존재하지 않는 관심사가 포함된 경우"),
 
+    TOO_MANY_INTERESTS("R002", "입력한 관심사가 일정 개수 이상인 경우"),
+    INVALID_INTERESTS_LIMIT("R003", "입력한 관심사가 개수가 일치하지 않는 경우"),
+    DUPLICATE_INTERESTS_FOUND("R004", "중복된 관심사가 입력된 경우"),
+    UNKNOWN_INTERESTS_FOUND("R005", "알 수 없는 관심사 값이 입력된 경우"),
+    INTERESTS_NOT_PROVIDED("R006", "관심사가 비어있을 경우"),
+
+
     // Image 관련
     CAN_NOT_READ_IMAGE("IM00", "이미지 업로드시 이미지를 읽을 수 없는 경우"),
     NULL_IMAGE("IM01", "이미지 업로드시, 이미지가 NULL인 경우"),
     EMPTY_IMAGE("IM02", "이미지 업로드시, 이미지의 크기가 0인 경우"),
     INVALID_IMAGE_NAME("IM03", "이미지 업로드시, 이미지의 이름이 비어있거나 NULL인 경우"),
     INVALID_IMAGE_EXTENSION("IM04", "이미지 업로드시, PNG JPEG JPG SVG 확장자가 아닌 파일인 경우"),
+    INVALID_PRIMARY_IMAGE_INDEX("IM05", "유효하지 않은 대표 사진 index일 경우"),
 
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우(Provider 서버 예외)"),

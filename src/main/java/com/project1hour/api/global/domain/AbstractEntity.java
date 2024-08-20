@@ -5,6 +5,8 @@ import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.util.Objects;
 import lombok.Getter;
+import org.apache.commons.lang3.builder.HashCodeBuilder;
+import org.hibernate.Hibernate;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
@@ -24,7 +26,7 @@ public abstract class AbstractEntity<ID> {
             return true;
         }
 
-        if (other == null || getClass() != other.getClass()) {
+        if (other == null || Hibernate.getClass(this) != Hibernate.getClass(other)) {
             return false;
         }
 
@@ -34,7 +36,9 @@ public abstract class AbstractEntity<ID> {
 
     @Override
     public int hashCode() {
-        return 31 * Objects.hashCode(this.getId());
+        return new HashCodeBuilder()
+                .append(getId())
+                .toHashCode();
     }
 
     public abstract ID getId();

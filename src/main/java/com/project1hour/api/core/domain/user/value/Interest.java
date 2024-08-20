@@ -2,18 +2,16 @@ package com.project1hour.api.core.domain.user.value;
 
 import static java.util.stream.Collectors.toMap;
 
-import com.project1hour.api.global.advice.BadRequestException;
-import com.project1hour.api.global.advice.ErrorCode;
 import java.util.Arrays;
 import java.util.LinkedHashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Objects;
 import java.util.function.Function;
+import lombok.Getter;
 
 /**
  * TODO : 추후 데이터베이스로 이관될 수 있음
  */
+@Getter
 public enum Interest {
     FOOD_TOUR("맛집"),
     COFFEE("커피"),
@@ -43,31 +41,15 @@ public enum Interest {
     PICNIC("피크닉"),
     GAME("게임");
 
-    private static Map<String, Interest> INTEREST_NAMES = Arrays.stream(Interest.values())
-            .collect(toMap(type -> type.name, Function.identity(), (oldValue, newValue) -> oldValue,
+    public static final Map<Long, Interest> INTEREST_IDS = Arrays.stream(Interest.values())
+            .collect(toMap(type -> type.id, Function.identity(), (oldValue, newValue) -> oldValue,
                     LinkedHashMap::new));
+
+    private final long id = ordinal();
 
     private final String name;
 
     Interest(final String name) {
         this.name = name;
-    }
-
-    public static List<String> findAll() {
-        return List.copyOf(INTEREST_NAMES.keySet());
-    }
-
-    public static List<Interest> findAllByNames(final List<String> interestNames) {
-        return interestNames.stream()
-                .map(name -> {
-                    Interest interest = INTEREST_NAMES.get(name);
-
-                    if (Objects.isNull(interest)) {
-                        String message = String.format("존재하지 않는 관심사 입니다. name = %s", name);
-                        throw new BadRequestException(message, ErrorCode.INCLUDE_NOT_EXISTS_INTEREST);
-                    }
-                    return interest;
-                })
-                .toList();
     }
 }

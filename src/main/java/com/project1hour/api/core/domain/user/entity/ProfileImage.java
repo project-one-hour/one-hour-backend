@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.user.entity;
 
-import com.project1hour.api.core.domain.user.User;
 import com.project1hour.api.core.domain.user.value.ProfileImageType;
+import com.project1hour.api.global.domain.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -23,7 +23,7 @@ import org.hibernate.annotations.SQLRestriction;
 @SQLDelete(sql = "UPDATE profile_image_id SET deleted_at = now() WHERE profile_imgae_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class ProfileImage {
+public class ProfileImage extends AbstractEntity<Long> {
 
     @Id
     @Tsid

@@ -4,6 +4,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
+import lombok.Builder;
 
 @Embeddable
 public record ServiceConsent(
@@ -20,7 +21,9 @@ public record ServiceConsent(
 
     public enum Notification {ALLOW, NOT_ALLOW}
 
-    public static ServiceConsent of(final boolean marketingConsentAllowed, final boolean notificationConsentAllowed) {
+    @Builder(builderMethodName = "of")
+    private static ServiceConsent createServiceConsent(final boolean marketingConsentAllowed,
+                                                       final boolean notificationConsentAllowed) {
         Marketing marketing = Marketing.NOT_ALLOW;
         Notification notification = Notification.NOT_ALLOW;
 

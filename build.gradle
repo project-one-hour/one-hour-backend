@@ -85,6 +85,11 @@ dependencies {
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
 
+    // apache-utils
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+    implementation 'org.apache.tika:tika-core:2.9.1'
+
+
     //docker-compose-support
     developmentOnly "org.springframework.boot:spring-boot-docker-compose"
 
