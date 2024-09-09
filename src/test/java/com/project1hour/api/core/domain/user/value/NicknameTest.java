@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThatNoException;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import com.project1hour.api.global.advice.BadRequestException;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Test;
@@ -17,7 +16,6 @@ import org.junit.jupiter.params.provider.ValueSource;
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 public class NicknameTest {
 
-    @Disabled
     @ParameterizedTest
     @ValueSource(strings = {"ㅎㅏ", "ㅡㅇ", "ㅎ123", "1ㅎ", "음절인데&-`"})
     void 한글단독_혹은_한글과_숫자로_구성된_닉네임은_한글이_음절로_이루어져_있지_않다면_예외가_발생한다(String nickname) {
@@ -27,9 +25,8 @@ public class NicknameTest {
                 .hasMessage("닉네임의 형식이 잘못됐습니다. 현재닉네임 = " + nickname);
     }
 
-    @Disabled
     @ParameterizedTest
-    @ValueSource(strings = {"sㄱ1", "ㄱ가1a", "ㄱr1", "가1aㅏ"})
+    @ValueSource(strings = {"sㄱ1", "ㄱ가1a", "ㄱr1", "가1aㅏ", "zl존"})
     void 영어가_포함된_닉네임이라면_한글의_자음_모음이나_숫자_모두_상관없이_닉네임을_생성할_수_있다(String nickname) {
         // expect
         assertThatNoException().isThrownBy(() -> new Nickname(nickname));
