@@ -1,10 +1,11 @@
 package com.project1hour.api.core.application.user;
 
 import com.project1hour.api.core.application.user.api.OauthClientFactory;
-import com.project1hour.api.core.application.user.api.SocialProfileId;
+import com.project1hour.api.core.application.user.api.data.SocialProfileId;
 import com.project1hour.api.core.application.user.service.UserRegistrationService;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.User;
+import com.project1hour.api.core.domain.user.event.UserRegisteredEvent;
 import com.project1hour.api.core.domain.user.value.AuthInfo;
 import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
@@ -17,6 +18,7 @@ import java.time.LocalDate;
 import java.util.List;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
+import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -29,6 +31,7 @@ public class UserRegistrationUseCase implements UserRegistrationService {
 
     private final UserRepository userRepository;
     private final OauthClientFactory oauthClientFactory;
+    private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
     public Long signUpUser(final UserRegistrationService.Request request) {
@@ -84,7 +87,7 @@ public class UserRegistrationUseCase implements UserRegistrationService {
                 .build();
 
         User registeredUser = userRepository.save(newUser);
-        // DomainEvent 발행
+        applicationEventPublisher.publishEvent(new UserRegisteredEvent(registeredUser.getId()));
         return registeredUser;
     }
 }
