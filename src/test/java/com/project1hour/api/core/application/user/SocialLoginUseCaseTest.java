@@ -9,7 +9,7 @@ import static org.mockito.BDDMockito.given;
 
 import com.project1hour.api.core.application.user.api.OauthClient2;
 import com.project1hour.api.core.application.user.api.OauthClientFactory;
-import com.project1hour.api.core.application.user.api.SocialProfileId;
+import com.project1hour.api.core.application.user.api.data.SocialProfileId;
 import com.project1hour.api.core.application.user.service.SocialLoginService;
 import com.project1hour.api.core.application.user.service.SocialLoginService.Request;
 import com.project1hour.api.core.domain.user.UserRepository;
