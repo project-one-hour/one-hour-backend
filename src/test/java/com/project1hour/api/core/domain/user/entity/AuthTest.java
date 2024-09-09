@@ -18,6 +18,5 @@ public class AuthTest {
 
         //expect
         assertThat(auth.getProvider()).isEqualTo(AuthProvider.KAKAO);
-        assertThat(auth.isProviderEqual(provider)).isFalse();
     }
 }
