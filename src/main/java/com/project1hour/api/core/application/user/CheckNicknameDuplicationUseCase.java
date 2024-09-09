@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.service.CheckNickNameDuplicationService;
+import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
@@ -11,14 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 @Transactional(readOnly = true)
 @RequiredArgsConstructor
-public class CheckNicknameDuplicationUseCase implements CheckNickNameDuplicationService {
+public class CheckNicknameDuplicationUseCase implements CheckNicknameDuplicationService {
 
     private final UserRepository userRepository;
 
     @Override
-    public boolean checkNickNameDuplication(final CheckNickNameDuplicationService.Request request) {
+    public Response checkNickNameDuplication(final CheckNicknameDuplicationService.Request request) {
         checkIfNicknameDuplicate(request.nickname());
-        return false;
+        return new Response(false);
     }
 
     /**

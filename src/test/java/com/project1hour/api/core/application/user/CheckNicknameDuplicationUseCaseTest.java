@@ -4,8 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.service.CheckNickNameDuplicationService;
-import com.project1hour.api.core.application.user.service.CheckNickNameDuplicationService.Request;
+import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
+import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService.Request;
+import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService.Response;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -25,7 +26,7 @@ public class CheckNicknameDuplicationUseCaseTest {
     private CheckNicknameDuplicationUseCase checkNicknameDuplicationUseCase;
 
     @Autowired
-    private CheckNickNameDuplicationService checkNicknameDuplicationService;
+    private CheckNicknameDuplicationService checkNicknameDuplicationService;
 
     @MockBean
     private UserRepository userRepository;
@@ -57,7 +58,9 @@ public class CheckNicknameDuplicationUseCaseTest {
 
             // expect
             assertThat(checkNicknameDuplicationService.checkNickNameDuplication(new Request("Test")))
-                    .isFalse();
+                    .extracting(Response::isDuplicate)
+                    .isEqualTo(false);
+
         }
     }
 }
