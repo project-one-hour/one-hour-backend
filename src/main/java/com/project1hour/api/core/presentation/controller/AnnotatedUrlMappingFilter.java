@@ -21,7 +21,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.util.pattern.PathPatternParser;
 
-public abstract class AnnotatedUrlMappingFilter<A extends Annotation> extends ExceptionHandleAdapterFilter
+public abstract class AnnotatedUrlMappingFilter<A extends Annotation> extends ExceptionHandlingFilter
         implements ApplicationListener<ServletWebServerInitializedEvent> {
 
     private List<String> includeUrlPatterns;

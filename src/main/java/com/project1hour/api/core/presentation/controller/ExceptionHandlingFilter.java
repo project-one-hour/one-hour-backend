@@ -22,7 +22,7 @@ import org.springframework.web.filter.OncePerRequestFilter;
 import org.springframework.web.servlet.HandlerExceptionResolver;
 import org.springframework.web.servlet.ModelAndView;
 
-public abstract class ExceptionHandleAdapterFilter extends OncePerRequestFilter implements ApplicationContextAware {
+public abstract class ExceptionHandlingFilter extends OncePerRequestFilter implements ApplicationContextAware {
 
     /**
      * WebMvcEndpointChildContextConfiguration 클래스 참고 / (Bean Name)
