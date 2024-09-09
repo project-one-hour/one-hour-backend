@@ -4,21 +4,23 @@ package com.project1hour.api.core.infrastructure.user.client;
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 import com.project1hour.api.core.application.user.api.OauthClient2;
-import com.project1hour.api.core.application.user.api.SocialProfileId;
-import lombok.RequiredArgsConstructor;
-import org.springframework.boot.context.properties.EnableConfigurationProperties;
+import com.project1hour.api.core.application.user.api.data.SocialProfileId;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 
 @Component
-@RequiredArgsConstructor
-@EnableConfigurationProperties(KakaoOauthProperties.class)
 public class KakaoOauthClient2 implements OauthClient2 {
 
+    private static final String BEARER_PREFIX = "Bearer ";
     public static final String KAKAO_OAUTH_PROVIDER = "KAKAO";
 
-    private final KakaoOauthProperties properties;
+    private final String profileUrl;
     private final RestClient restClient = RestClient.create();
+
+    public KakaoOauthClient2(@Value("${oauth2.kakao.url.profile}") final String profileUrl) {
+        this.profileUrl = profileUrl;
+    }
 
     @Override
     public boolean isSupport(final String provider) {
@@ -28,13 +30,13 @@ public class KakaoOauthClient2 implements OauthClient2 {
     @Override
     public SocialProfileId findSocialProfileIdByAccessToken(final String accessToken) {
         return restClient.get()
-                .uri(properties.profile())
+                .uri(profileUrl)
                 .header(AUTHORIZATION, convertToBearerToken(accessToken))
                 .retrieve()
                 .body(KakaoSocialProfileId.class);
     }
 
     private String convertToBearerToken(final String accessToken) {
-        return "Bearer " + accessToken;
+        return BEARER_PREFIX + accessToken;
     }
 }
