@@ -7,18 +7,24 @@ import java.util.Objects;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.Hibernate;
+import org.springframework.data.domain.Persistable;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
 @Getter
 @MappedSuperclass
 @EntityListeners(AuditingEntityListener.class)
-public abstract class AbstractEntity<ID> {
+public abstract class AbstractEntity<ID> implements Persistable<ID> {
 
     @Embedded
     private DateAuditInfo dateAuditInfo;
 
     @Embedded
     private DeleteInfo deleteInfo;
+
+    @Override
+    public boolean isNew() {
+        return Objects.isNull(getDateAuditInfo().createdAt());
+    }
 
     @Override
     public boolean equals(Object other) {
