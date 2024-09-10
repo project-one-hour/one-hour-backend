@@ -1,4 +1,4 @@
-package com.project1hour.api.core.presentation.controller;
+package com.project1hour.api.core.presentation.filter.core;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;

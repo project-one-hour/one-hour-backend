@@ -1,10 +1,11 @@
-package com.project1hour.api.core.presentation.controller;
+package com.project1hour.api.core.presentation.filter;
 
 import static com.project1hour.api.global.advice.ErrorCode.AUTH_TOKEN_NOT_FOUND;
 
 import com.project1hour.api.core.application.user.manager.TokenAuthManager;
 import com.project1hour.api.core.application.user.manager.TokenAuthManager.UserDetail;
 import com.project1hour.api.core.presentation.auth.MemberOnly;
+import com.project1hour.api.core.presentation.filter.core.AnnotatedUrlMappingFilter;
 import com.project1hour.api.global.advice.UnauthorizedException;
 import com.project1hour.api.global.support.JwtTokenExtractor;
 import jakarta.servlet.FilterChain;
