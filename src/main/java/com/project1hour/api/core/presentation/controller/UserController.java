@@ -1,7 +1,6 @@
 package com.project1hour.api.core.presentation.controller;
 
 import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
-import com.project1hour.api.core.presentation.auth.MemberOnly;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -21,7 +20,6 @@ public class UserController {
     private final CheckNicknameDuplicationService checkNicknameDuplicationService;
 
     @GetMapping("/duplicate/{nickname}")
-    @MemberOnly
     public ResponseEntity<CheckNicknameDuplicationService.Response> isDuplicated(@PathVariable final String nickname) {
         var request = new CheckNicknameDuplicationService.Request(nickname);
         var response = checkNicknameDuplicationService.checkNickNameDuplication(request);
