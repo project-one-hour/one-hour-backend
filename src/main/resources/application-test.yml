@@ -46,3 +46,7 @@ jwt:
     secret-key: dWJFREY0UW1IWXNCWWRpZU4yRzJxNkRTOUltM09Dd1RCM1B4b0hBcFpCUWlqRXNMVHN6aEg2dmNtT2YvbE9PaQptcjVkdWRnSUNwakRpWkNTY2dNeld3PT0K
     expire-length:
       access: 604800000
+
+image:
+  max-upload-size: 5
+  formats: jpg, jpeg, png, heic, heif # svg 일단 보류 (보안 문제, svg 만을 처리하기 위한 코드가 필요함)
