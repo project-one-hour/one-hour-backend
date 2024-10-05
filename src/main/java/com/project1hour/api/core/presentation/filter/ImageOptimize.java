@@ -1,2 +1,11 @@
-package com.project1hour.api.core.presentation.filter;public @interface ImageOptimize {
+package com.project1hour.api.core.presentation.filter;
+
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+@Target({ElementType.METHOD})
+@Retention(RetentionPolicy.RUNTIME)
+public @interface ImageOptimize {
 }

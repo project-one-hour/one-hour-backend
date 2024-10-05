@@ -35,8 +35,4 @@ public class ImageUploadUseCase implements ImageUploadEventHandler {
                 .build();
         imageRepository.save(uploadedImage);
     }
-
-    void method() {
-
-    }
 }

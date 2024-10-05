@@ -2,11 +2,10 @@ package com.project1hour.api.core.application.image.manager;
 
 import java.io.InputStream;
 
-public interface ImageFileValidationManager {
+public interface ImageValidationManager {
 
-    boolean validateImageIntegrity(InputStream image);
+    boolean validateImage(ImageResource imageInput);
 
-    boolean validateCompression(InputStream image, double maxCompressionRatio);
-
-    boolean validateAspectRatio(InputStream image);
+    record ImageResource(InputStream inputStream, long size) {
+    }
 }

@@ -2,6 +2,7 @@ package com.project1hour.api.core.presentation.filter;
 
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
+import com.project1hour.api.global.support.IOUtils;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletRequestWrapper;
@@ -12,15 +13,12 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.function.Function;
-import lombok.Builder;
-import org.apache.commons.io.IOUtils;
 
 public class ImageFilterRequest extends HttpServletRequestWrapper {
 
     private final Function<Part, Part> compressPartProxy;
     private final Collection<Part> compressedParts;
 
-    @Builder
     public ImageFilterRequest(final HttpServletRequest request,
                               final Function<Part, Part> compressPartProxy) {
         super(request);
@@ -31,7 +29,8 @@ public class ImageFilterRequest extends HttpServletRequestWrapper {
     @Override
     public Collection<Part> getParts() throws IOException, ServletException {
         if (compressedParts.isEmpty()) {
-            compressedParts.addAll(getCompressedParts());
+            Collection<Part> mappedParts = super.getParts().stream().map(compressPartProxy).toList();
+            compressedParts.addAll(mappedParts);
         }
         return Collections.unmodifiableCollection(compressedParts);
     }
@@ -44,18 +43,15 @@ public class ImageFilterRequest extends HttpServletRequestWrapper {
                 .orElse(null);
     }
 
-    private Collection<Part> getCompressedParts() throws IOException, ServletException {
-        return super.getParts().stream()
-                .map(compressPartProxy)
-                .toList();
-    }
-
-    static class FuckingPart implements Part {
+    /**
+     * 요청의 헤더는 원본 파일의 헤더 값을 포함하고 있습니다!!
+     */
+    static class WrappedPart implements Part {
 
         private final Part delegatePart;
         private final Function<InputStream, InputStream> compressedImageProxy;
 
-        public FuckingPart(final Part delegatePart, final Function<InputStream, InputStream> compressedImageProxy) {
+        public WrappedPart(final Part delegatePart, final Function<InputStream, InputStream> compressedImageProxy) {
             this.delegatePart = delegatePart;
             this.compressedImageProxy = compressedImageProxy;
         }
@@ -67,6 +63,8 @@ public class ImageFilterRequest extends HttpServletRequestWrapper {
                 IOUtils.closeQuietly(compressedImageInput);
                 return originalImageInput;
             }
+
+            IOUtils.closeQuietly(originalImageInput);
             return compressedImageInput;
         }
 

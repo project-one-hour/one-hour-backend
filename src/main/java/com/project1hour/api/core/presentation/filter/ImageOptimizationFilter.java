@@ -5,11 +5,12 @@ import com.project1hour.api.core.application.image.manager.ImageExpressionManage
 import com.project1hour.api.core.application.image.manager.ImageExpressionManager.ImageEditOptions;
 import com.project1hour.api.core.application.image.manager.ImageValidationManager;
 import com.project1hour.api.core.application.image.manager.ImageValidationManager.ImageResource;
-import com.project1hour.api.core.presentation.filter.ImageFilterRequest.FuckingPart;
+import com.project1hour.api.core.presentation.filter.ImageFilterRequest.WrappedPart;
 import com.project1hour.api.core.presentation.filter.core.AnnotatedUrlMappingFilter;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
+import com.project1hour.api.global.support.IOUtils;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -20,8 +21,7 @@ import java.io.InputStream;
 import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
-import org.apache.tika.utils.ExceptionUtils;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.multipart.MultipartResolver;
@@ -29,7 +29,7 @@ import org.springframework.web.multipart.MultipartResolver;
 @Slf4j
 @Component
 @RequiredArgsConstructor
-public class FuckingFilter extends AnnotatedUrlMappingFilter<ImageOptimize> {
+public class ImageOptimizationFilter extends AnnotatedUrlMappingFilter<ImageOptimize> {
 
     private final ImageExpressionManager imageExpressionManager;
     private final ImageValidationManager imageValidationManager;
@@ -41,7 +41,7 @@ public class FuckingFilter extends AnnotatedUrlMappingFilter<ImageOptimize> {
     protected void doProcessFilter(final HttpServletRequest request, final HttpServletResponse response,
                                    final FilterChain filterChain) throws ServletException, IOException {
         HttpServletRequest processedRequest = getMultipartRequest(request)
-                .orElseThrow(() -> new BadRequestException("요청이 멀티파트 형식이 아닙니다", ErrorCode.CAN_NOT_READ_IMAGE));
+                .orElseThrow(() -> new BadRequestException("요청이 멀티파트 형식이 아닙니다", ErrorCode.INVALID_MULTIPART_REQUEST));
 
         try {
             filterChain.doFilter(processedRequest, response);
@@ -74,7 +74,7 @@ public class FuckingFilter extends AnnotatedUrlMappingFilter<ImageOptimize> {
             int imageRotation = imageDetailManager.getImageRotation(rotationInputStream);
             IOUtils.closeQuietly(rotationInputStream);
 
-            return new FuckingPart(part, inputStream -> compressImage(imageRotation, inputStream));
+            return new WrappedPart(part, inputStream -> compressImage(imageRotation, inputStream));
         } catch (IOException e) {
             log.error("이미지 압축 중 I/O 오류 발생: {}", ExceptionUtils.getStackTrace(e));
             throw new InfraStructureException("이미지 처리 중 오류가 발생했습니다!", ErrorCode.INTERNAL_SERVER_ERROR);
