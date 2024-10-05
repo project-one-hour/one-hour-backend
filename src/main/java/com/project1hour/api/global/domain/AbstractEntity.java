@@ -4,6 +4,7 @@ import jakarta.persistence.Embedded;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.MappedSuperclass;
 import java.util.Objects;
+import java.util.Optional;
 import lombok.Getter;
 import org.apache.commons.lang3.builder.HashCodeBuilder;
 import org.hibernate.Hibernate;
@@ -23,7 +24,9 @@ public abstract class AbstractEntity<ID> implements Persistable<ID> {
 
     @Override
     public boolean isNew() {
-        return Objects.isNull(getDateAuditInfo().createdAt());
+        return Optional.ofNullable(getDateAuditInfo())
+                .map(DateAuditInfo::createdAt)
+                .isEmpty();
     }
 
     @Override
