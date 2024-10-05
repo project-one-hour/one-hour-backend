@@ -1,25 +1,25 @@
-# Simple workflow for deploying static content to GitHub Pages
+# 정적 콘텐츠를 GitHub 페이지에 배포하는 워크플로
 name: Deploy static content to Pages
 
 on:
-  # Runs on pushes targeting the default branch
+  # 실행할 기본 브랜치
   push:
     branches: [ "develop" ]
 
-  # Allows you to run this workflow manually from the Actions tab
+  # GitHub Actions 탭에서 수동으로 이 워크플로우를 실행할 수 있음
   workflow_dispatch:
 
-# Sets permissions of the GITHUB_TOKEN to allow deployment to GitHub Pages
+# 이 워크플로우에 GITHUB_TOKEN 권한 부여 설정
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: read # 리포지토리 콘텐츠를 읽을 수 있는 권한
+  pages: write # GitHub Pages에 콘텐츠를 쓸 수 있는 권한
+  id-token: write # ID 토큰을 발급받을 수 있는 권한
 
-# Allow only one concurrent deployment, skipping runs queued between the run in-progress and latest queued.
-# However, do NOT cancel in-progress runs as we want to allow these production deployments to complete.
+# 이 동시성 설정은 GitHub Pages에 대한 배포 작업이 동시에 여러 개 실행되지 않도록 제한
+# 이미 실행 중인 배포 작업이 완료될 때까지 기다림
 concurrency:
   group: "pages"
-  cancel-in-progress: false
+  cancel-in-progress: false # 현재 진행 중인 작업을 취소하지 않음
 
 jobs:
   # Single deploy job since we're just deploying
