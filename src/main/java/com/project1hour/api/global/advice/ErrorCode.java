@@ -34,7 +34,6 @@ public enum ErrorCode {
     UNKNOWN_INTERESTS_FOUND("R005", "알 수 없는 관심사 값이 입력된 경우"),
     INTERESTS_NOT_PROVIDED("R006", "관심사가 비어있을 경우"),
 
-
     // Image 관련
     CAN_NOT_READ_IMAGE("IM00", "이미지 업로드시 이미지를 읽을 수 없는 경우"),
     NULL_IMAGE("IM01", "이미지 업로드시, 이미지가 NULL인 경우"),
@@ -42,6 +41,7 @@ public enum ErrorCode {
     INVALID_IMAGE_NAME("IM03", "이미지 업로드시, 이미지의 이름이 비어있거나 NULL인 경우"),
     INVALID_IMAGE_EXTENSION("IM04", "이미지 업로드시, PNG JPEG JPG SVG 확장자가 아닌 파일인 경우"),
     INVALID_PRIMARY_IMAGE_INDEX("IM05", "유효하지 않은 대표 사진 index일 경우"),
+    IMAGE_TOO_LARGE("IM06", "이미지의 크기가 너무 큰 경우"),
 
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우(Provider 서버 예외)"),
@@ -53,6 +53,7 @@ public enum ErrorCode {
 
     // Error
     INTERNAL_SERVER_ERROR("ER001", "예기치 못한 예외가 발생한 경우"),
+    INVALID_MULTIPART_REQUEST("ER002", "잘못된 멀티파트 요청입니다."),
 
     // Global 예외 관련,
     METHOD_ARGUMENT_NOT_VALID("G000", "API 요청 시, request-fields의 값이 NULL인 경우");
