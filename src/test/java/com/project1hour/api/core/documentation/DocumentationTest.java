@@ -6,7 +6,11 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import com.project1hour.api.core.application.auth.AuthService;
 import com.project1hour.api.core.application.bungae.BungaeService;
 import com.project1hour.api.core.application.credit.CreditService;
+import com.project1hour.api.core.application.image.manager.ImageDetailManager;
+import com.project1hour.api.core.application.image.manager.ImageExpressionManager;
+import com.project1hour.api.core.application.image.manager.ImageValidationManager;
 import com.project1hour.api.core.application.member.MemberService;
+import com.project1hour.api.core.application.user.manager.TokenAuthManager;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.image.ImageUploader;
@@ -28,6 +32,7 @@ import org.springframework.restdocs.RestDocumentationContextProvider;
 import org.springframework.restdocs.RestDocumentationExtension;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.multipart.MultipartResolver;
 
 @WebMvcTest({
         AuthController.class,
@@ -35,7 +40,7 @@ import org.springframework.web.context.WebApplicationContext;
         InterestController.class,
         ImageController.class,
         CreditController.class,
-        BungaeController.class,
+        BungaeController.class
 })
 @ExtendWith(RestDocumentationExtension.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
@@ -63,6 +68,21 @@ public class DocumentationTest {
 
     @MockBean
     protected AuthenticationContext authenticationContext;
+
+    @MockBean
+    protected TokenAuthManager tokenAuthManager;
+
+    @MockBean
+    protected MultipartResolver multipartResolver;
+
+    @MockBean
+    protected ImageExpressionManager imageExpressionManager;
+
+    @MockBean
+    protected ImageValidationManager imageValidationManager;
+
+    @MockBean
+    protected ImageDetailManager imageDetailManager;
 
     @BeforeEach
     void setUp(final WebApplicationContext webApplicationContext,
