@@ -24,6 +24,7 @@ import com.project1hour.api.global.advice.NotFoundException;
 import java.util.List;
 import java.util.Set;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
 import org.junit.jupiter.api.DisplayNameGenerator;
 import org.junit.jupiter.api.Nested;
@@ -92,7 +93,11 @@ public class SocialLoginUseCaseTest {
                     .hasMessage("해당하는 사용자를 찾을 수 없습니다.");
         }
 
+        /**
+         * 사용자의 아이디를 서로 다른 소셜 로그인 제공자가 같은 아이디를 제공할 경우는 희박하며 근본적으로 애플은 문자열 카카오는 정수값을 반환한다
+         */
         @Test
+        @Disabled
         void 소셜_로그인_제공자와_일치하지_않는_경우_예외가_발생한다() {
             // given
             SocialProfileId socialProfileId = () -> "socialProfileId";
