@@ -87,10 +87,14 @@ dependencies {
 
     // apache-utils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
-    implementation 'org.apache.tika:tika-core:2.9.1'
 
+    // thumbnailator
+    implementation 'net.coobird:thumbnailator:0.4.20'
 
-    //docker-compose-support
+    //metadata-extractor
+    implementation 'com.drewnoakes:metadata-extractor:2.18.0'
+
+    // docker-compose-support
     developmentOnly "org.springframework.boot:spring-boot-docker-compose"
 
     // spring-rest-docs
@@ -116,7 +120,7 @@ task copyDockerCompose(type: Copy) {
     copy {
         from './submodule-backend'
         include 'docker-compose.yaml'
-        into "${projectDir}"
+        into 'src/main/resources'
     }
 }
 
