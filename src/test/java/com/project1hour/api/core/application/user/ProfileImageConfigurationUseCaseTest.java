@@ -4,7 +4,6 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.api.ProfileImageClient;
 import com.project1hour.api.core.application.user.component.TestUserEventListener;
 import com.project1hour.api.global.advice.BadRequestException;
 import java.io.ByteArrayInputStream;
