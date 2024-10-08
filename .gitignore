@@ -30,6 +30,8 @@ application-dev.yml
 application-staging.yml
 application-prod.yml
 docker-compose.yaml
+schema_local.sql
+index.html
 
 ### NetBeans ###
 /nbproject/private/
@@ -42,7 +44,6 @@ docker-compose.yaml
 .vscode/
 
 .DS_Store
-*.iml
 
 .envrc
 secrets.*.json
