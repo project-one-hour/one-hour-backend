@@ -30,7 +30,8 @@ application-dev.yml
 application-staging.yml
 application-prod.yml
 docker-compose.yaml
-schema_local.sql
+01_create_schema_dev.sql
+02_insert_dummy_user_data_dev.sql
 index.html
 
 ### NetBeans ###
