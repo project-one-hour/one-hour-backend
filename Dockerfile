@@ -6,6 +6,6 @@ ENV PROFILES_ACTIVE dev
 
 COPY ${JAR_FILE} app.jar
 
-EXPOSE 8880
+EXPOSE 8888
 
 ENTRYPOINT ["java", "-Xms512m", "-Xmx512m", "-jar", "/app.jar", "--spring.profiles.active=${PROFILES_ACTIVE}"]
