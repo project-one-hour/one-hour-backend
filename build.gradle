@@ -114,21 +114,21 @@ task copySecret(type: Copy) {
     }
 }
 
+task copySqlScripts(type: Copy) {
+    copy {
+        from './submodule-backend'
+        include '*.sql'
+        into 'src/main/resources'
+    }
+}
+
 // 로컬 개발 환경에서만 사용
 // TODO : 배포 시 테스크 분리 고려
 task copyDockerCompose(type: Copy) {
     copy {
         from './submodule-backend'
         include 'docker-compose.yaml'
-        into 'src/main/resources'
-    }
-}
-
-task copySqlScripts(type: Copy) {
-    copy {
-        from './submodule-backend'
-        include '*.sql'
-        into 'src/main/resources'
+        into projectDir
     }
 }
 
