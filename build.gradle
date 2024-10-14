@@ -118,7 +118,7 @@ task copySqlScripts(type: Copy) {
     copy {
         from './submodule-backend'
         include '*.sql'
-        into 'src/main/resources'
+        into 'src/main/resources/initdb'
     }
 }
 
