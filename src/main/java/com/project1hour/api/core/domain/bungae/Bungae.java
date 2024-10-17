@@ -1,5 +1,6 @@
 package com.project1hour.api.core.domain.bungae;
 
+import com.project1hour.api.core.domain.bungae.value.BungaeType;
 import com.project1hour.api.core.domain.interest.Category;
 import com.project1hour.api.core.domain.member.Member;
 import jakarta.persistence.Column;
