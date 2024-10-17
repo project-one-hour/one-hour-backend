@@ -6,6 +6,8 @@ public interface ImageExpressionManager {
 
     InputStream optimizeImage(ImageEditOptions options);
 
+    String getImageExtension();
+
     record ImageEditOptions(int width, int height, int rotation, InputStream imageInput) {
 
         public static final int DEFAULT_WIDTH = 0;
