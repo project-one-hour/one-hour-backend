@@ -4,7 +4,6 @@ import com.project1hour.api.core.domain.bungae.value.BungaeType;
 import com.project1hour.api.core.domain.interest.Category;
 import com.project1hour.api.core.domain.member.Member;
 import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
@@ -24,7 +23,7 @@ import org.hibernate.annotations.SQLRestriction;
 import org.locationtech.jts.geom.Point;
 import org.springframework.data.jpa.domain.support.AuditingEntityListener;
 
-@Entity
+//@Entity
 @Getter
 @EntityListeners(AuditingEntityListener.class)
 @SQLDelete(sql = "UPDATE bungae SET deleted_at = now() WHERE bungae_id = ?")
