@@ -6,6 +6,7 @@ import com.project1hour.api.global.advice.InfraStructureException;
 import io.awspring.cloud.s3.S3Exception;
 import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.UUID;
 import org.apache.commons.lang3.StringUtils;
@@ -31,11 +32,11 @@ public class S3ImageClient implements ImageClient {
     }
 
     @Override
-    public String uploadImage(final InputStream image) {
-        try {
-            S3Resource resource = s3Template.upload(bucket, generateFilePath(""), image);
+    public String uploadImage(final InputStream image, final String imageExtension) {
+        try (image) {
+            S3Resource resource = s3Template.upload(bucket, generateFilePath(imageExtension), image);
             return cdnUrl + resource.getFilename();
-        } catch (S3Exception e) {
+        } catch (S3Exception | IOException e) {
             throw new InfraStructureException("S3 버킷에 이미지를 업로드할 수 없습니다.", ErrorCode.CAN_NOT_UPLOAD_IMAGE_TO_S3);
         }
     }

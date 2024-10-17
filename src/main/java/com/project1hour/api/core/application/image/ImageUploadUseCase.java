@@ -2,6 +2,7 @@ package com.project1hour.api.core.application.image;
 
 import com.project1hour.api.core.application.image.api.ImageClient;
 import com.project1hour.api.core.application.image.eventhandler.ImageUploadEventHandler;
+import com.project1hour.api.core.application.image.manager.ImageExpressionManager;
 import com.project1hour.api.core.domain.image.ImageRepository;
 import com.project1hour.api.core.domain.image.entity.Image;
 import com.project1hour.api.core.domain.image.value.ImageName;
@@ -16,6 +17,7 @@ import org.springframework.transaction.annotation.Transactional;
 public class ImageUploadUseCase implements ImageUploadEventHandler {
 
     private final ImageRepository imageRepository;
+    private final ImageExpressionManager imageExpressionManager;
     private final ImageClient imageClient;
 
     @Override
@@ -27,7 +29,7 @@ public class ImageUploadUseCase implements ImageUploadEventHandler {
      * Command : 이미지 업로드
      */
     protected void processImageUpload(final Long imageId, final InputStream image) {
-        String imageName = imageClient.uploadImage(image);
+        String imageName = imageClient.uploadImage(image, imageExpressionManager.getImageExtension());
 
         Image uploadedImage = Image.createImage()
                 .id(imageId)
