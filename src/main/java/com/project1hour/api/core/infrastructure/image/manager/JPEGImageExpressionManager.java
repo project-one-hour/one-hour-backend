@@ -48,6 +48,11 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
         }
     }
 
+    @Override
+    public String getImageExtension() {
+        return IMAGE_EXTENSION;
+    }
+
     private Thumbnails.Builder<?> createThumbnailBuilder(final ImageEditOptions options) throws IOException {
         if (options.width() < MINIMUM_WIDTH || options.height() < MINIMUM_HEIGHT) {
             BufferedImage image = readImage(options.imageInput()).orElseThrow(() ->
