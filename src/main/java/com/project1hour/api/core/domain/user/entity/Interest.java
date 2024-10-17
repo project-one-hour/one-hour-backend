@@ -1,4 +1,4 @@
-package com.project1hour.api.core.domain.user.value;
+package com.project1hour.api.core.domain.user.entity;
 
 import static java.util.stream.Collectors.toMap;
 
