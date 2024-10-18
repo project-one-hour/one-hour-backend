@@ -15,11 +15,12 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
+import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
 @SQLDelete(sql = "UPDATE user SET deleted_at = now() WHERE bungae_id = ?")
-//@SQLRestriction("deleted_at IS NULL")
+@SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Participant extends AbstractEntity<Long> {
 
