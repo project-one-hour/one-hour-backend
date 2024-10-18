@@ -7,11 +7,11 @@ import org.locationtech.jts.geom.Point;
 
 @Embeddable
 public record Location(
-        @Column(nullable = false, columnDefinition = "point")
+        @Column(columnDefinition = "point")
         Point location,
 
         @Lob
         @Column(columnDefinition = "text")
-        String name
+        String locationInfo
 ) {
 }
