@@ -1,4 +1,4 @@
-package com.project1hour.api.core.domain.user.value;
+package com.project1hour.api.core.domain.user.entity;
 
 import static java.util.stream.Collectors.toMap;
 
@@ -41,15 +41,23 @@ public enum Interest {
     PICNIC("피크닉"),
     GAME("게임");
 
-    public static final Map<Long, Interest> INTEREST_IDS = Arrays.stream(Interest.values())
-            .collect(toMap(type -> type.id, Function.identity(), (oldValue, newValue) -> oldValue,
-                    LinkedHashMap::new));
+    public static final Map<Long, Interest> INTEREST_IDS =
+            Arrays.stream(Interest.values())
+                    .collect(toMap(
+                            type -> type.id,
+                            Function.identity(),
+                            (oldValue, newValue) -> oldValue,
+                            LinkedHashMap::new
+                    ));
 
-    private final long id = ordinal();
+    private static final long OFFSET = 1;
+
+    private final long id;
 
     private final String name;
 
     Interest(final String name) {
+        this.id = this.ordinal() + OFFSET;
         this.name = name;
     }
 }

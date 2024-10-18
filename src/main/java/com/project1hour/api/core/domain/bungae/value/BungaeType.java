@@ -1,4 +1,4 @@
-package com.project1hour.api.core.domain.bungae;
+package com.project1hour.api.core.domain.bungae.value;
 
 public enum BungaeType {
 

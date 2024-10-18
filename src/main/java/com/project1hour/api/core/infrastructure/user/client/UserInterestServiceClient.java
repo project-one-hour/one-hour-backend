@@ -1,9 +1,9 @@
 package com.project1hour.api.core.infrastructure.user.client;
 
-import static com.project1hour.api.core.domain.user.value.Interest.INTEREST_IDS;
+import static com.project1hour.api.core.domain.user.entity.Interest.INTEREST_IDS;
 
 import com.project1hour.api.core.application.user.api.UserInterestClient;
-import com.project1hour.api.core.domain.user.value.Interest;
+import com.project1hour.api.core.domain.user.entity.Interest;
 import java.util.Collection;
 import java.util.Map;
 import org.springframework.stereotype.Component;
