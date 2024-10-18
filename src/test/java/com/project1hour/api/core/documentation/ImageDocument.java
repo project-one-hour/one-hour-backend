@@ -20,7 +20,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.restdocs.payload.JsonFieldType;
 
-class ImageDocument extends DocumentationTest {
+public class ImageDocument extends DocumentationTest {
 
     @Nested
     class 이미지_업로드 {
