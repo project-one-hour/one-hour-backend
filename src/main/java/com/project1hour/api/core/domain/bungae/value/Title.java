@@ -5,7 +5,7 @@ import jakarta.persistence.Embeddable;
 
 @Embeddable
 public record Title(
-        @Column(nullable = false, length = 40)
+        @Column(name = "title", nullable = false, length = 40)
         String value
 ) {
 }
