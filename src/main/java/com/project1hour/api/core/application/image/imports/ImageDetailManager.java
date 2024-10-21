@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.image.manager;
+package com.project1hour.api.core.application.image.imports;
 
 import java.io.InputStream;
 

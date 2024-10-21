@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.api.UserInterestClient;
+import com.project1hour.api.core.application.user.imports.UserInterestClient;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import io.jsonwebtoken.lang.Collections;

@@ -1,6 +1,6 @@
 package com.project1hour.api.core.presentation.controller;
 
-import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
+import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;

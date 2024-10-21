@@ -4,8 +4,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.api.OauthClient2;
-import com.project1hour.api.core.application.user.api.data.SocialProfileId;
+import com.project1hour.api.core.application.user.imports.OauthClient2;
+import com.project1hour.api.core.application.user.imports.OauthClient2.SocialProfileId;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.User;
 import com.project1hour.api.core.domain.user.value.AuthInfo;

@@ -6,11 +6,9 @@ import static org.springframework.restdocs.operation.preprocess.Preprocessors.pr
 import com.project1hour.api.core.application.auth.AuthService;
 import com.project1hour.api.core.application.bungae.BungaeService;
 import com.project1hour.api.core.application.credit.CreditService;
-import com.project1hour.api.core.application.image.manager.ImageDetailManager;
-import com.project1hour.api.core.application.image.manager.ImageExpressionManager;
-import com.project1hour.api.core.application.image.manager.ImageValidationManager;
+import com.project1hour.api.core.application.image.exports.ImageCompressionFacade;
 import com.project1hour.api.core.application.member.MemberService;
-import com.project1hour.api.core.application.user.manager.TokenAuthManager;
+import com.project1hour.api.core.application.user.exports.TokenAuthorizationFacade;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.image.ImageUploader;
@@ -70,19 +68,13 @@ public class DocumentationTest {
     protected AuthenticationContext authenticationContext;
 
     @MockBean
-    protected TokenAuthManager tokenAuthManager;
+    protected TokenAuthorizationFacade tokenAuthenticationFacade;
 
     @MockBean
     protected MultipartResolver multipartResolver;
 
     @MockBean
-    protected ImageExpressionManager imageExpressionManager;
-
-    @MockBean
-    protected ImageValidationManager imageValidationManager;
-
-    @MockBean
-    protected ImageDetailManager imageDetailManager;
+    protected ImageCompressionFacade imageCompressionFacade;
 
     @BeforeEach
     void setUp(final WebApplicationContext webApplicationContext,

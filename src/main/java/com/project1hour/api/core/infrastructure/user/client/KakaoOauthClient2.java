@@ -3,8 +3,7 @@ package com.project1hour.api.core.infrastructure.user.client;
 
 import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
-import com.project1hour.api.core.application.user.api.OauthClient2;
-import com.project1hour.api.core.application.user.api.data.SocialProfileId;
+import com.project1hour.api.core.application.user.imports.OauthClient2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;

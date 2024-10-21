@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.service;
+package com.project1hour.api.core.application.user.exports;
 
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -8,6 +8,7 @@ public interface UserRegistrationService {
 
     Long signUpUser(Request request);
 
+    //인터페이스
     record Request(
             String nickname,
             String gender,

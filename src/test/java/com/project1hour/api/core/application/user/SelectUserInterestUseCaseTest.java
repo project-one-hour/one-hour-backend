@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.api.UserInterestClient;
+import com.project1hour.api.core.application.user.imports.UserInterestClient;
 import com.project1hour.api.global.advice.BadRequestException;
 import java.util.List;
 import java.util.Set;

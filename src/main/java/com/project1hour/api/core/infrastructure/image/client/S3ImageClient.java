@@ -1,6 +1,6 @@
 package com.project1hour.api.core.infrastructure.image.client;
 
-import com.project1hour.api.core.application.image.api.ImageClient;
+import com.project1hour.api.core.application.image.imports.ImageClient;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import io.awspring.cloud.s3.S3Exception;

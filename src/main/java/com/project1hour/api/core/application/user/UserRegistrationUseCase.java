@@ -1,8 +1,8 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.api.OauthClientFactory;
-import com.project1hour.api.core.application.user.api.data.SocialProfileId;
-import com.project1hour.api.core.application.user.service.UserRegistrationService;
+import com.project1hour.api.core.application.user.exports.UserRegistrationService;
+import com.project1hour.api.core.application.user.imports.OauthClient2.SocialProfileId;
+import com.project1hour.api.core.application.user.imports.OauthClientFactory;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.User;
 import com.project1hour.api.core.domain.user.event.UserRegisteredEvent;

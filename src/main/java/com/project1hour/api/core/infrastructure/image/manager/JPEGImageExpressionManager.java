@@ -1,6 +1,6 @@
 package com.project1hour.api.core.infrastructure.image.manager;
 
-import com.project1hour.api.core.application.image.manager.ImageExpressionManager;
+import com.project1hour.api.core.application.image.imports.ImageExpressionManager;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import java.awt.image.BufferedImage;
@@ -32,8 +32,9 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
 
     @Override
     public InputStream optimizeImage(final ImageEditOptions options) {
-        try {
-            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        try (InputStream imageInput = options.imageInput();
+             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
+
             createThumbnailBuilder(options)
                     .useExifOrientation(false)
                     .rotate(rotateImageAngle(options.rotation()))

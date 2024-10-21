@@ -4,9 +4,9 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
-import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService.Request;
-import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService.Response;
+import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService;
+import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService.Request;
+import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService.Response;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import org.junit.jupiter.api.DisplayNameGeneration;

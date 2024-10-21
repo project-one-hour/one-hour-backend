@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.api;
+package com.project1hour.api.core.application.user.imports;
 
 import java.util.Collection;
 

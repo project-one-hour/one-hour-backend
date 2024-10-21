@@ -2,7 +2,8 @@ package com.project1hour.api.core.infrastructure.user.manager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project1hour.api.core.application.user.manager.TokenAuthManager;
+import com.project1hour.api.core.application.user.data.UserDetail;
+import com.project1hour.api.core.application.user.imports.TokenAuthManager;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import io.jsonwebtoken.Claims;
@@ -19,12 +20,11 @@ import java.time.temporal.ChronoUnit;
 import java.util.Date;
 import java.util.Map;
 import javax.crypto.SecretKey;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class JwtAuthManager implements TokenAuthManager {
+public class JwtTokenAuthManager implements TokenAuthManager {
 
     private final static TypeReference<Map<String, Object>> CLAIMS_TYPE_REFERENCE = new TypeReference<>() {
     };
@@ -33,9 +33,9 @@ public class JwtAuthManager implements TokenAuthManager {
     private final SecretKey signingKey;
     private final long accessTokenExpireMilliSecond;
 
-    public JwtAuthManager(@Value("${jwt.token.secret-key}") final String signingKey,
-                          @Value("${jwt.token.expire-length.access}") final long accessTokenExpireMilliSecond,
-                          final ObjectMapper objectMapper) {
+    public JwtTokenAuthManager(@Value("${jwt.token.secret-key}") final String signingKey,
+                               @Value("${jwt.token.expire-length.access}") final long accessTokenExpireMilliSecond,
+                               final ObjectMapper objectMapper) {
         byte[] keyBytes = signingKey.getBytes(StandardCharsets.UTF_8);
         this.signingKey = Keys.hmacShaKeyFor(keyBytes);
         this.accessTokenExpireMilliSecond = accessTokenExpireMilliSecond;
@@ -43,19 +43,13 @@ public class JwtAuthManager implements TokenAuthManager {
     }
 
     @Override
-    public String authorize(final UserDetail userDetail) {
+    public String createToken(final UserDetail userDetail) {
         return Jwts.builder()
                 .issuedAt(issuedNow())
                 .expiration(expiredAt(accessTokenExpireMilliSecond))
                 .signWith(signingKey)
                 .claims(objectMapper.convertValue(userDetail, CLAIMS_TYPE_REFERENCE))
                 .compact();
-    }
-
-    @Override
-    public boolean isAuthenticated(final String token) {
-        Claims claim = extractBody(token);
-        return ObjectUtils.isNotEmpty(claim);
     }
 
     @Override

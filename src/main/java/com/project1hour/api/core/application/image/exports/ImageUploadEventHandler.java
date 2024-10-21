@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.image.eventhandler;
+package com.project1hour.api.core.application.image.exports;
 
 import java.io.InputStream;
 

@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.service;
+package com.project1hour.api.core.application.user.exports;
 
 public interface CheckNicknameDuplicationService {
 

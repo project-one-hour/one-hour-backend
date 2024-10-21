@@ -1,11 +1,13 @@
-package com.project1hour.api.core.application.user.api;
+package com.project1hour.api.core.application.user.imports;
 
-
-import com.project1hour.api.core.application.user.api.data.SocialProfileId;
 
 public interface OauthClient2 {
 
     boolean isSupport(String provider);
 
     SocialProfileId findSocialProfileIdByAccessToken(String accessToken);
+
+    interface SocialProfileId {
+        String id();
+    }
 }
