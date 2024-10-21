@@ -5,7 +5,7 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 
-import com.project1hour.api.core.application.user.imports.UserInterestClient;
+import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import java.util.List;
 import java.util.Set;
@@ -25,13 +25,13 @@ public class SelectUserInterestUseCaseTest {
     private SelectUserInterestUseCase selectUserInterestUseCase;
 
     @MockBean
-    private UserInterestClient userInterestClient;
+    private UserRepository userRepository;
 
     @Test
     void 모든_관심사가_존재할_때_관심사_아이디_Set을_반환한다() {
         // given
         List<Long> interestIds = List.of(1L, 2L, 3L, 4L, 5L);
-        given(userInterestClient.hasMissingInterestIds(any())).willReturn(false);
+        given(userRepository.hasMissingInterestIds(any())).willReturn(false);
 
         // when
         Set<Long> result = selectUserInterestUseCase.selectInterestIds(interestIds);
@@ -47,7 +47,7 @@ public class SelectUserInterestUseCaseTest {
     void 중복된_관심사가_존재할_때_예외가_발생한다() {
         // given
         List<Long> interestIds = List.of(1L, 2L, 2L, 4L, 5L);
-        given(userInterestClient.hasMissingInterestIds(any())).willReturn(false);
+        given(userRepository.hasMissingInterestIds(any())).willReturn(false);
 
         // expect
         assertThatThrownBy(() -> selectUserInterestUseCase.selectInterestIds(interestIds))
@@ -59,7 +59,7 @@ public class SelectUserInterestUseCaseTest {
     void 존재하지_않은_관심사가_존재할_때_예외가_발생한다() {
         // given
         List<Long> interestIds = List.of(1L, 2L, 3L, 4L, 5L);
-        given(userInterestClient.hasMissingInterestIds(any())).willReturn(true);
+        given(userRepository.hasMissingInterestIds(any())).willReturn(true);
 
         // expect
         assertThatThrownBy(() -> selectUserInterestUseCase.selectInterestIds(interestIds))
