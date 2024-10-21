@@ -1,4 +1,4 @@
-package com.project1hour.api.core.domain.user.event;
+package com.project1hour.api.core.domain.user;
 
 import com.project1hour.api.global.domain.DomainEvent;
 

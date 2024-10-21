@@ -1,5 +1,6 @@
-package com.project1hour.api.core.domain.user.event;
+package com.project1hour.api.core.application.user.event;
 
+import com.project1hour.api.core.domain.user.UserDomainEvent;
 import java.io.InputStream;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -12,7 +13,7 @@ public record ProfileImageConfiguredEvent(
         List<Long> imageIds,
         LocalDateTime occurredAt) implements UserDomainEvent {
 
-    public ProfileImageConfiguredEvent(List<InputStream> images, List<Long> imageIds) {
+    public ProfileImageConfiguredEvent(final List<InputStream> images, final List<Long> imageIds) {
         this(images, imageIds, LocalDateTime.now());
     }
 }

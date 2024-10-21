@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.domain.user.event.ProfileImageConfiguredEvent;
+import com.project1hour.api.core.application.user.event.ProfileImageConfiguredEvent;
 import com.project1hour.api.global.support.IdGenerator;
 import java.io.InputStream;
 import java.util.List;

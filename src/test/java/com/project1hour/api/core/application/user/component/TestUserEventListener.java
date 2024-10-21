@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user.component;
 
-import com.project1hour.api.core.domain.user.event.UserDomainEvent;
+import com.project1hour.api.core.domain.user.UserDomainEvent;
 import java.util.ArrayList;
 import java.util.List;
 import org.springframework.context.event.EventListener;
