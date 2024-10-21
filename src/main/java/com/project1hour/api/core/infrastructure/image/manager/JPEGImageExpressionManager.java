@@ -3,6 +3,7 @@ package com.project1hour.api.core.infrastructure.image.manager;
 import com.project1hour.api.core.application.image.imports.ImageExpressionManager;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
+import com.project1hour.api.global.support.IOUtils;
 import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
@@ -32,9 +33,8 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
 
     @Override
     public InputStream optimizeImage(final ImageEditOptions options) {
-        try (InputStream imageInput = options.imageInput();
-             ByteArrayOutputStream outputStream = new ByteArrayOutputStream()) {
-
+        try {
+            ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
             createThumbnailBuilder(options)
                     .useExifOrientation(false)
                     .rotate(rotateImageAngle(options.rotation()))
@@ -42,6 +42,7 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
                     .outputFormat(IMAGE_EXTENSION)
                     .toOutputStream(outputStream);
 
+            IOUtils.closeQuietly(options.imageInput());
             return new ByteArrayInputStream(outputStream.toByteArray());
         } catch (IOException e) {
             log.error("이미지 압축 과정에서 I/O 오류 발생: {}", ExceptionUtils.getStackTrace(e));
