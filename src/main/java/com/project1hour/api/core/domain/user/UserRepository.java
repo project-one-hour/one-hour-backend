@@ -1,6 +1,7 @@
 package com.project1hour.api.core.domain.user;
 
 import com.project1hour.api.core.domain.user.entity.User;
+import java.util.Collection;
 import java.util.Optional;
 
 public interface UserRepository {
@@ -14,4 +15,6 @@ public interface UserRepository {
     boolean existsAuthBySocialProfileId(String socialProfileId);
 
     Optional<User> findByAuthSocialProfileId(String socialProfileId);
+
+    boolean hasMissingInterestIds(Collection<Long> interestIds);
 }

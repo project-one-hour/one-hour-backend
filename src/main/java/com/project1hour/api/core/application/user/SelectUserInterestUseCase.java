@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.imports.UserInterestClient;
+import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import io.jsonwebtoken.lang.Collections;
@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 @RequiredArgsConstructor
 public class SelectUserInterestUseCase {
 
-    private final UserInterestClient userInterestClient;
+    private final UserRepository userRepository;
 
     /**
      * Command : 전체 관심사 선택
@@ -31,7 +31,7 @@ public class SelectUserInterestUseCase {
             throw new BadRequestException(message, ErrorCode.DUPLICATE_INTERESTS_FOUND);
         }
 
-        if (userInterestClient.hasMissingInterestIds(interestIdSet)) {
+        if (userRepository.hasMissingInterestIds(interestIdSet)) {
             throw new BadRequestException("알 수 없는 관심사 값이 포함되어 있습니다.", ErrorCode.UNKNOWN_INTERESTS_FOUND);
         }
 
