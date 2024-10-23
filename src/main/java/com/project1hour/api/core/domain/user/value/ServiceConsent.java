@@ -22,8 +22,8 @@ public record ServiceConsent(
     public enum Notification {ALLOW, NOT_ALLOW}
 
     @Builder(builderMethodName = "of")
-    private static ServiceConsent createServiceConsent(final boolean marketingConsentAllowed,
-                                                       final boolean notificationConsentAllowed) {
+    public static ServiceConsent createServiceConsent(final boolean marketingConsentAllowed,
+                                                      final boolean notificationConsentAllowed) {
         Marketing marketing = Marketing.NOT_ALLOW;
         Notification notification = Notification.NOT_ALLOW;
 

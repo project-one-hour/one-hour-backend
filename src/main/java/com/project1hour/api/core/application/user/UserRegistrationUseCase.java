@@ -1,22 +1,23 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.event.UserRegisteredEvent;
+import com.project1hour.api.core.application.user.data.ProfileImageInput;
+import com.project1hour.api.core.application.user.data.event.UserRegisteredEvent;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
 import com.project1hour.api.core.application.user.imports.OauthClient2.SocialProfileId;
 import com.project1hour.api.core.application.user.imports.OauthClientFactory;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.User;
+import com.project1hour.api.core.domain.user.entity.User.UserBuilder;
 import com.project1hour.api.core.domain.user.value.AuthInfo;
 import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
-import com.project1hour.api.core.domain.user.value.ServiceConsent;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -28,16 +29,25 @@ public class UserRegistrationUseCase implements UserRegistrationService {
     private final CheckNicknameDuplicationUseCase checkNicknameDuplicationUseCase;
     private final SelectUserInterestUseCase selectUserInterestUseCase;
     private final ProfileImageConfigurationUseCase profileImageConfigurationUsecase;
+    private final TokenAuthenticationUseCase tokenAuthenticationUseCase;
 
     private final UserRepository userRepository;
     private final OauthClientFactory oauthClientFactory;
     private final ApplicationEventPublisher applicationEventPublisher;
 
     @Override
-    public Long signUpUser(final UserRegistrationService.Request request) {
+    public Response signUpUser(final Request request) {
         checkNicknameDuplicationUseCase.checkIfNicknameDuplicate(request.nickname());
 
+        List<Long> interestIds = request.interestIds();
+        User userInterestSelectedUser = selectUserInterestUseCase.selectInterestIds(null, interestIds);
+
+        List<ProfileImageInput> profileImageInputs = request.profileImageInputs();
+        User profileImageConfiguredUser =
+                profileImageConfigurationUsecase.configureProfileImages(userInterestSelectedUser, profileImageInputs);
+
         User registeredUser = registerUser(
+                profileImageConfiguredUser,
                 request.nickname(),
                 request.gender(),
                 request.birthday(),
@@ -46,21 +56,20 @@ public class UserRegistrationUseCase implements UserRegistrationService {
                 request.notificationConsentAllowed(),
                 request.socialProvider().provider(),
                 request.socialProvider().accessToken(),
-                request.socialProvider().refreshToken(),
-                selectUserInterestUseCase.selectInterestIds(request.interestIds()),
-                profileImageConfigurationUsecase.configureProfileImages(request.imageFiles()),
-                request.primaryImageFileIndex()
+                request.socialProvider().refreshToken()
         );
-        return registeredUser.getId();
+
+        String accessToken = tokenAuthenticationUseCase.createAccessToken(registeredUser.getId());
+        return new Response(accessToken);
     }
 
     /**
      * Command : 회원 가입
      */
-    protected User registerUser(final String nickname, final String gender, final LocalDate birthday, final String mbti,
+    protected User registerUser(final User user, final String nickname, final String gender, final LocalDate birthday,
+                                final String mbti,
                                 final boolean marketingConsentAllowed, final boolean notificationConsentAllowed,
-                                final String provider, final String accessToken, final String refreshToken,
-                                final Set<Long> interestIds, final List<Long> imageIds, final int primaryImageIndex) {
+                                final String provider, final String accessToken, final String refreshToken) {
         SocialProfileId socialProfileId =
                 oauthClientFactory.getOauthClientByProvider(provider).findSocialProfileIdByAccessToken(accessToken);
 
@@ -68,22 +77,17 @@ public class UserRegistrationUseCase implements UserRegistrationService {
             throw new BadRequestException("이미 가입한 사용자 입니다.", ErrorCode.DUPLICATED_SIGN_UP);
         }
 
-        User newUser = User.createNewUser()
-                .nickname(new Nickname(nickname))
-                .gender(Gender.find(gender))
-                .birthday(new Birthday(birthday))
-                .mbti(Mbti.find(mbti))
-                .serviceConsent(
-                        ServiceConsent.of()
-                                .marketingConsentAllowed(marketingConsentAllowed)
-                                .notificationConsentAllowed(notificationConsentAllowed)
-                                .build()
-                )
-                .interestIds(interestIds)
-                .imageIds(imageIds)
-                .primaryImageIndex(primaryImageIndex)
-                .provider(provider)
-                .authInfo(new AuthInfo(socialProfileId.id(), accessToken, refreshToken))
+        UserBuilder userBuilder = Optional.ofNullable(user)
+                .map(User::toBuilder)
+                .orElseGet(User::builder);
+
+        User newUser = userBuilder
+                .withNickname(new Nickname(nickname))
+                .withGender(Gender.find(gender))
+                .withBirthday(new Birthday(birthday))
+                .withMbti(Mbti.find(mbti))
+                .serviceConsent(marketingConsentAllowed, notificationConsentAllowed)
+                .userAuth(provider, new AuthInfo(socialProfileId.id(), accessToken, refreshToken))
                 .build();
 
         User registeredUser = userRepository.save(newUser);

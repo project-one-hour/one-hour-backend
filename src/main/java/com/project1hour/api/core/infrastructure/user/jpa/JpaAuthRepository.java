@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 
 public interface JpaAuthRepository extends JpaRepository<Auth, Long> {
 
-    boolean existsByInfoSocialProfileId(String socialProfileId);
+    boolean existsByAuthInfoSocialProfileId(String socialProfileId);
 
-    Optional<Auth> findByInfoSocialProfileId(String socialProfileId);
+    Optional<Auth> findByAuthInfoSocialProfileId(String socialProfileId);
 }

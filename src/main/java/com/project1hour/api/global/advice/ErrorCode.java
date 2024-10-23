@@ -41,7 +41,9 @@ public enum ErrorCode {
     INVALID_IMAGE_NAME("IM03", "이미지 업로드시, 이미지의 이름이 비어있거나 NULL인 경우"),
     INVALID_IMAGE_EXTENSION("IM04", "이미지 업로드시, PNG JPEG JPG SVG 확장자가 아닌 파일인 경우"),
     INVALID_PRIMARY_IMAGE_INDEX("IM05", "유효하지 않은 대표 사진 index일 경우"),
-    IMAGE_TOO_LARGE("IM06", "이미지의 크기가 너무 큰 경우"),
+    NO_PRIMARY_PROFILE_IMAGE("IM06", "대표 프로필 이미지가 존재하지 않는 경우"),
+    TOO_MANY_PRIMARY_PROFILE_IMAGES("IM07", "대표 프로필 이미지가 너무 많은 경우"),
+    IMAGE_TOO_LARGE("IM08", "이미지의 크기가 너무 큰 경우"),
 
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우(Provider 서버 예외)"),

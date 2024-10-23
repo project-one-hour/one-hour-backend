@@ -34,7 +34,7 @@ public class UserInterest extends AbstractEntity<Long> {
     @Column(nullable = false)
     private Long interestId;
 
-    @Builder
+    @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
     public UserInterest(final Long id, final User user, final Long interestId) {
         this.id = id;
         this.user = user;

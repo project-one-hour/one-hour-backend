@@ -6,6 +6,7 @@ import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
+import com.project1hour.api.core.domain.user.value.ProfileImageType;
 import com.project1hour.api.core.domain.user.value.ServiceConsent;
 import com.project1hour.api.global.domain.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
@@ -19,10 +20,14 @@ import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Builder.ObtainVia;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -42,7 +47,7 @@ public class User extends AbstractEntity<Long> {
     private Long id;
 
     @Embedded
-    private Nickname nickName;
+    private Nickname nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, updatable = false)
@@ -67,44 +72,86 @@ public class User extends AbstractEntity<Long> {
     @JoinColumn(name = "auth_id")
     private Auth userAuth;
 
-    /**
-     * TODO: 추후 소속 번개에 대한 정의
-     */
-    @Builder(builderClassName = "CreateNewUserBuilder", builderMethodName = "createNewUser")
+    @Builder(setterPrefix = "with", toBuilder = true)
     public User(final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
-                final ServiceConsent serviceConsent, final Set<Long> interestIds,
-                final String provider, final AuthInfo authInfo,
-                final List<Long> imageIds, final int primaryImageIndex) {
-        this.nickName = nickname;
+                final ServiceConsent serviceConsent, final Auth userAuth,
+                @ObtainVia(method = "userInterestsToSet") final Set<UserInterest> userInterests,
+                @ObtainVia(method = "profileImagesToList") final List<ProfileImage> profileImages) {
+        this.nickname = nickname;
         this.gender = gender;
         this.birthday = birthday;
         this.mbti = mbti;
         this.serviceConsent = serviceConsent;
-        this.userInterests = addUserInterests(interestIds);
-        this.profileImages = addProfileImages(imageIds, primaryImageIndex);
-        this.userAuth = addUserAuth(provider, authInfo);
+        this.userAuth = userAuth;
+        this.userInterests = createUserInterests(userInterests);
+        this.profileImages = createProfileImages(profileImages);
     }
 
-    private UserInterests addUserInterests(final Set<Long> interestIds) {
-        return UserInterests.builder()
-                .interestIds(interestIds)
-                .user(this)
-                .build();
+    private ProfileImages createProfileImages(final List<ProfileImage> profileImages) {
+        List<ProfileImage> profileImageList = profileImages.stream()
+                .map(profileImage -> profileImage.toBuilder().user(this).build())
+                .toList();
+        return new ProfileImages(profileImageList);
     }
 
-    private ProfileImages addProfileImages(final List<Long> imageIds, final int primaryImageIndex) {
-        return ProfileImages.builder()
-                .imageIds(imageIds)
-                .primaryImageIndex(primaryImageIndex)
-                .user(this)
-                .build();
+    private List<ProfileImage> profileImagesToList() {
+        return profileImages.getProfileImageList();
     }
 
-    private Auth addUserAuth(final String provider, final AuthInfo authInfo) {
-        return Auth.builder()
-                .provider(AuthProvider.find(provider))
-                .authInfo(authInfo)
-                .user(this)
-                .build();
+    private UserInterests createUserInterests(final Set<UserInterest> userInterests) {
+        Set<UserInterest> userInterestSet = userInterests.stream()
+                .map(userInterest -> userInterest.toBuilder().user(this).build())
+                .collect(Collectors.toSet());
+        return new UserInterests(userInterestSet);
+    }
+
+    private Set<UserInterest> userInterestsToSet() {
+        return userInterests.getUserInterestSet();
+    }
+
+    public static class UserBuilder {
+
+        public UserBuilder serviceConsent(final boolean marketingConsentAllowed,
+                                          final boolean notificationConsentAllowed) {
+            this.serviceConsent = ServiceConsent.of()
+                    .marketingConsentAllowed(marketingConsentAllowed)
+                    .notificationConsentAllowed(notificationConsentAllowed)
+                    .build();
+            return this;
+        }
+
+        public UserBuilder userAuth(final String provider, final AuthInfo authInfo) {
+            this.userAuth = Auth.builder()
+                    .provider(AuthProvider.find(provider))
+                    .authInfo(authInfo)
+                    .build();
+            return this;
+        }
+
+        public UserBuilder userInterest(final Long interestId) {
+            if (this.userInterests == null) {
+                this.userInterests = new HashSet<>();
+            }
+
+            UserInterest userInterest = UserInterest.builder()
+                    .interestId(interestId)
+                    .build();
+            this.userInterests.add(userInterest);
+
+            return this;
+        }
+
+        public UserBuilder profileImage(final Long imageId, final boolean isPrimaryImage) {
+            if (this.profileImages == null) {
+                this.profileImages = new ArrayList<>();
+            }
+            ProfileImage profileImage = ProfileImage.builder()
+                    .imageId(imageId)
+                    .profileImageType(isPrimaryImage ? ProfileImageType.PRIMARY : ProfileImageType.SECONDARY)
+                    .build();
+            this.profileImages.add(profileImage);
+
+            return this;
+        }
     }
 }

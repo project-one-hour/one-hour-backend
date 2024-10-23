@@ -30,7 +30,7 @@ public class ProfileImage extends AbstractEntity<Long> {
     @Column(name = "profile_image_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long imageId;
 
     @ManyToOne(fetch = FetchType.LAZY)
@@ -41,7 +41,7 @@ public class ProfileImage extends AbstractEntity<Long> {
     @Column(nullable = false)
     private ProfileImageType profileImageType;
 
-    @Builder
+    @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
     public ProfileImage(final Long id, final Long imageId, final User user, final ProfileImageType profileImageType) {
         this.id = id;
         this.imageId = imageId;

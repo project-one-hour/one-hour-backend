@@ -1,14 +1,13 @@
 package com.project1hour.api.core.application.user.exports;
 
-import java.io.InputStream;
+import com.project1hour.api.core.application.user.data.ProfileImageInput;
 import java.time.LocalDate;
 import java.util.List;
 
 public interface UserRegistrationService {
 
-    Long signUpUser(Request request);
+    Response signUpUser(Request request);
 
-    //인터페이스
     record Request(
             String nickname,
             String gender,
@@ -17,15 +16,16 @@ public interface UserRegistrationService {
             List<Long> interestIds,
             boolean marketingConsentAllowed,
             boolean notificationConsentAllowed,
-            SocialProvider socialProvider,
-            List<InputStream> imageFiles,
-            int primaryImageFileIndex) {
+            SocialProviderRequest socialProvider,
+            List<ProfileImageInput> profileImageInputs) {
     }
 
-    record SocialProvider(
+    record SocialProviderRequest(
             String provider,
             String accessToken,
             String refreshToken) {
     }
 
+    record Response(String accessToken) {
+    }
 }

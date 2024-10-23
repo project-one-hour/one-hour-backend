@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.event;
+package com.project1hour.api.core.application.user.data.event;
 
 import com.project1hour.api.core.domain.user.UserDomainEvent;
 import java.time.LocalDateTime;

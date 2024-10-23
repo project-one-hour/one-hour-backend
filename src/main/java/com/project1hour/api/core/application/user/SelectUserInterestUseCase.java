@@ -1,10 +1,13 @@
 package com.project1hour.api.core.application.user;
 
 import com.project1hour.api.core.domain.user.UserRepository;
+import com.project1hour.api.core.domain.user.entity.User;
+import com.project1hour.api.core.domain.user.entity.User.UserBuilder;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import io.jsonwebtoken.lang.Collections;
 import java.util.List;
+import java.util.Optional;
 import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -23,7 +26,7 @@ public class SelectUserInterestUseCase {
     /**
      * Command : 전체 관심사 선택
      */
-    protected Set<Long> selectInterestIds(final List<Long> interestIds) {
+    protected User selectInterestIds(final User user, final List<Long> interestIds) {
         Set<Long> interestIdSet = Collections.asSet(interestIds);
 
         if (interestIdSet.size() != interestIds.size()) {
@@ -35,6 +38,12 @@ public class SelectUserInterestUseCase {
             throw new BadRequestException("알 수 없는 관심사 값이 포함되어 있습니다.", ErrorCode.UNKNOWN_INTERESTS_FOUND);
         }
 
-        return interestIdSet;
+        UserBuilder userBuilder = Optional.ofNullable(user)
+                .map(User::toBuilder)
+                .orElseGet(User::builder);
+
+        interestIdSet.forEach(userBuilder::userInterest);
+
+        return userBuilder.build();
     }
 }

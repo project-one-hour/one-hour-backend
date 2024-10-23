@@ -27,17 +27,17 @@ public class DefaultUserRepository implements UserRepository {
 
     @Override
     public boolean existsByNickname(final String nickname) {
-        return jpaUserRepository.existsByNickNameValue(nickname);
+        return jpaUserRepository.existsByNicknameValue(nickname);
     }
 
     @Override
     public boolean existsAuthBySocialProfileId(final String socialProfileId) {
-        return jpaAuthRepository.existsByInfoSocialProfileId(socialProfileId);
+        return jpaAuthRepository.existsByAuthInfoSocialProfileId(socialProfileId);
     }
 
     @Override
     public Optional<User> findByAuthSocialProfileId(final String socialProfileId) {
-        return jpaAuthRepository.findByInfoSocialProfileId(socialProfileId)
+        return jpaAuthRepository.findByAuthInfoSocialProfileId(socialProfileId)
                 .map(Auth::getUser);
     }
 

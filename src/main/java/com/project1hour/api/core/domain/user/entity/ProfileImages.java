@@ -7,11 +7,10 @@ import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
 import java.util.List;
-import java.util.stream.IntStream;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.CollectionUtils;
 
 /**
  * TODO : 대표 사진 validate 작성
@@ -20,40 +19,44 @@ import org.springframework.util.CollectionUtils;
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileImages {
 
-    private static final int MAX_PROFILE_IMAGE_SIZE = 3;
+    private static final int MAX_PROFILE_IMAGES_SIZE = 3;
 
+    private static final long REQUIRED_PRIMARY_IMAGE_COUNT = 1;
+    private static final long NO_PRIMARY_IMAGE = 0;
+
+    @Getter(AccessLevel.PACKAGE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfileImage> profileImageList;
 
-    @Builder
-    public ProfileImages(final List<Long> imageIds, final int primaryImageIndex, final User user) {
-        validate(imageIds, primaryImageIndex);
-        this.profileImageList = createProfileImageList(imageIds, primaryImageIndex, user);
+    public ProfileImages(final List<ProfileImage> profileImages) {
+        this.profileImageList = profileImages;
+        validateProfileImageCount();
+        validateSinglePrimaryImage();
     }
 
-    private void validate(final List<Long> imageIds, final int primaryImageIndex) {
-        if (CollectionUtils.isEmpty(imageIds) || imageIds.size() > MAX_PROFILE_IMAGE_SIZE) {
-            String message = String.format("프로필 이미지는 1장 이상 3장 이하여야 합니다. size = %d", imageIds.size());
+    private void validateProfileImageCount() {
+        if (profileImageList.isEmpty() || profileImageList.size() > MAX_PROFILE_IMAGES_SIZE) {
+            String message = String.format("프로필 이미지는 1장 이상 3장 이하여야 합니다. size = %d", profileImageList.size());
             throw new BadRequestException(message, ErrorCode.INVALID_MEMBER_PROFILE_IMAGE_SIZE);
         }
+    }
 
-        if (primaryImageIndex < 0 || primaryImageIndex >= imageIds.size()) {
-            String message = String.format("유효하지 않은 대표 프로필 사진 index입니다. index = %d image size = %d",
-                    primaryImageIndex, imageIds.size());
-            throw new BadRequestException(message, ErrorCode.INVALID_PRIMARY_IMAGE_INDEX);
+    private void validateSinglePrimaryImage() {
+        long countPrimaryImages = countPrimaryImages();
+
+        if (countPrimaryImages == NO_PRIMARY_IMAGE) {
+            throw new BadRequestException("대표 프로필 이미지가 존재하지 않습니다.", ErrorCode.NO_PRIMARY_PROFILE_IMAGE);
+        }
+
+        if (countPrimaryImages != REQUIRED_PRIMARY_IMAGE_COUNT) {
+            String message = String.format("대표 프로필 이미지는 1장만 있어야 합니다. 현재 개수: %d", countPrimaryImages);
+            throw new BadRequestException(message, ErrorCode.TOO_MANY_PRIMARY_PROFILE_IMAGES);
         }
     }
 
-    private List<ProfileImage> createProfileImageList(final List<Long> imageIds, final int primaryImageIndex,
-                                                      final User user) {
-        return IntStream.range(0, imageIds.size())
-                .mapToObj(index -> ProfileImage.builder()
-                        .imageId(imageIds.get(index))
-                        .profileImageType(
-                                index == primaryImageIndex ? ProfileImageType.PRIMARY : ProfileImageType.SECONDARY)
-                        .user(user)
-                        .build())
-                .toList();
+    private long countPrimaryImages() {
+        return profileImageList.stream()
+                .collect(Collectors.groupingBy(ProfileImage::getProfileImageType, Collectors.counting()))
+                .getOrDefault(ProfileImageType.PRIMARY, NO_PRIMARY_IMAGE);
     }
-
 }

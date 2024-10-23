@@ -38,13 +38,13 @@ public class Auth extends AbstractEntity<Long> {
     private AuthProvider provider;
 
     @Embedded
-    private AuthInfo info;
+    private AuthInfo authInfo;
 
-    @Builder
+    @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
     public Auth(final Long id, User user, final AuthProvider provider, final AuthInfo authInfo) {
         this.id = id;
         this.user = user;
         this.provider = provider;
-        this.info = authInfo;
+        this.authInfo = authInfo;
     }
 }

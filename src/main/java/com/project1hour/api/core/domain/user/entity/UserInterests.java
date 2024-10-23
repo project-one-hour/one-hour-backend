@@ -8,9 +8,8 @@ import jakarta.persistence.OneToMany;
 import java.util.Set;
 import java.util.stream.Collectors;
 import lombok.AccessLevel;
-import lombok.Builder;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.springframework.util.CollectionUtils;
 
 @Embeddable
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -18,22 +17,18 @@ public class UserInterests {
 
     private static final int USER_INTEREST_LIMIT = 5;
 
+    @Getter(AccessLevel.PACKAGE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserInterest> userInterestList;
+    private Set<UserInterest> userInterestSet;
 
-    @Builder
-    public UserInterests(final Set<Long> interestIds, final User user) {
-        validate(interestIds);
-        this.userInterestList = createUserInterestList(interestIds, user);
+    public UserInterests(final Set<UserInterest> userInterests) {
+        this.userInterestSet = Set.copyOf(userInterests);
+        validate();
     }
 
-    private void validate(final Set<Long> interestIds) {
-        if (CollectionUtils.isEmpty(interestIds)) {
-            throw new BadRequestException("관심사가 비어있습니다.", ErrorCode.INTERESTS_NOT_PROVIDED);
-        }
-
-        if (interestIds.size() != USER_INTEREST_LIMIT) {
-            String message = String.format("관심사가 %d개가 아닙니다. size = %d", USER_INTEREST_LIMIT, interestIds.size());
+    private void validate() {
+        if (userInterestSet.size() != USER_INTEREST_LIMIT) {
+            String message = String.format("관심사가 %d개가 아닙니다. size = %d", USER_INTEREST_LIMIT, userInterestSet.size());
             throw new BadRequestException(message, ErrorCode.INVALID_INTERESTS_LIMIT);
         }
     }

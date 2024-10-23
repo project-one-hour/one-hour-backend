@@ -29,7 +29,7 @@ public class Participant extends AbstractEntity<Long> {
     @Column(name = "participant_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
