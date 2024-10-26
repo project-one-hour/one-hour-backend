@@ -1,6 +1,7 @@
 package com.project1hour.api.core.domain.user;
 
-import com.project1hour.api.global.domain.DomainEvent;
+import java.time.LocalDateTime;
 
-public interface UserDomainEvent extends DomainEvent {
+public interface UserDomainEvent {
+    LocalDateTime occurredAt();
 }
