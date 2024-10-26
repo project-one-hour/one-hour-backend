@@ -1,4 +1,4 @@
-package com.project1hour.api.global.domain;
+package com.project1hour.api.global.entity;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Embeddable;
