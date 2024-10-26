@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.image.entity;
 
 import com.project1hour.api.core.domain.image.value.ImageName;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;

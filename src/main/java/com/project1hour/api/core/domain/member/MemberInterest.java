@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.member;
 
 import com.project1hour.api.core.domain.interest.Interest;
-import com.project1hour.api.global.domain.CommonField;
+import com.project1hour.api.global.entity.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

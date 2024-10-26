@@ -5,8 +5,7 @@ import com.project1hour.api.global.advice.ErrorCode;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Embeddable;
 import jakarta.persistence.OneToMany;
-import java.util.Set;
-import java.util.stream.Collectors;
+import java.util.List;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,27 +18,17 @@ public class UserInterests {
 
     @Getter(AccessLevel.PACKAGE)
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Set<UserInterest> userInterestSet;
+    private List<UserInterest> userInterestList;
 
-    public UserInterests(final Set<UserInterest> userInterests) {
-        this.userInterestSet = Set.copyOf(userInterests);
+    public UserInterests(final List<UserInterest> userInterests) {
+        this.userInterestList = List.copyOf(userInterests);
         validate();
     }
 
     private void validate() {
-        if (userInterestSet.size() != USER_INTEREST_LIMIT) {
-            String message = String.format("관심사가 %d개가 아닙니다. size = %d", USER_INTEREST_LIMIT, userInterestSet.size());
+        if (userInterestList.size() != USER_INTEREST_LIMIT) {
+            String message = String.format("관심사가 %d개가 아닙니다. size = %d", USER_INTEREST_LIMIT, userInterestList.size());
             throw new BadRequestException(message, ErrorCode.INVALID_INTERESTS_LIMIT);
         }
-    }
-
-    private Set<UserInterest> createUserInterestList(final Set<Long> interestIds, final User user) {
-        return interestIds.stream()
-                .map(interestId -> UserInterest.builder()
-                        .interestId(interestId)
-                        .user(user)
-                        .build()
-                )
-                .collect(Collectors.toSet());
     }
 }

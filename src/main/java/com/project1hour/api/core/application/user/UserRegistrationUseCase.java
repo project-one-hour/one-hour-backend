@@ -17,7 +17,6 @@ import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -40,14 +39,15 @@ public class UserRegistrationUseCase implements UserRegistrationService {
         checkNicknameDuplicationUseCase.checkIfNicknameDuplicate(request.nickname());
 
         List<Long> interestIds = request.interestIds();
-        User userInterestSelectedUser = selectUserInterestUseCase.selectInterestIds(null, interestIds);
+        UserBuilder interestSelectedBuilder =
+                selectUserInterestUseCase.selectInterestIds(User.builder(), interestIds);
 
         List<ProfileImageInput> profileImageInputs = request.profileImageInputs();
-        User profileImageConfiguredUser =
-                profileImageConfigurationUsecase.configureProfileImages(userInterestSelectedUser, profileImageInputs);
+        UserBuilder profileImageConfiguredBuilder =
+                profileImageConfigurationUsecase.configureProfileImages(interestSelectedBuilder, profileImageInputs);
 
         User registeredUser = registerUser(
-                profileImageConfiguredUser,
+                profileImageConfiguredBuilder,
                 request.nickname(),
                 request.gender(),
                 request.birthday(),
@@ -66,8 +66,8 @@ public class UserRegistrationUseCase implements UserRegistrationService {
     /**
      * Command : 회원 가입
      */
-    protected User registerUser(final User user, final String nickname, final String gender, final LocalDate birthday,
-                                final String mbti,
+    protected User registerUser(final UserBuilder userBuilder, final String nickname, final String gender,
+                                final LocalDate birthday, final String mbti,
                                 final boolean marketingConsentAllowed, final boolean notificationConsentAllowed,
                                 final String provider, final String accessToken, final String refreshToken) {
         SocialProfileId socialProfileId =
@@ -76,10 +76,6 @@ public class UserRegistrationUseCase implements UserRegistrationService {
         if (userRepository.existsAuthBySocialProfileId(socialProfileId.id())) {
             throw new BadRequestException("이미 가입한 사용자 입니다.", ErrorCode.DUPLICATED_SIGN_UP);
         }
-
-        UserBuilder userBuilder = Optional.ofNullable(user)
-                .map(User::toBuilder)
-                .orElseGet(User::builder);
 
         User newUser = userBuilder
                 .withNickname(new Nickname(nickname))

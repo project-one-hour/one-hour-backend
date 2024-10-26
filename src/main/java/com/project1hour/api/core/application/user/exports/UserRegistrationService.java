@@ -8,19 +8,27 @@ public interface UserRegistrationService {
 
     Response signUpUser(Request request);
 
-    record Request(
-            String nickname,
-            String gender,
-            LocalDate birthday,
-            String mbti,
-            List<Long> interestIds,
-            boolean marketingConsentAllowed,
-            boolean notificationConsentAllowed,
-            SocialProviderRequest socialProvider,
-            List<ProfileImageInput> profileImageInputs) {
+    interface Request {
+        String nickname();
+
+        String gender();
+
+        LocalDate birthday();
+
+        String mbti();
+
+        List<Long> interestIds();
+
+        boolean marketingConsentAllowed();
+
+        boolean notificationConsentAllowed();
+
+        SocialProvider socialProvider();
+
+        List<ProfileImageInput> profileImageInputs();
     }
 
-    record SocialProviderRequest(
+    record SocialProvider(
             String provider,
             String accessToken,
             String refreshToken) {

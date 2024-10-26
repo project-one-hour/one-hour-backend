@@ -8,7 +8,7 @@ import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
 import com.project1hour.api.core.domain.user.value.ProfileImageType;
 import com.project1hour.api.core.domain.user.value.ServiceConsent;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -21,10 +21,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.List;
-import java.util.Set;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Builder.ObtainVia;
@@ -75,7 +72,7 @@ public class User extends AbstractEntity<Long> {
     @Builder(setterPrefix = "with", toBuilder = true)
     public User(final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
                 final ServiceConsent serviceConsent, final Auth userAuth,
-                @ObtainVia(method = "userInterestsToSet") final Set<UserInterest> userInterests,
+                @ObtainVia(method = "userInterestsToList") final List<UserInterest> userInterests,
                 @ObtainVia(method = "profileImagesToList") final List<ProfileImage> profileImages) {
         this.nickname = nickname;
         this.gender = gender;
@@ -98,15 +95,15 @@ public class User extends AbstractEntity<Long> {
         return profileImages.getProfileImageList();
     }
 
-    private UserInterests createUserInterests(final Set<UserInterest> userInterests) {
-        Set<UserInterest> userInterestSet = userInterests.stream()
+    private UserInterests createUserInterests(final List<UserInterest> userInterests) {
+        List<UserInterest> userInterestSet = userInterests.stream()
                 .map(userInterest -> userInterest.toBuilder().user(this).build())
-                .collect(Collectors.toSet());
+                .toList();
         return new UserInterests(userInterestSet);
     }
 
-    private Set<UserInterest> userInterestsToSet() {
-        return userInterests.getUserInterestSet();
+    private List<UserInterest> userInterestsToList() {
+        return userInterests.getUserInterestList();
     }
 
     public static class UserBuilder {
@@ -130,7 +127,7 @@ public class User extends AbstractEntity<Long> {
 
         public UserBuilder userInterest(final Long interestId) {
             if (this.userInterests == null) {
-                this.userInterests = new HashSet<>();
+                this.userInterests = new ArrayList<>();
             }
 
             UserInterest userInterest = UserInterest.builder()
@@ -145,6 +142,7 @@ public class User extends AbstractEntity<Long> {
             if (this.profileImages == null) {
                 this.profileImages = new ArrayList<>();
             }
+
             ProfileImage profileImage = ProfileImage.builder()
                     .imageId(imageId)
                     .profileImageType(isPrimaryImage ? ProfileImageType.PRIMARY : ProfileImageType.SECONDARY)

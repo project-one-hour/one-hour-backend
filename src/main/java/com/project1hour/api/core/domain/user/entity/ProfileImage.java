@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.user.entity;
 
 import com.project1hour.api.core.domain.user.value.ProfileImageType;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
