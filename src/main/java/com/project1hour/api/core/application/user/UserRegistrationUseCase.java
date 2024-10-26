@@ -1,10 +1,10 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.data.ProfileImageInput;
-import com.project1hour.api.core.application.user.data.event.UserRegisteredEvent;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
 import com.project1hour.api.core.application.user.imports.OauthClient2.SocialProfileId;
 import com.project1hour.api.core.application.user.imports.OauthClientFactory;
+import com.project1hour.api.core.application.user.model.ProfileImageInput;
+import com.project1hour.api.core.application.user.model.event.UserRegisteredEvent;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.User;
 import com.project1hour.api.core.domain.user.entity.User.UserBuilder;

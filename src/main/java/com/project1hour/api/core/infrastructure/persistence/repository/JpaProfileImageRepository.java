@@ -1,4 +1,4 @@
-package com.project1hour.api.core.infrastructure.user.jpa;
+package com.project1hour.api.core.infrastructure.persistence.repository;
 
 import com.project1hour.api.core.domain.user.entity.ProfileImage;
 import org.springframework.data.jpa.repository.JpaRepository;

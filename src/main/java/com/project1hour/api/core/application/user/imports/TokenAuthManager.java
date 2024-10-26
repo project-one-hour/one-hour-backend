@@ -1,7 +1,7 @@
 package com.project1hour.api.core.application.user.imports;
 
 
-import com.project1hour.api.core.application.user.data.UserDetail;
+import com.project1hour.api.core.application.user.model.UserDetail;
 
 public interface TokenAuthManager {
 

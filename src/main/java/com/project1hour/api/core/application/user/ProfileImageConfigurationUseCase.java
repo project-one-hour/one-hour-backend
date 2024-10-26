@@ -3,8 +3,8 @@ package com.project1hour.api.core.application.user;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ONE;
 import static org.apache.commons.lang3.math.NumberUtils.INTEGER_ZERO;
 
-import com.project1hour.api.core.application.user.data.ProfileImageInput;
-import com.project1hour.api.core.application.user.data.event.ProfileImageConfiguredEvent;
+import com.project1hour.api.core.application.user.model.ProfileImageInput;
+import com.project1hour.api.core.application.user.model.event.ProfileImageConfiguredEvent;
 import com.project1hour.api.core.domain.user.entity.User.UserBuilder;
 import com.project1hour.api.global.support.IdGenerator;
 import java.io.InputStream;

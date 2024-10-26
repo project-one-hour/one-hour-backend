@@ -2,8 +2,8 @@ package com.project1hour.api.core.presentation.filter;
 
 import static com.project1hour.api.global.advice.ErrorCode.AUTH_TOKEN_NOT_FOUND;
 
-import com.project1hour.api.core.application.user.data.UserDetail;
 import com.project1hour.api.core.application.user.exports.TokenAuthorizationFacade;
+import com.project1hour.api.core.application.user.model.UserDetail;
 import com.project1hour.api.core.presentation.auth.MemberOnly;
 import com.project1hour.api.core.presentation.filter.core.AnnotatedUrlMappingFilter;
 import com.project1hour.api.global.advice.UnauthorizedException;

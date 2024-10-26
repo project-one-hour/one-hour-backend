@@ -1,8 +1,7 @@
-package com.project1hour.api.core.infrastructure.image;
+package com.project1hour.api.core.infrastructure.persistence.repository;
 
 import com.project1hour.api.core.domain.image.ImageRepository;
 import com.project1hour.api.core.domain.image.entity.Image;
-import com.project1hour.api.core.infrastructure.image.jpa.JpaImageRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 

@@ -1,4 +1,4 @@
-package com.project1hour.api.core.infrastructure.user.client;
+package com.project1hour.api.core.infrastructure.restclient.model;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project1hour.api.core.application.user.imports.OauthClient2.SocialProfileId;

@@ -1,4 +1,4 @@
-package com.project1hour.api.core.infrastructure.image.client;
+package com.project1hour.api.core.infrastructure.restclient;
 
 import com.project1hour.api.core.application.image.imports.ImageClient;
 import com.project1hour.api.global.advice.ErrorCode;

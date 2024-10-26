@@ -1,9 +1,9 @@
-package com.project1hour.api.core.infrastructure.user.manager;
+package com.project1hour.api.core.infrastructure.manager;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project1hour.api.core.application.user.data.UserDetail;
 import com.project1hour.api.core.application.user.imports.TokenAuthManager;
+import com.project1hour.api.core.application.user.model.UserDetail;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import io.jsonwebtoken.Claims;

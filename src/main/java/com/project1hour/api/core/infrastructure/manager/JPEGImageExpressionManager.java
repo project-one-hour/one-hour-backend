@@ -1,4 +1,4 @@
-package com.project1hour.api.core.infrastructure.image.manager;
+package com.project1hour.api.core.infrastructure.manager;
 
 import com.project1hour.api.core.application.image.imports.ImageExpressionManager;
 import com.project1hour.api.global.advice.ErrorCode;

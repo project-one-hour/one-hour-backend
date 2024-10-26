@@ -1,11 +1,9 @@
-package com.project1hour.api.core.infrastructure.user;
+package com.project1hour.api.core.infrastructure.persistence.repository;
 
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.core.domain.user.entity.Auth;
 import com.project1hour.api.core.domain.user.entity.Interest;
 import com.project1hour.api.core.domain.user.entity.User;
-import com.project1hour.api.core.infrastructure.user.jpa.JpaAuthRepository;
-import com.project1hour.api.core.infrastructure.user.jpa.JpaUserRepository;
 import java.util.Collection;
 import java.util.Map;
 import java.util.Optional;

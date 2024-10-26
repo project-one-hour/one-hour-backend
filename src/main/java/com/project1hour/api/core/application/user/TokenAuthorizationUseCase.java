@@ -1,8 +1,8 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.data.UserDetail;
 import com.project1hour.api.core.application.user.exports.TokenAuthorizationFacade;
 import com.project1hour.api.core.application.user.imports.TokenAuthManager;
+import com.project1hour.api.core.application.user.model.UserDetail;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

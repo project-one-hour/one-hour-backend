@@ -1,4 +1,4 @@
-package com.project1hour.api.core.infrastructure.image.manager;
+package com.project1hour.api.core.infrastructure.manager;
 
 import com.drew.imaging.ImageMetadataReader;
 import com.drew.metadata.Directory;

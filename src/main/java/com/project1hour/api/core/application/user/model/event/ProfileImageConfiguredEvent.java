@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.data.event;
+package com.project1hour.api.core.application.user.model.event;
 
 import com.project1hour.api.core.domain.user.UserDomainEvent;
 import java.io.InputStream;

@@ -1,4 +1,4 @@
-package com.project1hour.api.core.application.user.data;
+package com.project1hour.api.core.application.user.model;
 
 import java.io.InputStream;
 

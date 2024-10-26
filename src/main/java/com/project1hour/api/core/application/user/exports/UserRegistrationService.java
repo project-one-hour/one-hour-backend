@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user.exports;
 
-import com.project1hour.api.core.application.user.data.ProfileImageInput;
+import com.project1hour.api.core.application.user.model.ProfileImageInput;
 import java.time.LocalDate;
 import java.util.List;
 
