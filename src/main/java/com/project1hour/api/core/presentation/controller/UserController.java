@@ -1,7 +1,12 @@
 package com.project1hour.api.core.presentation.controller;
 
+import static com.project1hour.api.core.presentation.filter.AuthenticationFilter.AUTHENTICATED_USER;
+
 import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService;
+import com.project1hour.api.core.application.user.exports.OauthLoginService;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
+import com.project1hour.api.core.application.user.model.UserDetail;
+import com.project1hour.api.core.presentation.auth.MemberOnly;
 import com.project1hour.api.core.presentation.dto.UserRegistrationRequest;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
@@ -10,7 +15,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
@@ -26,6 +33,7 @@ public class UserController {
 
     private final CheckNicknameDuplicationService checkNicknameDuplicationService;
     private final UserRegistrationService userRegistrationService;
+    private final OauthLoginService oauthLoginService;
 
     @GetMapping("/duplicate/{nickname}")
     public ResponseEntity<CheckNicknameDuplicationService.Response> isDuplicated(@PathVariable final String nickname) {
@@ -34,15 +42,27 @@ public class UserController {
         return ResponseEntity.ok(response);
     }
 
+    @MemberOnly
     @PostMapping(path = "/signup", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
-    public ResponseEntity<UserRegistrationService.Response> signUp(
-            @RequestPart("userRegistration") UserRegistrationRequest request,
-            @RequestPart("primaryImage") MultipartFile primaryImage,
-            @RequestPart("secondaryImages") List<MultipartFile> secondaryImages) {
+    public ResponseEntity<Void> signUp(@RequestAttribute(AUTHENTICATED_USER) final UserDetail userDetail,
+                                       @RequestPart("signup") final UserRegistrationRequest request,
+                                       @RequestPart("primaryImage") final MultipartFile primaryImage,
+                                       @RequestPart("secondaryImages") final List<MultipartFile> secondaryImages) {
+        var requestWithMultipart = request
+                .withPrimaryImage(primaryImage)
+                .withSecondaryImages(secondaryImages)
+                .withUserId(userDetail.userId());
+        userRegistrationService.signUpUser(requestWithMultipart);
+        return ResponseEntity.ok().build();
+    }
 
-        var requestWithMultipart = request.withPrimaryImage(primaryImage).withSecondaryImages(secondaryImages);
-        var response = userRegistrationService.signUpUser(requestWithMultipart);
+    @GetMapping(path = "/auth-callback/{provider}")
+    public ResponseEntity<OauthLoginService.Response> socialLoginCallback(@PathVariable final String provider,
+                                                                          @RequestParam("code") final String authorizationCode) {
+        var request = new OauthLoginService.Request(provider, authorizationCode);
+        var response = oauthLoginService.login(request);
         return ResponseEntity.ok(response);
     }
-    
+
+    //https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=36714b270084b47dea0f9ee52d2b9331&redirect_uri=http://localhost:8080/api/users/auth-callback/kakao
 }

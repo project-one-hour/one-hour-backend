@@ -8,13 +8,13 @@ import org.springframework.stereotype.Component;
 
 @Component
 @RequiredArgsConstructor
-public class OauthClientFactory {
+public class OpenIDConnectManagerFactory {
 
-    private final List<OauthClient2> oauthClients;
+    private final List<OpenIDConnectManager> openIDConnectManagers;
 
-    public OauthClient2 getOauthClientByProvider(String provider) {
-        return oauthClients.stream()
-                .filter(client -> client.isSupport(provider))
+    public OpenIDConnectManager getOIDCManagerByProvider(String provider) {
+        return openIDConnectManagers.stream()
+                .filter(manager -> manager.isSupport(provider))
                 .findAny()
                 .orElseThrow(() -> new NotFoundException("지원하는 소셜 로그인이 없습니다.", ErrorCode.OAUTH_PROVIDER_NOT_FOUND));
     }

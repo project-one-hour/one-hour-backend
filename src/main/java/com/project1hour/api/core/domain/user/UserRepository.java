@@ -7,14 +7,12 @@ import java.util.Optional;
 public interface UserRepository {
 
     // command
-    User save(User user);
+    User saveUser(User user);
 
     //query
+    Optional<User> findUserById(Long userId);
+
     boolean existsByNickname(String nickname);
-
-    boolean existsAuthBySocialProfileId(String socialProfileId);
-
-    Optional<User> findByAuthSocialProfileId(String socialProfileId);
 
     boolean hasMissingInterestIds(Collection<Long> interestIds);
 }

@@ -29,38 +29,55 @@ public class JwtTokenAuthManager implements TokenAuthManager {
     private final static TypeReference<Map<String, Object>> CLAIMS_TYPE_REFERENCE = new TypeReference<>() {
     };
 
-    private final ObjectMapper objectMapper;
-    private final SecretKey signingKey;
-    private final long accessTokenExpireMilliSecond;
+    private final SecretKey accessTokenSecretKey;
+    private final SecretKey refreshTokenSecretKey;
+    private final long accessTokenExpiryMilliSecond;
+    private final long refreshTokenExpiryMilliSecond;
 
-    public JwtTokenAuthManager(@Value("${jwt.token.secret-key}") final String signingKey,
-                               @Value("${jwt.token.expire-length.access}") final long accessTokenExpireMilliSecond,
+    private final ObjectMapper objectMapper;
+
+    public JwtTokenAuthManager(@Value("${jwt.access-token.secret-key}") final String accessTokenSecretKey,
+                               @Value("${jwt.refresh-token.secret-key}") final String refreshTokenSecretKey,
+                               @Value("${jwt.access-token.expire-length}") final long accessTokenExpireMilliSecond,
+                               @Value("${jwt.refresh-token.expire-length}") final long refreshTokenExpireMilliSecond,
                                final ObjectMapper objectMapper) {
-        byte[] keyBytes = signingKey.getBytes(StandardCharsets.UTF_8);
-        this.signingKey = Keys.hmacShaKeyFor(keyBytes);
-        this.accessTokenExpireMilliSecond = accessTokenExpireMilliSecond;
+        this.accessTokenSecretKey = Keys.hmacShaKeyFor(accessTokenSecretKey.getBytes(StandardCharsets.UTF_8));
+        this.refreshTokenSecretKey = Keys.hmacShaKeyFor(refreshTokenSecretKey.getBytes(StandardCharsets.UTF_8));
+        this.accessTokenExpiryMilliSecond = accessTokenExpireMilliSecond;
+        this.refreshTokenExpiryMilliSecond = refreshTokenExpireMilliSecond;
         this.objectMapper = objectMapper;
     }
 
     @Override
-    public String createToken(final UserDetail userDetail) {
+    public String createAccessToken(final UserDetail userDetail) {
         return Jwts.builder()
                 .issuedAt(issuedNow())
-                .expiration(expiredAt(accessTokenExpireMilliSecond))
-                .signWith(signingKey)
+                .expiration(expiredAt(accessTokenExpiryMilliSecond))
                 .claims(objectMapper.convertValue(userDetail, CLAIMS_TYPE_REFERENCE))
+                .signWith(accessTokenSecretKey)
                 .compact();
     }
 
     @Override
-    public UserDetail getUserDetail(final String token) {
-        return objectMapper.convertValue(extractBody(token), UserDetail.class);
+    public String createRefreshToken(final Long userId) {
+        return Jwts.builder()
+                .issuedAt(issuedNow())
+                .expiration(expiredAt(refreshTokenExpiryMilliSecond))
+                .subject(userId.toString())
+                .signWith(refreshTokenSecretKey)
+                .compact();
     }
 
-    private Claims extractBody(final String token) {
+    @Override
+    public UserDetail getUserDetail(final String accessToken) {
+        Claims claims = extractPayload(accessToken, accessTokenSecretKey);
+        return objectMapper.convertValue(claims, UserDetail.class);
+    }
+
+    private Claims extractPayload(final String token, final SecretKey secretKey) {
         try {
             return Jwts.parser()
-                    .verifyWith(signingKey)
+                    .verifyWith(secretKey)
                     .build()
                     .parseSignedClaims(token)
                     .getPayload();
@@ -76,16 +93,12 @@ public class JwtTokenAuthManager implements TokenAuthManager {
     }
 
     private Date issuedNow() {
-        LocalDateTime now = LocalDateTime.now();
-
-        return Date.from(now.atZone(ZoneId.systemDefault())
+        return Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault())
                 .toInstant());
     }
 
     private Date expiredAt(final long validityInMilliseconds) {
-        LocalDateTime now = LocalDateTime.now();
-
-        return Date.from(now.atZone(ZoneId.systemDefault())
+        return Date.from(LocalDateTime.now().atZone(ZoneId.systemDefault())
                 .plus(validityInMilliseconds, ChronoUnit.MILLIS)
                 .toInstant());
     }

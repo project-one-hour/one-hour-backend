@@ -6,9 +6,11 @@ import java.util.List;
 
 public interface UserRegistrationService {
 
-    Response signUpUser(Request request);
+    void signUpUser(Request request);
 
     interface Request {
+        Long userId();
+
         String nickname();
 
         String gender();
@@ -23,17 +25,6 @@ public interface UserRegistrationService {
 
         boolean notificationConsentAllowed();
 
-        SocialProvider socialProvider();
-
         List<ProfileImageInput> profileImageInputs();
-    }
-
-    record SocialProvider(
-            String provider,
-            String accessToken,
-            String refreshToken) {
-    }
-
-    record Response(String accessToken) {
     }
 }

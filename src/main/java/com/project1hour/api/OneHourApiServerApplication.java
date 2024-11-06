@@ -9,5 +9,4 @@ public class OneHourApiServerApplication {
     public static void main(String[] args) {
         SpringApplication.run(OneHourApiServerApplication.class, args);
     }
-
 }

@@ -11,7 +11,8 @@ import java.util.List;
 public record ProfileImageConfiguredEvent(
         List<InputStream> images,
         List<Long> imageIds,
-        LocalDateTime occurredAt) implements UserDomainEvent {
+        LocalDateTime occurredAt
+) implements UserDomainEvent {
 
     public ProfileImageConfiguredEvent(final List<InputStream> images, final List<Long> imageIds) {
         this(images, imageIds, LocalDateTime.now());

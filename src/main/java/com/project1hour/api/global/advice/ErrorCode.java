@@ -8,6 +8,7 @@ public enum ErrorCode {
     AUTH_TOKEN_NOT_FOUND("A002", "API 요청 시, 요청 헤더에 JWT 토큰이 없는 경우 (Bearer jwt.token.here)"),
     UNAUTHORIZED_PATH("A003", "API요청 시, 해당 API에 접근할 수 있는 권한이 없는 사용자의 경우"),
     OTHER_AUTH_AUTHENTICATED("A004", "소셜로그인 시, 현재 Provider와 다른 Provider로 소셜로그인을 진행한 이력이 있는 경우"),
+    INVALID_AUTH_PROVIDER_ID("A005", "유효하지 않은 소셜 인증 아이디일 경우"),
 
     // Member 관련
     MEMBER_NOT_FOUND("M000", "사용자 조회 시, 입력 받은 id의 사용자가 존재하지 않는 경우"),
@@ -55,7 +56,8 @@ public enum ErrorCode {
 
     // Error
     INTERNAL_SERVER_ERROR("ER001", "예기치 못한 예외가 발생한 경우"),
-    INVALID_MULTIPART_REQUEST("ER002", "잘못된 멀티파트 요청입니다."),
+    INVALID_MULTIPART_REQUEST("ER002", "잘못된 멀티파트 요청일 경우"),
+    INVALID_DATA("ER003", "잘못된 데이터 요청일 경우"),
 
     // Global 예외 관련,
     METHOD_ARGUMENT_NOT_VALID("G000", "API 요청 시, request-fields의 값이 NULL인 경우");

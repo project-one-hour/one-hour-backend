@@ -8,7 +8,7 @@ import com.project1hour.api.core.application.bungae.BungaeService;
 import com.project1hour.api.core.application.credit.CreditService;
 import com.project1hour.api.core.application.image.exports.ImageCompressionFacade;
 import com.project1hour.api.core.application.member.MemberService;
-import com.project1hour.api.core.application.user.exports.TokenAuthorizationFacade;
+import com.project1hour.api.core.application.user.exports.TokenAuthenticationFacade;
 import com.project1hour.api.core.domain.auth.AuthenticationContext;
 import com.project1hour.api.core.domain.auth.TokenProvider;
 import com.project1hour.api.core.domain.image.ImageUploader;
@@ -68,7 +68,7 @@ public class DocumentationTest {
     protected AuthenticationContext authenticationContext;
 
     @MockBean
-    protected TokenAuthorizationFacade tokenAuthenticationFacade;
+    protected TokenAuthenticationFacade tokenAuthenticationFacade;
 
     @MockBean
     protected MultipartResolver multipartResolver;

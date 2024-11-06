@@ -35,7 +35,12 @@ logging:
 
 oauth2:
   kakao:
+    api-key: restapirestapirestapirestapirestapi
+    issuer: https://kauth.kakao.com
     url:
+      callback: http://localhost:8080/api/users/auth-callback/kakao
+      tokens: https://kauth.kakao.com/oauth/token
+      public-key: https://kauth.kakao.com/.well-known/jwks.json
       profile: https://kapi.kakao.com/v2/user/me
   apple:
     url:
@@ -43,10 +48,21 @@ oauth2:
 
 jwt:
   token:
-    secret-key: dWJFREY0UW1IWXNCWWRpZU4yRzJxNkRTOUltM09Dd1RCM1B4b0hBcFpCUWlqRXNMVHN6aEg2dmNtT2YvbE9PaQptcjVkdWRnSUNwakRpWkNTY2dNeld3PT0K
+    secret-key: secretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecretsecret
     expire-length:
       access: 604800000
+
+  access-token:
+    secret-key: dWJFREY0UW1IWXNCWWRpZU4yRzJxNkRTOUltM09Dd1RCM1B4b0hBcFpCUWlqRXNMVHN6aEg2dmNtT2YvbE9PaQptcjVkdWRnSUNwakRpWkNTY2dNeld3PT0K
+    expire-length: 3600000 # 1시간
+  refresh-token:
+    secret-key: ybk4SbcjX/Z2cYtonEfn2X+vptl3o8E8g5tm//qYb+pYxCRJUBRFy+NVuvKQNt0uRuSAVHZaX+o+AQsy8LWNYX6Z+f8KX+eW+LdddPJfKcvycHP3neA0CkVcWX43r8Ffje/KMA==
+    expire-length: 1814400000 # 21일 (약 3주)
 
 image:
   max-upload-size: 5
   formats: jpg, jpeg, png, heic, heif # svg 일단 보류 (보안 문제, svg 만을 처리하기 위한 코드가 필요함)
+
+crypto:
+  key: abcdefghabcdefghabcdefghabcdefgh
+  iv: 1234567890abcdef
