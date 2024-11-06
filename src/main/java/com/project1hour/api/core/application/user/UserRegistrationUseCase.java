@@ -1,22 +1,22 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.api.OauthClientFactory;
-import com.project1hour.api.core.application.user.api.data.SocialProfileId;
-import com.project1hour.api.core.application.user.service.UserRegistrationService;
-import com.project1hour.api.core.domain.user.UserRepository;
+import com.project1hour.api.core.application.user.exports.UserRegistrationService;
+import com.project1hour.api.core.application.user.imports.UserApplicationRepository;
+import com.project1hour.api.core.application.user.model.ProfileImageInfo;
+import com.project1hour.api.core.application.user.model.ProfileImageInput;
+import com.project1hour.api.core.application.user.model.event.UserRegisteredEvent;
 import com.project1hour.api.core.domain.user.entity.User;
-import com.project1hour.api.core.domain.user.event.UserRegisteredEvent;
-import com.project1hour.api.core.domain.user.value.AuthInfo;
+import com.project1hour.api.core.domain.user.entity.User.UserBuilder;
 import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
+import com.project1hour.api.core.domain.user.value.MarketingConsent;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
-import com.project1hour.api.core.domain.user.value.ServiceConsent;
-import com.project1hour.api.global.advice.BadRequestException;
+import com.project1hour.api.core.domain.user.value.NotificationConsent;
 import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.NotFoundException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Set;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -29,65 +29,53 @@ public class UserRegistrationUseCase implements UserRegistrationService {
     private final SelectUserInterestUseCase selectUserInterestUseCase;
     private final ProfileImageConfigurationUseCase profileImageConfigurationUsecase;
 
-    private final UserRepository userRepository;
-    private final OauthClientFactory oauthClientFactory;
-    private final ApplicationEventPublisher applicationEventPublisher;
+    private final UserApplicationRepository userApplicationRepository;
+    private final ApplicationEventPublisher eventPublisher;
 
     @Override
-    public Long signUpUser(final UserRegistrationService.Request request) {
-        checkNicknameDuplicationUseCase.checkIfNicknameDuplicate(request.nickname());
+    public void signUpUser(final Request request) {
+        String nickname = request.nickname();
+        checkNicknameDuplicationUseCase.checkIfNicknameDuplicate(nickname);
 
-        User registeredUser = registerUser(
-                request.nickname(),
+        List<Long> interestIds = request.interestIds();
+        selectUserInterestUseCase.selectInterestIds(interestIds);
+
+        List<ProfileImageInput> profileImageInputs = request.profileImageInputs();
+        var profileImageInfos = profileImageConfigurationUsecase.configureProfileImages(profileImageInputs);
+
+        registerUser(
+                request.userId(),
+                nickname,
                 request.gender(),
                 request.birthday(),
                 request.mbti(),
                 request.marketingConsentAllowed(),
                 request.notificationConsentAllowed(),
-                request.socialProvider().provider(),
-                request.socialProvider().accessToken(),
-                request.socialProvider().refreshToken(),
-                selectUserInterestUseCase.selectInterestIds(request.interestIds()),
-                profileImageConfigurationUsecase.configureProfileImages(request.imageFiles()),
-                request.primaryImageFileIndex()
+                interestIds,
+                profileImageInfos
         );
-        return registeredUser.getId();
     }
 
-    /**
-     * Command : 회원 가입
-     */
-    protected User registerUser(final String nickname, final String gender, final LocalDate birthday, final String mbti,
-                                final boolean marketingConsentAllowed, final boolean notificationConsentAllowed,
-                                final String provider, final String accessToken, final String refreshToken,
-                                final Set<Long> interestIds, final List<Long> imageIds, final int primaryImageIndex) {
-        SocialProfileId socialProfileId =
-                oauthClientFactory.getOauthClientByProvider(provider).findSocialProfileIdByAccessToken(accessToken);
+    protected void registerUser(final Long userId, final String nickname, final String gender, final LocalDate birthday,
+                                final String mbti, final boolean marketingAllowed, final boolean notificationAllowed,
+                                final List<Long> interestIds, final List<ProfileImageInfo> profileImageInfos) {
 
-        if (userRepository.existsAuthBySocialProfileId(socialProfileId.id())) {
-            throw new BadRequestException("이미 가입한 사용자 입니다.", ErrorCode.DUPLICATED_SIGN_UP);
-        }
+        User pendingUser = userApplicationRepository.findUserById(userId)
+                .filter(User::isProfileRequired)
+                .orElseThrow(() -> new NotFoundException("가입 대기 중인 회원을 찾을 수 없습니다.", ErrorCode.MEMBER_NOT_FOUND));
 
-        User newUser = User.createNewUser()
+        UserBuilder userBuilder = pendingUser.toBuilder()
                 .nickname(new Nickname(nickname))
                 .gender(Gender.find(gender))
                 .birthday(new Birthday(birthday))
                 .mbti(Mbti.find(mbti))
-                .serviceConsent(
-                        ServiceConsent.of()
-                                .marketingConsentAllowed(marketingConsentAllowed)
-                                .notificationConsentAllowed(notificationConsentAllowed)
-                                .build()
-                )
-                .interestIds(interestIds)
-                .imageIds(imageIds)
-                .primaryImageIndex(primaryImageIndex)
-                .provider(provider)
-                .authInfo(new AuthInfo(socialProfileId.id(), accessToken, refreshToken))
-                .build();
+                .marketingConsent(MarketingConsent.fromBoolean(marketingAllowed))
+                .notificationConsent(NotificationConsent.fromBoolean(notificationAllowed));
 
-        User registeredUser = userRepository.save(newUser);
-        applicationEventPublisher.publishEvent(new UserRegisteredEvent(registeredUser.getId()));
-        return registeredUser;
+        interestIds.forEach(userBuilder::userInterest);
+        profileImageInfos.forEach(info -> userBuilder.profileImage(info.imageId(), info.isPrimary()));
+
+        User registeredUser = userApplicationRepository.saveUser(userBuilder.build());
+        eventPublisher.publishEvent(new UserRegisteredEvent(registeredUser.getId()));
     }
 }

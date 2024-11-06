@@ -1,0 +1,6 @@
+package com.project1hour.api.core.domain.user.value;
+
+public enum SignUpStatus {
+    AUTHENTICATED,
+    SIGNED_UP
+}

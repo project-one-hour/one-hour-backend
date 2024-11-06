@@ -1,5 +1,6 @@
 package com.project1hour.api.core.presentation.filter;
 
+import com.project1hour.api.core.application.image.exports.ImageCompressionFacade.ImageFileItem;
 import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import com.project1hour.api.global.support.IOUtils;
@@ -46,19 +47,21 @@ public class ImageFilterRequest extends HttpServletRequestWrapper {
     /**
      * 요청의 헤더는 원본 파일의 헤더 값을 포함하고 있습니다!!
      */
-    static class WrappedPart implements Part {
+    static class WrappedPart implements Part, ImageFileItem {
 
         private final Part delegatePart;
-        private final Function<InputStream, InputStream> compressedImageProxy;
+        private final Function<ImageFileItem, InputStream> compressedImageProxy;
 
-        public WrappedPart(final Part delegatePart, final Function<InputStream, InputStream> compressedImageProxy) {
+        public WrappedPart(final Part delegatePart, final Function<ImageFileItem, InputStream> compressedImageProxy) {
             this.delegatePart = delegatePart;
             this.compressedImageProxy = compressedImageProxy;
         }
 
+
         public InputStream getInputStream() throws IOException {
-            InputStream compressedImageInput = compressedImageProxy.apply(delegatePart.getInputStream());
+            InputStream compressedImageInput = compressedImageProxy.apply(this);
             InputStream originalImageInput = delegatePart.getInputStream();
+
             if (originalImageInput.available() < compressedImageInput.available()) {
                 IOUtils.closeQuietly(compressedImageInput);
                 return originalImageInput;
@@ -75,6 +78,20 @@ public class ImageFilterRequest extends HttpServletRequestWrapper {
             } catch (IOException e) {
                 throw new InfraStructureException("이미지 크기를 가져오는 중 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
             }
+        }
+
+        @Override
+        public InputStream originInputStream() {
+            try {
+                return delegatePart.getInputStream();
+            } catch (IOException e) {
+                throw new InfraStructureException("원본 이미지를 가져오는 중 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
+            }
+        }
+
+        @Override
+        public long originImageSize() {
+            return delegatePart.getSize();
         }
 
         @Override

@@ -5,7 +5,7 @@ import com.project1hour.api.core.domain.member.profileinfo.Gender;
 import com.project1hour.api.core.domain.member.profileinfo.Mbti;
 import com.project1hour.api.core.domain.member.profileinfo.Nickname;
 import com.project1hour.api.core.domain.member.profileinfo.ProfileImage;
-import com.project1hour.api.global.domain.CommonField;
+import com.project1hour.api.global.entity.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

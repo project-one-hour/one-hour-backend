@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.bungae.entity;
 
 import com.project1hour.api.core.domain.bungae.value.BungaeRole;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -29,7 +29,7 @@ public class Participant extends AbstractEntity<Long> {
     @Column(name = "participant_id")
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, unique = true)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)

@@ -1,6 +1,6 @@
 package com.project1hour.api.core.domain.user.entity;
 
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -34,7 +34,7 @@ public class UserInterest extends AbstractEntity<Long> {
     @Column(nullable = false)
     private Long interestId;
 
-    @Builder
+    @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
     public UserInterest(final Long id, final User user, final Long interestId) {
         this.id = id;
         this.user = user;

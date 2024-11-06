@@ -1,8 +1,8 @@
 package com.project1hour.api.core.application.image;
 
-import com.project1hour.api.core.application.image.api.ImageClient;
-import com.project1hour.api.core.application.image.eventhandler.ImageUploadEventHandler;
-import com.project1hour.api.core.application.image.manager.ImageExpressionManager;
+import com.project1hour.api.core.application.image.exports.ImageUploadEventHandler;
+import com.project1hour.api.core.application.image.imports.ImageClient;
+import com.project1hour.api.core.application.image.imports.ImageExpressionManager;
 import com.project1hour.api.core.domain.image.ImageRepository;
 import com.project1hour.api.core.domain.image.entity.Image;
 import com.project1hour.api.core.domain.image.value.ImageName;

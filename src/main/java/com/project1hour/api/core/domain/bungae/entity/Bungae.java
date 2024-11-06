@@ -6,7 +6,7 @@ import com.project1hour.api.core.domain.bungae.value.BungaeType;
 import com.project1hour.api.core.domain.bungae.value.Description;
 import com.project1hour.api.core.domain.bungae.value.Location;
 import com.project1hour.api.core.domain.bungae.value.Title;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;

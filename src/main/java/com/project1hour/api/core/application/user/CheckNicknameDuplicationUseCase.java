@@ -1,6 +1,6 @@
 package com.project1hour.api.core.application.user;
 
-import com.project1hour.api.core.application.user.service.CheckNicknameDuplicationService;
+import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicationService;
 import com.project1hour.api.core.domain.user.UserRepository;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;

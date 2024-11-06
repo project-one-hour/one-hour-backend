@@ -2,7 +2,7 @@ package com.project1hour.api.core.domain.auth;
 
 import com.project1hour.api.core.domain.member.Member;
 import com.project1hour.api.core.domain.member.Provider;
-import com.project1hour.api.global.domain.CommonField;
+import com.project1hour.api.global.entity.CommonField;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;

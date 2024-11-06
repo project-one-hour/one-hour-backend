@@ -1,28 +1,30 @@
 package com.project1hour.api.core.domain.user.entity;
 
-import com.project1hour.api.core.domain.user.value.AuthInfo;
-import com.project1hour.api.core.domain.user.value.AuthProvider;
 import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
+import com.project1hour.api.core.domain.user.value.MarketingConsent;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
-import com.project1hour.api.core.domain.user.value.ServiceConsent;
-import com.project1hour.api.global.domain.AbstractEntity;
+import com.project1hour.api.core.domain.user.value.NotificationConsent;
+import com.project1hour.api.core.domain.user.value.ProfileImageType;
+import com.project1hour.api.core.domain.user.value.SignUpStatus;
+import com.project1hour.api.global.entity.AbstractEntity;
 import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
-import java.util.Set;
+import java.util.Optional;
+import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
+import lombok.Builder.ObtainVia;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -42,7 +44,7 @@ public class User extends AbstractEntity<Long> {
     private Long id;
 
     @Embedded
-    private Nickname nickName;
+    private Nickname nickname;
 
     @Enumerated(EnumType.STRING)
     @Column(length = 10, updatable = false)
@@ -54,8 +56,11 @@ public class User extends AbstractEntity<Long> {
     @Embedded
     private Mbti mbti;
 
-    @Embedded
-    private ServiceConsent serviceConsent;
+    @Enumerated(EnumType.STRING)
+    private MarketingConsent marketingConsent;
+
+    @Enumerated(EnumType.STRING)
+    private NotificationConsent notificationConsent;
 
     @Embedded
     private UserInterests userInterests;
@@ -63,48 +68,96 @@ public class User extends AbstractEntity<Long> {
     @Embedded
     private ProfileImages profileImages;
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
-    @JoinColumn(name = "auth_id")
-    private Auth userAuth;
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = false)
+    private SignUpStatus signUpStatus;
 
-    /**
-     * TODO: 추후 소속 번개에 대한 정의
-     */
-    @Builder(builderClassName = "CreateNewUserBuilder", builderMethodName = "createNewUser")
+    @Builder(toBuilder = true)
     public User(final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
-                final ServiceConsent serviceConsent, final Set<Long> interestIds,
-                final String provider, final AuthInfo authInfo,
-                final List<Long> imageIds, final int primaryImageIndex) {
-        this.nickName = nickname;
+                final MarketingConsent marketingConsent, final NotificationConsent notificationConsent,
+                @ObtainVia(method = "userInterestsToList") final List<UserInterest> userInterests,
+                @ObtainVia(method = "profileImagesToList") final List<ProfileImage> profileImages,
+                final SignUpStatus signUpStatus) {
+        this.nickname = nickname;
         this.gender = gender;
         this.birthday = birthday;
         this.mbti = mbti;
-        this.serviceConsent = serviceConsent;
-        this.userInterests = addUserInterests(interestIds);
-        this.profileImages = addProfileImages(imageIds, primaryImageIndex);
-        this.userAuth = addUserAuth(provider, authInfo);
+        this.marketingConsent = marketingConsent;
+        this.notificationConsent = notificationConsent;
+        this.userInterests = createUserInterests(userInterests);
+        this.profileImages = createProfileImages(profileImages);
+        this.signUpStatus = signUpStatus;
     }
 
-    private UserInterests addUserInterests(final Set<Long> interestIds) {
-        return UserInterests.builder()
-                .interestIds(interestIds)
-                .user(this)
-                .build();
+    public static User createPendingUser() {
+        User user = new User();
+        user.signUpStatus = SignUpStatus.AUTHENTICATED;
+        return user;
     }
 
-    private ProfileImages addProfileImages(final List<Long> imageIds, final int primaryImageIndex) {
-        return ProfileImages.builder()
-                .imageIds(imageIds)
-                .primaryImageIndex(primaryImageIndex)
-                .user(this)
-                .build();
+    public boolean isProfileRequired() {
+        return signUpStatus == SignUpStatus.AUTHENTICATED;
     }
 
-    private Auth addUserAuth(final String provider, final AuthInfo authInfo) {
-        return Auth.builder()
-                .provider(AuthProvider.find(provider))
-                .authInfo(authInfo)
-                .user(this)
-                .build();
+    private ProfileImages createProfileImages(final List<ProfileImage> profileImages) {
+        if (profileImages == null) {
+            return null;
+        }
+
+        return profileImages.stream()
+                .map(profileImage -> profileImage.toBuilder().user(this).build())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), ProfileImages::new));
+    }
+
+    private List<ProfileImage> profileImagesToList() {
+        return Optional.ofNullable(profileImages)
+                .map(ProfileImages::getProfileImageList)
+                .orElseGet(Collections::emptyList);
+    }
+
+    private UserInterests createUserInterests(final List<UserInterest> userInterests) {
+        if (userInterests == null) {
+            return null;
+        }
+
+        return userInterests.stream()
+                .map(userInterest -> userInterest.toBuilder().user(this).build())
+                .collect(Collectors.collectingAndThen(Collectors.toList(), UserInterests::new));
+    }
+
+    private List<UserInterest> userInterestsToList() {
+        return Optional.ofNullable(userInterests)
+                .map(UserInterests::getUserInterestList)
+                .orElseGet(Collections::emptyList);
+    }
+
+    public static class UserBuilder {
+
+        public UserBuilder userInterest(final Long interestId) {
+            if (this.userInterests == null) {
+                this.userInterests = new ArrayList<>();
+            }
+
+            UserInterest userInterest = UserInterest.builder()
+                    .interestId(interestId)
+                    .build();
+            this.userInterests.add(userInterest);
+
+            return this;
+        }
+
+        public UserBuilder profileImage(final Long imageId, final boolean isPrimaryImage) {
+            if (this.profileImages == null) {
+                this.profileImages = new ArrayList<>();
+            }
+
+            ProfileImage profileImage = ProfileImage.builder()
+                    .imageId(imageId)
+                    .profileImageType(isPrimaryImage ? ProfileImageType.PRIMARY : ProfileImageType.SECONDARY)
+                    .build();
+            this.profileImages.add(profileImage);
+
+            return this;
+        }
     }
 }
