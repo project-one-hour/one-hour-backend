@@ -23,12 +23,12 @@ public class AppleOpenIDConnectManager implements OpenIDConnectManager {
     private static final String PROVIDER_TYPE = "APPLE";
 
     private final String appleIssuer;
-    private final String appleTeamId;
+    private final String appleServiceId;
 
-    public AppleOpenIDConnectManager(@Value("${oauth2.apple.team-id}") final String appleTeamId,
+    public AppleOpenIDConnectManager(@Value("${oauth2.apple.service-id}") final String appleServiceId,
                                      @Value("${oauth2.apple.auth-domain}") final String appleIssuer) {
         this.appleIssuer = appleIssuer;
-        this.appleTeamId = appleTeamId;
+        this.appleServiceId = appleServiceId;
     }
 
     @Override
@@ -45,7 +45,7 @@ public class AppleOpenIDConnectManager implements OpenIDConnectManager {
     private Claims extractClaimsFromIdToken(final String idToken, final List<WebKey> webKeys) {
         try {
             return Jwts.parser()
-                    .requireAudience(appleTeamId)
+                    .requireAudience(appleServiceId)
                     .requireIssuer(appleIssuer)
                     .keyLocator(new OAuthPublicKeyLocator(webKeys))
                     .build()
