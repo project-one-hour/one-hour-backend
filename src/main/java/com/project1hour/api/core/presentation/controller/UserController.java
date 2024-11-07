@@ -63,6 +63,4 @@ public class UserController {
         var response = oauthLoginService.login(request);
         return ResponseEntity.ok(response);
     }
-
-    //https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=36714b270084b47dea0f9ee52d2b9331&redirect_uri=http://localhost:8080/api/users/auth-callback/kakao
 }

@@ -22,12 +22,12 @@ public class KakaoOpenIDConnectManager implements OpenIDConnectManager {
 
     private static final String PROVIDER_TYPE = "KAKAO";
 
-    private final String kakaoIssuerUrl;
+    private final String kakaoIssuer;
     private final String kakaoApiKey;
 
-    public KakaoOpenIDConnectManager(@Value("${oauth2.kakao.issuer}") final String kakaoIssuerUrl,
+    public KakaoOpenIDConnectManager(@Value("${oauth2.kakao.auth-domain}") final String kakaoIssuer,
                                      @Value("${oauth2.kakao.api-key}") final String kakaoApiKey) {
-        this.kakaoIssuerUrl = kakaoIssuerUrl;
+        this.kakaoIssuer = kakaoIssuer;
         this.kakaoApiKey = kakaoApiKey;
     }
 
@@ -45,7 +45,7 @@ public class KakaoOpenIDConnectManager implements OpenIDConnectManager {
     private Claims extractClaimsFromIdToken(final String idToken, final List<WebKey> webKeys) {
         try {
             return Jwts.parser()
-                    .requireIssuer(kakaoIssuerUrl)
+                    .requireIssuer(kakaoIssuer)
                     .requireAudience(kakaoApiKey)
                     .keyLocator(new OAuthPublicKeyLocator(webKeys))
                     .build()
