@@ -35,16 +35,22 @@ logging:
 
 oauth2:
   kakao:
-    api-key: restapirestapirestapirestapirestapi
-    issuer: https://kauth.kakao.com
+    api-key: secretsecretsecretsecretsecretsecret
+    auth-domain: https://kauth.kakao.com
     url:
-      callback: http://localhost:8080/api/users/auth-callback/kakao
+      callback: http://localhost:8080/api/users/auth-callback/kakao # 변경해야함 ngrok 사용
       tokens: https://kauth.kakao.com/oauth/token
       public-key: https://kauth.kakao.com/.well-known/jwks.json
       profile: https://kapi.kakao.com/v2/user/me
   apple:
+    team-id: secretsecretsecretsecretsecret
+    service-id: secretsecretsecretsecretsecret
+    auth-domain: https://appleid.apple.com
+    auth-key-path: /key/AuthKey.p8
     url:
-      profile:
+      callback: https://d30f-221-165-191-152.ngrok-free.app/api/users/auth-callback/apple
+      tokens: https://appleid.apple.com/auth/token
+      public-key: https://appleid.apple.com/auth/keys
 
 jwt:
   token:
