@@ -66,7 +66,7 @@ public class AppleOauthRestClient implements OauthRestClient {
                                 @Value("${oauth2.apple.url.callback}") final String redirectUrl,
                                 @Value("${oauth2.apple.service-id}") final String serviceId,
                                 @Value("${oauth2.apple.team-id}") final String teamId,
-                                @Value("${oauth2.apple.audience}") final String audience,
+                                @Value("${oauth2.apple.auth-domain}") final String audience,
                                 @Value("${oauth2.apple.auth-key-path}") final String authKeyPath,
                                 final RestClient.Builder restClientBuilder) throws IOException {
         this.requestTokensUrl = requestTokensUrl;
