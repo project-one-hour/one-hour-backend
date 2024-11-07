@@ -54,6 +54,7 @@ public class AppleOauthRestClient implements OauthRestClient {
     private final String redirectUrl;
     private final String serviceId;
     private final String teamId;
+    private final String keyId;
     private final String audience;
 
     private final Path authKeyPath;
@@ -66,6 +67,7 @@ public class AppleOauthRestClient implements OauthRestClient {
                                 @Value("${oauth2.apple.url.callback}") final String redirectUrl,
                                 @Value("${oauth2.apple.service-id}") final String serviceId,
                                 @Value("${oauth2.apple.team-id}") final String teamId,
+                                @Value("${oauth2.apple.key-id}") final String keyId,
                                 @Value("${oauth2.apple.auth-domain}") final String audience,
                                 @Value("${oauth2.apple.auth-key-path}") final String authKeyPath,
                                 final RestClient.Builder restClientBuilder) throws IOException {
@@ -74,6 +76,7 @@ public class AppleOauthRestClient implements OauthRestClient {
         this.redirectUrl = redirectUrl;
         this.serviceId = serviceId;
         this.teamId = teamId;
+        this.keyId = keyId;
         this.audience = audience;
         this.authKeyPath = Path.of(new ClassPathResource(authKeyPath).getURI());
         this.converter = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME);
@@ -117,7 +120,7 @@ public class AppleOauthRestClient implements OauthRestClient {
     private String createClientSecretToken() {
         return Jwts.builder()
                 .header()
-                .keyId(teamId)
+                .keyId(keyId)
                 .and()
 
                 .claims()
@@ -134,16 +137,20 @@ public class AppleOauthRestClient implements OauthRestClient {
 
     private PrivateKey generatePrivateKey() {
         try {
-            String privateKey = Files.readAllLines(authKeyPath).stream()
-                    .filter(line -> !StringUtils.contains(line, TYPE_PRIVATE_KEY))
+            String privateKeyContent = Files.readAllLines(authKeyPath).stream()
+                    .filter(this::containsPrivateKeyContent)
                     .collect(Collectors.joining());
 
-            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKey);
+            byte[] privateKeyBytes = Base64.getDecoder().decode(privateKeyContent);
             return converter.getPrivateKey(PrivateKeyInfo.getInstance(privateKeyBytes));
         } catch (Exception e) {
             log.error("스택 트레이스 : {}", ExceptionUtils.getStackTrace(e));
             throw new InfraStructureException("비밀 키를 생성할 수 없습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
         }
+    }
+
+    private boolean containsPrivateKeyContent(final String content) {
+        return !StringUtils.contains(content, TYPE_PRIVATE_KEY);
     }
 
     private Date issuedNow() {
