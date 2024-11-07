@@ -5,7 +5,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 import com.project1hour.api.core.application.user.model.TokenPackage;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record KakaoResponseTokensBody(
+public record KakaoTokensResponseBody(
         @JsonProperty("token_type") String tokenType,
         @JsonProperty("access_token") String accessToken,
         @JsonProperty("id_token") String idToken,
