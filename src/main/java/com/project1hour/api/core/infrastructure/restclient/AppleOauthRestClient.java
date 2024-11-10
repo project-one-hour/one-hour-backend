@@ -13,7 +13,6 @@ import com.project1hour.api.global.advice.ErrorCode;
 import com.project1hour.api.global.advice.InfraStructureException;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.Jwts.SIG;
-import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.security.PrivateKey;
@@ -57,7 +56,7 @@ public class AppleOauthRestClient implements OauthRestClient {
     private final String keyId;
     private final String audience;
 
-    private final Path authKeyPath;
+    private final String authKeyPath;
     private final JcaPEMKeyConverter converter;
 
     private final RestClient restClient;
@@ -70,7 +69,7 @@ public class AppleOauthRestClient implements OauthRestClient {
                                 @Value("${oauth2.apple.key-id}") final String keyId,
                                 @Value("${oauth2.apple.auth-domain}") final String audience,
                                 @Value("${oauth2.apple.auth-key-path}") final String authKeyPath,
-                                final RestClient.Builder restClientBuilder) throws IOException {
+                                final RestClient.Builder restClientBuilder) {
         this.requestTokensUrl = requestTokensUrl;
         this.requestPublicKeyUrl = requestPublicKeyUrl;
         this.redirectUrl = redirectUrl;
@@ -78,7 +77,7 @@ public class AppleOauthRestClient implements OauthRestClient {
         this.teamId = teamId;
         this.keyId = keyId;
         this.audience = audience;
-        this.authKeyPath = Path.of(new ClassPathResource(authKeyPath).getURI());
+        this.authKeyPath = authKeyPath;
         this.converter = new JcaPEMKeyConverter().setProvider(BouncyCastleProvider.PROVIDER_NAME);
         this.restClient = restClientBuilder.build();
     }
@@ -137,7 +136,8 @@ public class AppleOauthRestClient implements OauthRestClient {
 
     private PrivateKey generatePrivateKey() {
         try {
-            String privateKeyContent = Files.readAllLines(authKeyPath).stream()
+            Path privateKeyPath = Path.of(new ClassPathResource(authKeyPath).getURI());
+            String privateKeyContent = Files.readAllLines(privateKeyPath).stream()
                     .filter(this::containsPrivateKeyContent)
                     .collect(Collectors.joining());
 
