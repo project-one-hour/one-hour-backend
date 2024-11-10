@@ -20,14 +20,14 @@ public abstract class AbstractEntity<ID> implements Persistable<ID> {
 
     @LastModifiedDate
     @Column(insertable = false)
-    LocalDateTime updatedAt;
+    protected LocalDateTime updatedAt;
 
     @CreatedDate
     @Column(updatable = false)
-    LocalDateTime createdAt;
+    protected LocalDateTime createdAt;
 
     @Column(insertable = false)
-    LocalDateTime deletedAt;
+    private LocalDateTime deletedAt;
 
     @Override
     public boolean isNew() {
