@@ -11,11 +11,11 @@ import java.time.LocalDate;
  */
 @Embeddable
 public record Birthday(
-        @Column(name = "birthday", updatable = false)
+        @Column(name = "birthday")
         LocalDate value
 ) {
 
-    private static LocalDate MINIMUM_ADULT_BIRTH = LocalDate.of(
+    private static final LocalDate MINIMUM_ADULT_BIRTH = LocalDate.of(
             LocalDate.now().minusYears(19).getYear(),
             LocalDate.MAX.getMonth(),
             LocalDate.MAX.getDayOfMonth()

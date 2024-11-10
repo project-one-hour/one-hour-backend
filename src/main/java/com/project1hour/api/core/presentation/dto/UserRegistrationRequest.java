@@ -21,8 +21,8 @@ public record UserRegistrationRequest(
         LocalDate birthday,
         String mbti,
         List<Long> interestIds,
-        boolean marketingConsentAllowed,
-        boolean notificationConsentAllowed,
+        boolean isMarketingAllowed,
+        boolean isNotificationAllowed,
         String provider,
         @With @JsonIgnore MultipartFile primaryImage,
         @With @JsonIgnore List<MultipartFile> secondaryImages

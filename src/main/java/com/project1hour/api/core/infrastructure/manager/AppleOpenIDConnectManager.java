@@ -18,17 +18,17 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
-public class KakaoOpenIDConnectManager implements OpenIDConnectManager {
+public class AppleOpenIDConnectManager implements OpenIDConnectManager {
 
-    private static final String PROVIDER_TYPE = "KAKAO";
+    private static final String PROVIDER_TYPE = "APPLE";
 
-    private final String kakaoIssuer;
-    private final String kakaoApiKey;
+    private final String appleIssuer;
+    private final String appleServiceId;
 
-    public KakaoOpenIDConnectManager(@Value("${oauth2.kakao.auth-domain}") final String kakaoIssuer,
-                                     @Value("${oauth2.kakao.api-key}") final String kakaoApiKey) {
-        this.kakaoIssuer = kakaoIssuer;
-        this.kakaoApiKey = kakaoApiKey;
+    public AppleOpenIDConnectManager(@Value("${oauth2.apple.service-id}") final String appleServiceId,
+                                     @Value("${oauth2.apple.auth-domain}") final String appleIssuer) {
+        this.appleIssuer = appleIssuer;
+        this.appleServiceId = appleServiceId;
     }
 
     @Override
@@ -45,8 +45,8 @@ public class KakaoOpenIDConnectManager implements OpenIDConnectManager {
     private Claims extractClaimsFromIdToken(final String idToken, final List<WebKey> webKeys) {
         try {
             return Jwts.parser()
-                    .requireIssuer(kakaoIssuer)
-                    .requireAudience(kakaoApiKey)
+                    .requireAudience(appleServiceId)
+                    .requireIssuer(appleIssuer)
                     .keyLocator(new OAuthPublicKeyLocator(webKeys))
                     .build()
                     .parseSignedClaims(idToken)

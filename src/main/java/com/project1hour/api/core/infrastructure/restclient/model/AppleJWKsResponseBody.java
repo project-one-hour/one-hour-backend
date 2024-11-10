@@ -6,12 +6,11 @@ import com.project1hour.api.core.application.user.model.WebKey;
 import java.util.List;
 
 @JsonIgnoreProperties(ignoreUnknown = true)
-public record KakaoResponseJWKsBody(
-        @JsonProperty("keys") List<KakaoResponseJWKBody> keys
+public record AppleJWKsResponseBody(
+        @JsonProperty("keys") List<AppleResponseJWKBody> keys
 ) {
-
     @JsonIgnoreProperties(ignoreUnknown = true)
-    public record KakaoResponseJWKBody(
+    public record AppleResponseJWKBody(
             @JsonProperty("kid") String keyId,
             @JsonProperty("kty") String keyType,
             @JsonProperty("alg") String algorithm,
