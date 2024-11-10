@@ -44,6 +44,7 @@ oauth2:
       profile: https://kapi.kakao.com/v2/user/me
   apple:
     team-id: secretsecretsecretsecretsecret
+    key-id: secretsecretsecretsecretsecret
     service-id: secretsecretsecretsecretsecret
     auth-domain: https://appleid.apple.com
     auth-key-path: /key/AuthKey.p8
