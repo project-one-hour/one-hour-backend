@@ -12,6 +12,7 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -57,7 +58,8 @@ public class OauthInfoEntity extends AbstractEntity<Long> {
     @Builder(toBuilder = true)
     public OauthInfoEntity(final Long id, final User user, final ProviderType providerType,
                            final String accessToken, final String refreshToken, final String userSocialId,
-                           final int accessTokenExpiresIn, final int refreshTokenExpiresIn) {
+                           final int accessTokenExpiresIn, final int refreshTokenExpiresIn,
+                           final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.providerType = providerType;
@@ -66,5 +68,7 @@ public class OauthInfoEntity extends AbstractEntity<Long> {
         this.userSocialId = userSocialId;
         this.accessTokenExpiresIn = accessTokenExpiresIn;
         this.refreshTokenExpiresIn = refreshTokenExpiresIn;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
     }
 }
