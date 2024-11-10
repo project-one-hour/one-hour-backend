@@ -21,9 +21,9 @@ public interface UserRegistrationService {
 
         List<Long> interestIds();
 
-        boolean marketingConsentAllowed();
+        boolean isMarketingAllowed();
 
-        boolean notificationConsentAllowed();
+        boolean isNotificationAllowed();
 
         List<ProfileImageInput> profileImageInputs();
     }
