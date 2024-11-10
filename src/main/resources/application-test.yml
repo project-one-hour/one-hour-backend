@@ -47,7 +47,7 @@ oauth2:
     key-id: secretsecretsecretsecretsecret
     service-id: secretsecretsecretsecretsecret
     auth-domain: https://appleid.apple.com
-    auth-key-path: /dummy-AuthKey.p8
+    auth-key-path: /key/AuthKey.p8
     url:
       callback: https://d30f-221-165-191-152.ngrok-free.app/api/users/auth-callback/apple
       tokens: https://appleid.apple.com/auth/token
