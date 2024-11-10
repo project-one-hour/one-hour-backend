@@ -2,19 +2,18 @@ package com.project1hour.api.core.infrastructure.restclient;
 
 import static org.springframework.http.MediaType.APPLICATION_FORM_URLENCODED;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.project1hour.api.core.application.user.imports.OauthRestClient;
 import com.project1hour.api.core.application.user.model.TokenPackage;
 import com.project1hour.api.core.application.user.model.WebKey;
-import com.project1hour.api.core.infrastructure.restclient.model.KakaoRequestTokensBody;
-import com.project1hour.api.core.infrastructure.restclient.model.KakaoResponseJWKsBody;
-import com.project1hour.api.core.infrastructure.restclient.model.KakaoResponseTokensBody;
+import com.project1hour.api.core.infrastructure.restclient.model.KakaoJWKsResponseBody;
+import com.project1hour.api.core.infrastructure.restclient.model.KakaoTokensRequestBody;
+import com.project1hour.api.core.infrastructure.restclient.model.KakaoTokensResponseBody;
 import java.util.Collections;
 import java.util.List;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
+import org.springframework.util.MultiValueMap;
 import org.springframework.web.client.RestClient;
 
 @Component
@@ -51,25 +50,26 @@ public class KakaoOauthRestClient implements OauthRestClient {
         return restClient.post()
                 .uri(requestTokensUrl)
                 .contentType(APPLICATION_FORM_URLENCODED)
-                .body(new KakaoRequestTokensBody(kakaoApiKey, redirectUrl, authorizationCode).toMultiValueMap())
+                .body(createKakaoTokensRequestForm(authorizationCode))
                 .retrieve()
-                .body(KakaoResponseTokensBody.class);
+                .body(KakaoTokensResponseBody.class);
     }
 
     @Override
     public List<WebKey> requestWebKeys() {
-        KakaoResponseJWKsBody response = restClient.get()
+        KakaoJWKsResponseBody response = restClient.get()
                 .uri(requestPublicKeyUrl)
                 .retrieve()
-                .body(KakaoResponseJWKsBody.class);
-
-        try {
-            String json = new ObjectMapper().writerWithDefaultPrettyPrinter().writeValueAsString(response);
-            System.out.println(json);
-        } catch (JsonProcessingException e) {
-            throw new RuntimeException(e);
-        }
-
+                .body(KakaoJWKsResponseBody.class);
         return Collections.unmodifiableList(response.keys());
+    }
+
+    private MultiValueMap<String, String> createKakaoTokensRequestForm(final String authorizationCode) {
+        return KakaoTokensRequestBody.builder()
+                .clientId(kakaoApiKey)
+                .redirectUri(redirectUrl)
+                .code(authorizationCode)
+                .build()
+                .toMultiValueMap();
     }
 }

@@ -85,6 +85,9 @@ dependencies {
     annotationProcessor 'org.projectlombok:lombok'
     compileOnly 'org.projectlombok:lombok'
 
+    // bouncycastle
+    implementation 'org.bouncycastle:bcpkix-jdk15on:1.70'
+
     // apache-utils
     implementation 'org.apache.commons:commons-lang3:3.12.0'
 
@@ -122,13 +125,20 @@ task copySqlScripts(type: Copy) {
     }
 }
 
-// 로컬 개발 환경에서만 사용
-// TODO : 배포 시 테스크 분리 고려
+// TODO : 배포 시 테스크 분리 고려,  dev/local 개발 환경에서만 사용
 task copyDockerCompose(type: Copy) {
     copy {
         from './submodule-backend'
         include 'docker-compose.yaml'
         into projectDir
+    }
+}
+
+task copyAuthKey(type: Copy) {
+    copy {
+        from './submodule-backend'
+        include 'AuthKey.p8'
+        into 'src/main/resources/key'
     }
 }
 

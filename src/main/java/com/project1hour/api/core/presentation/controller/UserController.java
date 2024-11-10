@@ -45,7 +45,7 @@ public class UserController {
     @MemberOnly
     @PostMapping(path = "/signup", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> signUp(@RequestAttribute(AUTHENTICATED_USER) final UserDetail userDetail,
-                                       @RequestPart("signup") final UserRegistrationRequest request,
+                                       @RequestPart("profile") final UserRegistrationRequest request,
                                        @RequestPart("primaryImage") final MultipartFile primaryImage,
                                        @RequestPart("secondaryImages") final List<MultipartFile> secondaryImages) {
         var requestWithMultipart = request
@@ -63,6 +63,4 @@ public class UserController {
         var response = oauthLoginService.login(request);
         return ResponseEntity.ok(response);
     }
-
-    //https://kauth.kakao.com/oauth/authorize?response_type=code&client_id=36714b270084b47dea0f9ee52d2b9331&redirect_uri=http://localhost:8080/api/users/auth-callback/kakao
 }
