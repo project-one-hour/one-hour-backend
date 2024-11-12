@@ -8,8 +8,10 @@ import com.project1hour.api.core.application.user.exports.UserRegistrationServic
 import com.project1hour.api.core.application.user.model.UserDetail;
 import com.project1hour.api.core.presentation.auth.MemberOnly;
 import com.project1hour.api.core.presentation.dto.UserRegistrationRequest;
+import com.project1hour.api.core.presentation.filter.ImageOptimize;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +45,7 @@ public class UserController {
     }
 
     @MemberOnly
+    @ImageOptimize
     @PostMapping(path = "/signup", consumes = {MediaType.APPLICATION_JSON_VALUE, MediaType.MULTIPART_FORM_DATA_VALUE})
     public ResponseEntity<Void> signUp(@RequestAttribute(AUTHENTICATED_USER) final UserDetail userDetail,
                                        @RequestPart("profile") final UserRegistrationRequest request,
@@ -53,7 +56,7 @@ public class UserController {
                 .withSecondaryImages(secondaryImages)
                 .withUserId(userDetail.userId());
         userRegistrationService.signUpUser(requestWithMultipart);
-        return ResponseEntity.ok().build();
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @GetMapping(path = "/auth-callback/{provider}")
