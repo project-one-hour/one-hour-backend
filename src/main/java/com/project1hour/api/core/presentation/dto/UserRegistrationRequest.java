@@ -15,7 +15,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 
 public record UserRegistrationRequest(
-        @With Long userId,
+        @With @JsonIgnore Long userId,
         String nickname,
         String gender,
         LocalDate birthday,
@@ -23,7 +23,6 @@ public record UserRegistrationRequest(
         List<Long> interestIds,
         boolean isMarketingAllowed,
         boolean isNotificationAllowed,
-        String provider,
         @With @JsonIgnore MultipartFile primaryImage,
         @With @JsonIgnore List<MultipartFile> secondaryImages
 ) implements UserRegistrationService.Request {
