@@ -1,36 +1,29 @@
-package com.project1hour.api.global.support;
+package com.project1hour.api.core.testconfig;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.BDDMockito.given;
-import static org.mockito.Mockito.mock;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.modifyHeaders;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessRequest;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.preprocessResponse;
 import static org.springframework.restdocs.operation.preprocess.Preprocessors.prettyPrint;
 
-import com.project1hour.api.core.application.user.exports.TokenAuthenticationFacade;
-import com.project1hour.api.core.application.user.model.UserDetail;
 import com.project1hour.api.core.presentation.filter.AuthenticationFilter;
+import com.project1hour.api.core.presentation.filter.ImageOptimizationFilter;
+import org.mockito.Mockito;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.restdocs.mockmvc.MockMvcRestDocumentation;
 import org.springframework.restdocs.mockmvc.RestDocumentationResultHandler;
 
 @TestConfiguration
-public class RestDocsTestConfiguration {
-
-    public static final Long MOCK_USER_ID = 1L;
+public class RestDocsConfiguration {
 
     @Bean
     public AuthenticationFilter authenticationFilter() {
-        return new AuthenticationFilter(tokenAuthenticationFacade());
+        return Mockito.mock(AuthenticationFilter.class);
     }
 
     @Bean
-    public TokenAuthenticationFacade tokenAuthenticationFacade() {
-        TokenAuthenticationFacade facade = mock(TokenAuthenticationFacade.class);
-        given(facade.authenticateUser(any())).willReturn(new UserDetail(MOCK_USER_ID));
-        return facade;
+    public ImageOptimizationFilter imageOptimizationFilter() {
+        return Mockito.mock(ImageOptimizationFilter.class);
     }
 
     @Bean
