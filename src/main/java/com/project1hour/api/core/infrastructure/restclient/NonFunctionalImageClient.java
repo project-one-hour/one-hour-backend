@@ -1,6 +1,7 @@
 package com.project1hour.api.core.infrastructure.restclient;
 
 import com.project1hour.api.core.application.image.imports.ImageClient;
+import com.project1hour.api.global.support.IOUtils;
 import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.util.UUID;
@@ -22,6 +23,7 @@ public class NonFunctionalImageClient implements ImageClient {
     public String uploadImage(final InputStream image, final String imageExtension) {
         log.info("업로드 이미지 스트림 : {}", image);
         log.info("이미지 확장자 : {}", imageExtension);
+        IOUtils.closeQuietly(image);
         return UUID.randomUUID() + "." + imageExtension;
     }
 }
