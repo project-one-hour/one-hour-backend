@@ -17,8 +17,12 @@ public class CheckNicknameDuplicationUseCase implements CheckNicknameDuplication
 
     @Override
     public Response checkNickNameDuplication(final CheckNicknameDuplicationService.Request request) {
-        checkIfNicknameDuplicate(request.nickname());
-        return new Response(false);
+        try {
+            checkIfNicknameDuplicate(request.nickname());
+            return new Response(false);
+        } catch (BadRequestException e) {
+            return new Response(true);
+        }
     }
 
     /**

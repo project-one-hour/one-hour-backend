@@ -6,9 +6,9 @@ import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicati
 import com.project1hour.api.core.application.user.exports.OauthLoginService;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
 import com.project1hour.api.core.application.user.model.UserDetail;
-import com.project1hour.api.core.presentation.auth.MemberOnly;
 import com.project1hour.api.core.presentation.dto.UserRegistrationRequest;
 import com.project1hour.api.core.presentation.filter.ImageOptimize;
+import com.project1hour.api.core.presentation.filter.MemberOnly;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;

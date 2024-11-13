@@ -10,8 +10,15 @@ import org.springframework.restdocs.snippet.TemplatedSnippet;
 
 public class ErrorCodeFieldsSnippet extends TemplatedSnippet {
 
+    private static final String ERROR_CODE_SNIPPET_NAME = "error-code";
+    private static final String ERROR_CODE_TEMPLATE_NAME = "error-code-template";
+
     public ErrorCodeFieldsSnippet(final String snippetName, final String templateName) {
         super(snippetName, templateName, null);
+    }
+
+    public static ErrorCodeFieldsSnippet errorCodeFields() {
+        return new ErrorCodeFieldsSnippet(ERROR_CODE_SNIPPET_NAME, ERROR_CODE_TEMPLATE_NAME);
     }
 
     @Override
