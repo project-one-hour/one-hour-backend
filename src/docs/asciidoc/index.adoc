@@ -4,13 +4,9 @@
 :source-highlighter: highlightjs
 :toc: left
 :toclevels: 2
+:toc-title: 목차
 :sectlinks:
 :docinfo: shared-head
 
-include::auth.adoc[]
-include::member.adoc[]
-include::interest.adoc[]
-include::bungae.adoc[]
-include::credit.adoc[]
-include::image.adoc[]
+include::user.adoc[]
 include::errorCode.adoc[]
