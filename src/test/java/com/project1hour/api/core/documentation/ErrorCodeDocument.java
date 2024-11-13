@@ -1,18 +1,22 @@
 package com.project1hour.api.core.documentation;
 
-import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.document;
+import static com.project1hour.api.core.documentation.errorcode.ErrorCodeFieldsSnippet.errorCodeFields;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 
-import com.project1hour.api.core.documentation.errorcode.ErrorCodeFieldsSnippet;
+import com.project1hour.api.core.documentation.errorcode.FakeErrorCodeController;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 
-public class ErrorCodeDocument extends DocumentationTest {
+@WebMvcTest(FakeErrorCodeController.class)
+public class ErrorCodeDocument extends RestDocsTestSupport {
 
     @Test
-    void 에러_코드를_반환한다() {
-        ErrorCodeFieldsSnippet errorCodeFieldsSnippet = new ErrorCodeFieldsSnippet("error-code", "error-code-template");
-
-        docsGiven.when().get("/test/error-code")
-                .then().log().all()
-                .apply(document("error-code", errorCodeFieldsSnippet));
+    @DisplayName("에러 코드를 반환한다")
+    void errorCode() throws Exception {
+        mockMvc().perform(get("/test/error-code"))
+                .andDo(restDocs().document(
+                        errorCodeFields()
+                ));
     }
 }
