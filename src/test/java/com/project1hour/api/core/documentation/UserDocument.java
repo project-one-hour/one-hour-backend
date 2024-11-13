@@ -1,5 +1,7 @@
 package com.project1hour.api.core.documentation;
 
+import static com.project1hour.api.DummyDataGenerator.dummyImageMultipartFile;
+import static com.project1hour.api.DummyDataGenerator.jsonMultipartFile;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.BDDMockito.given;
 import static org.mockito.Mockito.doNothing;
@@ -20,7 +22,6 @@ import com.project1hour.api.core.application.user.exports.CheckNicknameDuplicati
 import com.project1hour.api.core.application.user.exports.OauthLoginService;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
 import com.project1hour.api.core.presentation.controller.UserController;
-import com.project1hour.api.global.support.RestDocsTestSupport;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -30,11 +31,10 @@ import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpMethod;
-import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.restdocs.payload.JsonFieldType;
 
 @WebMvcTest(UserController.class)
-public class UserControllerTest extends RestDocsTestSupport {
+public class UserDocument extends RestDocsTestSupport {
 
     @MockBean
     private CheckNicknameDuplicationService checkNicknameDuplicationService;
@@ -51,7 +51,7 @@ public class UserControllerTest extends RestDocsTestSupport {
         var response = new CheckNicknameDuplicationService.Response(false);
         given(checkNicknameDuplicationService.checkNickNameDuplication(any())).willReturn(response);
 
-        mockMvc().perform(get("/api/users/duplicate/{nickname}", "아무개"))
+        mockMvc().perform(get("/api/users/duplicate/{nickname}", "USER_NICKNAME"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.isDuplicate").value(false))
                 .andDo(restDocs().document(
@@ -72,25 +72,6 @@ public class UserControllerTest extends RestDocsTestSupport {
     void signup_201() throws Exception {
         doNothing().when(userRegistrationService).signUpUser(any());
 
-        MockMultipartFile primaryImage = new MockMultipartFile(
-                "primaryImage",
-                "MockImage1.jpeg",
-                "image/jpeg",
-                "Hello World~".getBytes()
-        );
-        MockMultipartFile secondaryImages1 = new MockMultipartFile(
-                "secondaryImages",
-                "MockImage2.jpeg",
-                "image/jpeg",
-                "Hello World~~".getBytes()
-        );
-        MockMultipartFile secondaryImages2 = new MockMultipartFile(
-                "secondaryImages",
-                "MockImage3.jpeg",
-                "image/jpeg",
-                "Hello World~~~".getBytes()
-        );
-
         Map<String, Object> profile = HashMap.newHashMap(7);
         profile.put("nickname", "아무개");
         profile.put("gender", "male");
@@ -101,11 +82,12 @@ public class UserControllerTest extends RestDocsTestSupport {
         profile.put("isNotificationAllowed", true);
 
         mockMvc().perform(multipart(HttpMethod.POST, "/api/users/signup")
-                        .file(primaryImage)
-                        .file(secondaryImages1)
-                        .file(secondaryImages2)
-                        .param("profile", createJson(profile))
-                        .header(HttpHeaders.AUTHORIZATION, "Bearer jwt.token.here"))
+                        .file(dummyImageMultipartFile("primaryImage"))
+                        .file(dummyImageMultipartFile("secondaryImages"))
+                        .file(dummyImageMultipartFile("secondaryImages"))
+                        .file(jsonMultipartFile("profile", createJson(profile)))
+                        .header(HttpHeaders.AUTHORIZATION, "Bearer jwt.token.here")
+                        .content(createJson(profile)))
                 .andExpect(status().isCreated())
                 .andDo(restDocs().document(
                         requestFields(
@@ -124,7 +106,7 @@ public class UserControllerTest extends RestDocsTestSupport {
                                         .type(JsonFieldType.STRING)
                                         .description("MBTI")
                                         .attributes(constraints("존재하는 MBTI만 입력 가능 (대소문자 상관 없음)")),
-                                fieldWithPath("interests")
+                                fieldWithPath("interestIds")
                                         .type(JsonFieldType.ARRAY)
                                         .description("관심사 목록")
                                         .attributes(constraints("DB에 존재하는 관심사만 가능, 반드시 5개여야 함")),
@@ -138,6 +120,8 @@ public class UserControllerTest extends RestDocsTestSupport {
                                         .attributes(constraints("true 권한 동의, false 권한 거부"))
                         ),
                         requestParts(
+                                partWithName("profile")
+                                        .description("업로드할 사용자 프로필 정보 (JSON)"),
                                 partWithName("primaryImage")
                                         .description("업로드할 대표 프로필 사진"),
                                 partWithName("secondaryImages")
@@ -157,7 +141,7 @@ public class UserControllerTest extends RestDocsTestSupport {
         );
         given(oauthLoginService.login(any())).willReturn(response);
 
-        mockMvc().perform(get("/api/users/auth-callback/{provider}", "kakao", "apple")
+        mockMvc().perform(get("/api/users/auth-callback/{provider}", "PROVIDER_NAME")
                         .param("code", "AuthorizationCode"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.accessToken").value(response.accessToken()))
@@ -178,9 +162,9 @@ public class UserControllerTest extends RestDocsTestSupport {
                                 fieldWithPath("refreshToken")
                                         .type(JsonFieldType.STRING)
                                         .description("JWT RefreshToken"),
-                                fieldWithPath("accessToken")
+                                fieldWithPath("isProfileRequired")
                                         .type(JsonFieldType.BOOLEAN)
-                                        .description("신규 가입 여부")
+                                        .description("사용자가 프로필 설정을 완료해야 하는지 여부")
                         )
                 ));
     }
