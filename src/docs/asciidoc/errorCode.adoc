@@ -1,4 +1,5 @@
-[[error-code]]
 == 에러 코드
 
-operation::error-code[snippets='error-code']
+- 아직 미완성입니다 참고만 해주세요
+
+include::{snippets}/error-code-document/error-code/error-code.adoc[]
