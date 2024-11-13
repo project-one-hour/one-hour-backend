@@ -1,11 +1,18 @@
-package com.project1hour.api.global.support;
+package com.project1hour.api.core.documentation;
 
+import static com.project1hour.api.core.presentation.filter.AuthenticationFilter.AUTHENTICATED_USER;
 import static org.springframework.restdocs.mockmvc.MockMvcRestDocumentation.documentationConfiguration;
 import static org.springframework.restdocs.snippet.Attributes.key;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.project1hour.api.core.presentation.filter.AuthenticationFilter;
+import com.project1hour.api.core.application.user.model.UserDetail;
+import com.project1hour.api.core.testconfig.RestDocsConfiguration;
+import jakarta.servlet.FilterChain;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.ServletRequest;
+import jakarta.servlet.ServletResponse;
+import java.io.IOException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.DisplayNameGeneration;
@@ -23,15 +30,17 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.filter.CharacterEncodingFilter;
 
 @Disabled
 @WebMvcTest
-@Import(RestDocsTestConfiguration.class)
+@Import(RestDocsConfiguration.class)
 @DisplayNameGeneration(DisplayNameGenerator.ReplaceUnderscores.class)
 @ExtendWith({RestDocumentationExtension.class, SpringExtension.class})
 public class RestDocsTestSupport {
 
     private static final String CONSTRAINTS = "constraints";
+    protected static final Long MOCK_USER_ID = 1L;
 
     @Autowired
     private MockMvc mockMvc;
@@ -42,17 +51,21 @@ public class RestDocsTestSupport {
     @Autowired
     private RestDocumentationResultHandler restDocumentationResultHandler;
 
-    @Autowired
-    private AuthenticationFilter authenticationFilter;
-
     @BeforeEach
     final void setUp(final WebApplicationContext context, final RestDocumentationContextProvider contextProvider) {
         this.mockMvc = MockMvcBuilders.webAppContextSetup(context)
                 .apply(documentationConfiguration(contextProvider))
                 .alwaysDo(MockMvcResultHandlers.print())
                 .alwaysDo(restDocumentationResultHandler)
-                .addFilter(authenticationFilter)
+                .addFilters(new CharacterEncodingFilter("UTF-8", true))
+                .addFilter(this::stubAuthenticateFilter)
                 .build();
+    }
+
+    private void stubAuthenticateFilter(final ServletRequest request, final ServletResponse response,
+                                        final FilterChain filterChain) throws IOException, ServletException {
+        request.setAttribute(AUTHENTICATED_USER, new UserDetail(MOCK_USER_ID));
+        filterChain.doFilter(request, response);
     }
 
     protected final String createJson(final Object object) throws JsonProcessingException {
