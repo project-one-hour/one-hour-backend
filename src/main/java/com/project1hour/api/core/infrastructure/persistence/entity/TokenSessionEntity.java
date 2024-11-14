@@ -2,6 +2,7 @@ package com.project1hour.api.core.infrastructure.persistence.entity;
 
 import com.project1hour.api.core.domain.user.entity.User;
 import io.hypersistence.utils.hibernate.id.Tsid;
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
@@ -16,13 +17,14 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Table(name = "token_session")
-@SQLDelete(sql = "UPDATE auth_provider SET deleted_at = now() WHERE auth_id = ?")
+@SQLDelete(sql = "UPDATE token_session SET deleted_at = now() WHERE token_session_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class TokenSessionEntity {
 
     @Id
     @Tsid
+    @Column(name = "token_session_id")
     private Long id;
 
     @OneToOne

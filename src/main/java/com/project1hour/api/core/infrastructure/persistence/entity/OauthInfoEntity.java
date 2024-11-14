@@ -26,7 +26,7 @@ import org.hibernate.annotations.SQLRestriction;
         name = "oauth_info",
         uniqueConstraints = {@UniqueConstraint(columnNames = {"provider_type", "user_social_id"})}
 )
-@SQLDelete(sql = "UPDATE auth_provider SET deleted_at = now() WHERE auth_id = ?")
+@SQLDelete(sql = "UPDATE oauth_info SET deleted_at = now() WHERE oauth_info_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class OauthInfoEntity extends AbstractEntity<Long> {

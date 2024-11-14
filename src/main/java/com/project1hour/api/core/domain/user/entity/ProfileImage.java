@@ -20,7 +20,7 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
-@SQLDelete(sql = "UPDATE profile_image_id SET deleted_at = now() WHERE profile_imgae_id = ?")
+@SQLDelete(sql = "UPDATE profile_image SET deleted_at = now() WHERE profile_image_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileImage extends AbstractEntity<Long> {
