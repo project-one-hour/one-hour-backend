@@ -24,7 +24,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Getter
 @Table(
         name = "oauth_info",
-        uniqueConstraints = {@UniqueConstraint(columnNames = {"provider_type", "user_social_id"})}
+        uniqueConstraints = @UniqueConstraint(columnNames = {"provider_type", "user_social_id"})
 )
 @SQLDelete(sql = "UPDATE oauth_info SET deleted_at = now() WHERE oauth_info_id = ?")
 @SQLRestriction("deleted_at IS NULL")
