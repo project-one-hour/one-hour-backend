@@ -11,6 +11,8 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.Table;
+import jakarta.persistence.UniqueConstraint;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +21,9 @@ import org.hibernate.annotations.SQLRestriction;
 
 @Entity
 @Getter
+@Table(
+        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "bungae_id"})
+)
 @SQLDelete(sql = "UPDATE participant SET deleted_at = now() WHERE participant_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -29,7 +34,7 @@ public class Participant extends AbstractEntity<Long> {
     @Column(name = "participant_id")
     private Long id;
 
-    @Column(nullable = false, unique = true)
+    @Column(nullable = false)
     private Long userId;
 
     @ManyToOne(fetch = FetchType.LAZY)
