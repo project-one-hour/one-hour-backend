@@ -35,7 +35,7 @@ import org.hibernate.annotations.SQLRestriction;
 @Entity
 @Getter
 @Table(name = "app_user")
-@SQLDelete(sql = "UPDATE user SET deleted_at = now() WHERE user_id = ?")
+@SQLDelete(sql = "UPDATE app_user SET deleted_at = now() WHERE user_id = ?")
 @SQLRestriction("deleted_at IS NULL")
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class User extends AbstractEntity<Long> {
