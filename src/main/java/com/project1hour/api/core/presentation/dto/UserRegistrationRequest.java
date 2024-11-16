@@ -28,11 +28,13 @@ public record UserRegistrationRequest(
 ) implements UserRegistrationService.Request {
 
     public List<ProfileImageInput> profileImageInputs() {
-        return Stream.concat(
-                Stream.of(new ProfileImageInputImpl(primaryImage, true)),
-                Optional.ofNullable(secondaryImages).orElseGet(List::of).stream()
-                        .map(secondaryImage -> new ProfileImageInputImpl(secondaryImage, false))
-        ).collect(Collectors.toUnmodifiableList());
+        var profileImageEntry = Stream.of(new ProfileImageInputImpl(primaryImage, true));
+        var secondaryImageEntries = Optional.ofNullable(secondaryImages)
+                .orElseGet(List::of)
+                .stream()
+                .map(secondaryImage -> new ProfileImageInputImpl(secondaryImage, false));
+
+        return Stream.concat(profileImageEntry, secondaryImageEntries).collect(Collectors.toUnmodifiableList());
     }
 
     record ProfileImageInputImpl(MultipartFile profileImage, boolean isPrimary) implements ProfileImageInput {
