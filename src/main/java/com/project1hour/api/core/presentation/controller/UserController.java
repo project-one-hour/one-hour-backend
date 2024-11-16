@@ -50,7 +50,7 @@ public class UserController {
     public ResponseEntity<Void> signUp(@RequestAttribute(AUTHENTICATED_USER) final UserDetail userDetail,
                                        @RequestPart("profile") final UserRegistrationRequest request,
                                        @RequestPart("primaryImage") final MultipartFile primaryImage,
-                                       @RequestPart("secondaryImages") final List<MultipartFile> secondaryImages) {
+                                       @RequestPart(name = "secondaryImages", required = false) final List<MultipartFile> secondaryImages) {
         var requestWithMultipart = request
                 .withPrimaryImage(primaryImage)
                 .withSecondaryImages(secondaryImages)
