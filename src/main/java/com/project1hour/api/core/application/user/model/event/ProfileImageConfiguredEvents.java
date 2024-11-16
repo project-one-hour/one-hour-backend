@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 public record ProfileImageConfiguredEvents(
-        List<ProfileImageConfiguredEvent> events,
+        List<ProfileImageConfiguredEvent> value,
         LocalDateTime occurredAt
 ) implements UserDomainEvent {
 
