@@ -14,7 +14,7 @@ public enum Mbti {
         String upperCaseValue = value.toUpperCase();
 
         return Arrays.stream(values())
-                .filter(gender -> upperCaseValue.equals(gender.name()))
+                .filter(mbti -> upperCaseValue.equals(mbti.name()))
                 .findFirst()
                 .orElseThrow(() -> {
                     String message = String.format("%s와 일치하는 MBTI를 찾을 수 없습니다.", upperCaseValue);
