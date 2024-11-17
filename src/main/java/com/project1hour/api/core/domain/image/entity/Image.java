@@ -6,6 +6,7 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Embedded;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -27,9 +28,12 @@ public class Image extends AbstractEntity<Long> {
     @Embedded
     private ImageName imageName;
 
-    @Builder(builderClassName = "CreateImageBuilder", builderMethodName = "createImage")
-    public Image(Long id, ImageName imageName) {
+    @Builder
+    public Image(final Long id, final ImageName imageName,
+                 final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.imageName = imageName;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
     }
 }

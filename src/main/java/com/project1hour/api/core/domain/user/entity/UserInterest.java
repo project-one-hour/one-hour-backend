@@ -8,6 +8,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -35,9 +36,12 @@ public class UserInterest extends AbstractEntity<Long> {
     private Long interestId;
 
     @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
-    public UserInterest(final Long id, final User user, final Long interestId) {
+    public UserInterest(final Long id, final User user, final Long interestId,
+                        final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.user = user;
         this.interestId = interestId;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
     }
 }

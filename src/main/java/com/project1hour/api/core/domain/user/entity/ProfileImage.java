@@ -11,6 +11,7 @@ import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
 import lombok.Builder;
 import lombok.Getter;
@@ -42,10 +43,13 @@ public class ProfileImage extends AbstractEntity<Long> {
     private ProfileImageType profileImageType;
 
     @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
-    public ProfileImage(final Long id, final Long imageId, final User user, final ProfileImageType profileImageType) {
+    public ProfileImage(final Long id, final Long imageId, final User user, final ProfileImageType profileImageType,
+                        final LocalDateTime createdAt, final LocalDateTime updatedAt) {
         this.id = id;
         this.imageId = imageId;
         this.user = user;
         this.profileImageType = profileImageType;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
     }
 }
