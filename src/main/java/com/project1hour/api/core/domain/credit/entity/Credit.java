@@ -10,7 +10,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.Id;
+import java.time.LocalDateTime;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.SQLDelete;
@@ -36,4 +38,23 @@ public class Credit extends AbstractEntity<Long> {
 
     @Column(nullable = false)
     private Long userId;
+
+    @Builder
+    public Credit(final Long id, final EarnType earnType, final Quantity quantity, final Long userId,
+                  final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+        this.id = id;
+        this.earnType = earnType;
+        this.quantity = quantity;
+        this.userId = userId;
+        super.createdAt = createdAt;
+        super.updatedAt = updatedAt;
+    }
+
+    public static Credit createCredit(final Long userId, final EarnType earnType) {
+        return Credit.builder()
+                .userId(userId)
+                .earnType(earnType)
+                .quantity(Quantity.fromEarnType(earnType))
+                .build();
+    }
 }
