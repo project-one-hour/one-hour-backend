@@ -3,6 +3,8 @@ package com.project1hour.api.core.presentation.dto;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.project1hour.api.core.application.user.exports.UserRegistrationService;
 import com.project1hour.api.core.application.user.model.ProfileImageInput;
+import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.InfraStructureException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDate;
@@ -27,6 +29,7 @@ public record UserRegistrationRequest(
         @With @JsonIgnore List<MultipartFile> secondaryImages
 ) implements UserRegistrationService.Request {
 
+    @Override
     public List<ProfileImageInput> profileImageInputs() {
         var profileImageEntry = Stream.of(new ProfileImageInputImpl(primaryImage, true));
         var secondaryImageEntries = Optional.ofNullable(secondaryImages)
@@ -37,13 +40,17 @@ public record UserRegistrationRequest(
         return Stream.concat(profileImageEntry, secondaryImageEntries).collect(Collectors.toUnmodifiableList());
     }
 
-    record ProfileImageInputImpl(MultipartFile profileImage, boolean isPrimary) implements ProfileImageInput {
+    record ProfileImageInputImpl(
+            MultipartFile profileImage,
+            boolean isPrimary
+    ) implements ProfileImageInput {
 
+        @Override
         public InputStream inputStream() {
-            try (InputStream imageInput = profileImage.getInputStream()) {
-                return imageInput;
+            try {
+                return profileImage.getInputStream();
             } catch (IOException e) {
-                throw new RuntimeException(e);
+                throw new InfraStructureException("이미지를 가져오는 중 오류가 발생했습니다.", ErrorCode.INTERNAL_SERVER_ERROR);
             }
         }
     }
