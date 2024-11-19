@@ -4,8 +4,8 @@ import java.io.InputStream;
 
 public interface ImageUploadEventHandler {
 
-    void handleImageUpload(PayLoad payLoad);
+    void handleImageUpload(Payload payLoad);
 
-    record PayLoad(Long imageId, InputStream inputStream) {
+    record Payload(Long imageId, InputStream inputStream) {
     }
 }

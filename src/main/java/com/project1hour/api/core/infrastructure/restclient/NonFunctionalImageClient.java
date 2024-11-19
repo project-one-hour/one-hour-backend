@@ -6,6 +6,7 @@ import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
 import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
@@ -23,6 +24,12 @@ public class NonFunctionalImageClient implements ImageClient {
     public String uploadImage(final InputStream image, final String imageExtension) {
         log.info("업로드 이미지 스트림 : {}", image);
         log.info("이미지 확장자 : {}", imageExtension);
+        try {
+            log.info("이미지 크기 : {}", image.available());
+        } catch (Exception e) {
+            log.info("스택 트래이스 : {}", ExceptionUtils.getStackTrace(e));
+            IOUtils.closeQuietly(image);
+        }
         IOUtils.closeQuietly(image);
         return UUID.randomUUID() + "." + imageExtension;
     }

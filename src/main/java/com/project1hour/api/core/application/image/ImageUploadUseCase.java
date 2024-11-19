@@ -21,7 +21,7 @@ public class ImageUploadUseCase implements ImageUploadEventHandler {
     private final ImageClient imageClient;
 
     @Override
-    public void handleImageUpload(final PayLoad payLoad) {
+    public void handleImageUpload(final Payload payLoad) {
         processImageUpload(payLoad.imageId(), payLoad.inputStream());
     }
 
@@ -31,7 +31,7 @@ public class ImageUploadUseCase implements ImageUploadEventHandler {
     protected void processImageUpload(final Long imageId, final InputStream image) {
         String imageName = imageClient.uploadImage(image, imageExpressionManager.getImageExtension());
 
-        Image uploadedImage = Image.createImage()
+        Image uploadedImage = Image.builder()
                 .id(imageId)
                 .imageName(new ImageName(imageName))
                 .build();

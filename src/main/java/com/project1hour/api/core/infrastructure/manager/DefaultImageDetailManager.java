@@ -6,6 +6,7 @@ import com.drew.metadata.exif.ExifIFD0Directory;
 import com.project1hour.api.core.application.image.imports.ImageDetailManager;
 import java.io.InputStream;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.stereotype.Component;
 
@@ -16,10 +17,10 @@ public class DefaultImageDetailManager implements ImageDetailManager {
     @Override
     public int getImageRotation(final InputStream imageInput) {
         try (imageInput) {
-            Directory directory = ImageMetadataReader.readMetadata(imageInput)
-                    .getFirstDirectoryOfType(ExifIFD0Directory.class);
+            Directory directory =
+                    ImageMetadataReader.readMetadata(imageInput).getFirstDirectoryOfType(ExifIFD0Directory.class);
 
-            if (directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
+            if (ObjectUtils.isNotEmpty(directory) && directory.containsTag(ExifIFD0Directory.TAG_ORIENTATION)) {
                 return directory.getInt(ExifIFD0Directory.TAG_ORIENTATION);
             }
 

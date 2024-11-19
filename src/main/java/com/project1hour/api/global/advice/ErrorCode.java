@@ -25,6 +25,8 @@ public enum ErrorCode {
 
     // Credit 관련
     CREDIT_NOT_FOUND("C000", "Credit 조회 시, 특정 사용자의 Credit정보를 찾을 수 없는 경우"),
+    INVALID_EARN_TYPE_VALUE("C001", "특정 충전 타입을 찾을 수 없는 경우"),
+    INVALID_REWARD_TYPE("C002", "리워드 타입의 충전 형식이 아닌 경우"),
 
     // Interest 관련
     INCLUDE_NOT_EXISTS_INTEREST("R001", "회원가입 시, 입력한 5개의 관심사 중에 존재하지 않는 관심사가 포함된 경우"),

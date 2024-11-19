@@ -12,16 +12,16 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class IOUtils {
 
-    public static BufferedInputStream buffer(InputStream inputStream) {
+    public static BufferedInputStream buffer(final InputStream inputStream) {
         Objects.requireNonNull(inputStream, "inputStream");
         return inputStream instanceof BufferedInputStream buffer ? buffer : new BufferedInputStream(inputStream);
     }
 
-    public static void closeQuietly(Closeable closeable) {
+    public static void closeQuietly(final Closeable closeable) {
         closeQuietly(closeable, null);
     }
 
-    public static void closeQuietly(Closeable closeable, Consumer<IOException> exceptionConsumer) {
+    public static void closeQuietly(final Closeable closeable, final Consumer<IOException> exceptionConsumer) {
         if (closeable != null) {
             try {
                 closeable.close();
