@@ -57,9 +57,7 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
 
     private Thumbnails.Builder<?> createThumbnailBuilder(final ImageEditOptions options) throws IOException {
         if (options.width() < MINIMUM_WIDTH || options.height() < MINIMUM_HEIGHT) {
-            BufferedImage image = readImage(options.imageInput()).orElseThrow(() ->
-                    new InfraStructureException("이미지 형식이 올바르지 않습니다.", ErrorCode.CAN_NOT_READ_IMAGE));
-
+            BufferedImage image = readImage(options.imageInput());
             return Thumbnails.of(image)
                     .size(image.getWidth(), image.getHeight());
         }
@@ -68,9 +66,9 @@ public class JPEGImageExpressionManager implements ImageExpressionManager {
                 .size(options.width(), options.height());
     }
 
-    private Optional<BufferedImage> readImage(final InputStream inputStream) throws IOException {
-        BufferedImage bufferedImage = ImageIO.read(inputStream);
-        return Optional.ofNullable(bufferedImage);
+    private BufferedImage readImage(final InputStream inputStream) throws IOException {
+        return Optional.ofNullable(ImageIO.read(inputStream))
+                .orElseThrow(() -> new InfraStructureException("이미지 형식이 올바르지 않습니다.", ErrorCode.CAN_NOT_READ_IMAGE));
     }
 
     private double rotateImageAngle(final int orientation) {

@@ -11,7 +11,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.Part;
 import java.io.IOException;
-import java.util.Optional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
@@ -29,8 +28,12 @@ public class ImageOptimizationFilter extends AnnotatedUrlMappingFilter<ImageOpti
     @Override
     protected void doProcessFilter(final HttpServletRequest request, final HttpServletResponse response,
                                    final FilterChain filterChain) throws ServletException, IOException {
-        HttpServletRequest processedRequest = getMultipartRequest(request)
-                .orElseThrow(() -> new BadRequestException("요청이 멀티파트 형식이 아닙니다", ErrorCode.INVALID_MULTIPART_REQUEST));
+        if (!multipartResolver.isMultipart(request)) {
+            throw new BadRequestException("요청이 멀티파트 형식이 아닙니다", ErrorCode.INVALID_MULTIPART_REQUEST);
+        }
+
+        ImageFilterRequest imageFilterRequest = new ImageFilterRequest(request, this::optimizeImagePart);
+        HttpServletRequest processedRequest = multipartResolver.resolveMultipart(imageFilterRequest);
 
         try {
             filterChain.doFilter(processedRequest, response);
@@ -39,15 +42,6 @@ public class ImageOptimizationFilter extends AnnotatedUrlMappingFilter<ImageOpti
                 multipartResolver.cleanupMultipart(multipartRequest);
             }
         }
-    }
-
-    private Optional<MultipartHttpServletRequest> getMultipartRequest(final HttpServletRequest request) {
-        if (multipartResolver.isMultipart(request)) {
-            var optimizedRequest = new ImageFilterRequest(request, this::optimizeImagePart);
-            return Optional.of(multipartResolver.resolveMultipart(optimizedRequest));
-        }
-
-        return Optional.empty();
     }
 
     private Part optimizeImagePart(final Part part) {
