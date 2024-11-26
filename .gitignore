@@ -31,7 +31,7 @@ application-staging.yml
 application-prod.yml
 docker-compose.yaml
 01_create_schema_dev.sql
-02_insert_dummy_user_data_dev.sql
+02_insert_Interest_category_data.sql
 AuthKey.p8
 
 ### NetBeans ###
