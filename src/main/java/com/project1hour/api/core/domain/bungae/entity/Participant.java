@@ -25,7 +25,7 @@ public class Participant extends AbstractDomainEntity<ParticipantId> {
         this.role = role;
     }
 
-    public static Participant createHostParticipant(final UserId userId, final Bungae bungae) {
+    public static Participant createHostParticipant(final UserId userId) {
         return Participant.builder()
                 .userId(userId)
                 .role(BungaeRole.HOST)
