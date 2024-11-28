@@ -24,10 +24,6 @@ import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-
-/**
- * TODO : 바뀐 Validation 스펙 테스트 -> Spring Aop기반 검증 (@Validated)가 없으면 메서드 파라미터 검증이 가능함
- */
 @RestController
 @RequestMapping("/api/users")
 @RequiredArgsConstructor
