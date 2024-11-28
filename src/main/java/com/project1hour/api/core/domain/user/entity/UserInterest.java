@@ -1,47 +1,23 @@
 package com.project1hour.api.core.domain.user.entity;
 
-import com.project1hour.api.global.entity.AbstractEntity;
-import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import java.time.LocalDateTime;
-import lombok.AccessLevel;
-import lombok.Builder;
+import com.project1hour.api.core.domain.AbstractDomainEntity;
+import com.project1hour.api.core.domain.user.value.InterestId;
+import com.project1hour.api.core.domain.user.value.UserInterestId;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
 @Getter
-@SQLDelete(sql = "UPDATE user_interest SET deleted_at = now() WHERE user_interest_id = ?")
-@SQLRestriction("deleted_at IS NULL")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class UserInterest extends AbstractEntity<Long> {
+public class UserInterest extends AbstractDomainEntity<UserInterestId> {
 
-    @Id
-    @Tsid
-    @Column(name = "user_interest_id")
-    private Long id;
+    private final UserInterestId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "user_id")
-    private User user;
+    private InterestId interestId;
 
-    @Column(nullable = false)
-    private Long interestId;
-
-    @Builder(access = AccessLevel.PACKAGE, toBuilder = true)
-    public UserInterest(final Long id, final User user, final Long interestId,
-                        final LocalDateTime createdAt, final LocalDateTime updatedAt) {
+    public UserInterest(final UserInterestId id, final InterestId interestId) {
         this.id = id;
-        this.user = user;
         this.interestId = interestId;
-        super.createdAt = createdAt;
-        super.updatedAt = updatedAt;
+    }
+
+    public static UserInterest createNewUserInterest(final InterestId interestId) {
+        return new UserInterest(null, interestId);
     }
 }

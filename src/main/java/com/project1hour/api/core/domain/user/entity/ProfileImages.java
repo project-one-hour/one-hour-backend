@@ -3,20 +3,12 @@ package com.project1hour.api.core.domain.user.entity;
 import com.project1hour.api.core.domain.user.value.ProfileImageType;
 import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
-import jakarta.persistence.CascadeType;
-import jakarta.persistence.Embeddable;
-import jakarta.persistence.OneToMany;
+import io.jsonwebtoken.lang.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.Builder;
+import lombok.Singular;
 
-/**
- * TODO : 대표 사진 validate 작성
- */
-@Embeddable
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class ProfileImages {
 
     private static final int MAX_PROFILE_IMAGES_SIZE = 3;
@@ -24,18 +16,21 @@ public class ProfileImages {
     private static final long REQUIRED_PRIMARY_IMAGE_COUNT = 1;
     private static final long NO_PRIMARY_IMAGE = 0;
 
-    @Getter(AccessLevel.PACKAGE)
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<ProfileImage> profileImageList;
 
-    public ProfileImages(final List<ProfileImage> profileImages) {
-        this.profileImageList = profileImages;
+    @Builder(toBuilder = true)
+    public ProfileImages(@Singular("profileImage") final List<ProfileImage> profileImageList) {
+        this.profileImageList = List.copyOf(profileImageList);
         validateProfileImageCount();
         validateSinglePrimaryImage();
     }
 
+    public List<ProfileImage> getProfileImageList() {
+        return List.copyOf(profileImageList);
+    }
+
     private void validateProfileImageCount() {
-        if (profileImageList.isEmpty() || profileImageList.size() > MAX_PROFILE_IMAGES_SIZE) {
+        if (Collections.isEmpty(profileImageList) || profileImageList.size() > MAX_PROFILE_IMAGES_SIZE) {
             String message = String.format("프로필 이미지는 1장 이상 3장 이하여야 합니다. size = %d", profileImageList.size());
             throw new BadRequestException(message, ErrorCode.INVALID_MEMBER_PROFILE_IMAGE_SIZE);
         }

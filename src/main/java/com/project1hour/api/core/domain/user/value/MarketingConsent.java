@@ -6,4 +6,8 @@ public enum MarketingConsent {
     public static MarketingConsent fromBoolean(final boolean allow) {
         return allow ? ALLOW : NOT_ALLOW;
     }
+
+    public boolean isMarketingAllowed() {
+        return this == ALLOW;
+    }
 }

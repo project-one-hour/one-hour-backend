@@ -15,7 +15,7 @@ public enum ErrorCode {
     DUPLICATED_SIGN_UP("M001", "회원가입 시, 가입하려는 사용자가 이미 가입을 완료한 상태인 경우"),
     INVALID_NICKNAME_LENGTH("M002", "회원가입 시, 닉네임의 길이가 2글자 이상 8글자 이하가 아닐때"),
     INVALID_NICKNAME_FORMAT("M003", "회원가입 시, 닉네임의 형식이 (한글음절/숫자[옵션]) 혹은 (한글/영어) 혹은 (한글/영어/숫자) 조합으로 이루어져 있지 않은 경우"),
-    INVALID_AGE_LIMIT("M004", "회원가입 시, 사용자가 올해 기준 법정 성인 연령이 아닌 경우"),
+    INVALID_MEMBER_AGE_LIMIT("M004", "회원가입 시, 사용자가 올해 기준 법정 성인 연령이 아닌 경우"),
     INVALID_GENDER_VALUE("M005", "회원가입 시, 성별을 찾을 수 없는 경우 ('MALE', 'FEMALE' 만 가능)"),
     INVALID_MBTI_VALUE("M006", "회원가입 시, MBTI가 잘못 입력된 경우"),
     INVALID_MEMBER_PROFILE_IMAGE_SIZE("M007", "프로필 사진 업로드시, 프로필 사진이 1개 이상 3가 이하가 아닌 경우"),
@@ -48,6 +48,7 @@ public enum ErrorCode {
     TOO_MANY_PRIMARY_PROFILE_IMAGES("IM07", "대표 프로필 이미지가 너무 많은 경우"),
     IMAGE_TOO_LARGE("IM08", "이미지의 크기가 너무 큰 경우"),
 
+
     // Infrastructure 관련
     CAN_NOT_EXCHANGE_OAUTH_PROFILE("I000", "Oauth2 사용자의 프로필을 요청할 수 없는 경우(Provider 서버 예외)"),
     INVALID_TOKEN_SIGNATURE("I001", "JWT 검증 시, JWT 토큰 시그니처가 잘못된 경우"),
@@ -55,6 +56,25 @@ public enum ErrorCode {
     EXPIRED_TOKEN("I003", "JWT 검증 시, JWT 토큰이 만료된 경우"),
     MALFORMED_TOKEN("I004", "JWT 검증 시, 유효하지 않은 JWT 토큰인 경우"),
     CAN_NOT_UPLOAD_IMAGE_TO_S3("I005", "이미지 업로드시, AWS S3에 이미지를 업로드할 수 없는 경우"),
+
+    // 번개 관련
+    INVALID_PARTICIPANTS_COUNT_MIN("B000", "번개 모집 인원 수가 최소 인원 수보다 적을 경우"),
+    INVALID_PARTICIPANTS_COUNT_MAX("B001", "번개 모집 인원 수가 최대 인원 수보다 많을 경우"),
+    EMPTY_BUNGAE_PARTICIPANT_LIST("B002", "번개 참가자 목록이 없는 경우"),
+    EXCEEDED_BUNGAE_PARTICIPANT_LIST_SIZE("B003", "번개 참가자 목록이 최대 인원 수를 초과할 경우"),
+    INVALID_BUNGAE_TITLE_LENGTH("B004", "번개 제목이 최대 길이를 초과할 경우"),
+    INVALID_BUNGAE_AGE_MIN("B005", "최소 나이 제한이 미만일 경우"),
+    INVALID_BUNGAE_AGE_MAX("B006", "최대 나이 제한을 초과할 경우"),
+    INVALID_BUNGAE_AGE_BOUNDS("B007", "나이 하한선이 상한선보다 클 경우"),
+    INVALID_BUNGAE_GENDER_TYPE_VALUE("B008", "성별 타입을 찾을 수 없는 경우"),
+    BUNGAE_CHAT_CAN_NOT_HAVE_LOCATION("B009", "채팅 번개에 장소를 지정할 경우"),
+
+
+    INVALID_LATITUDE("L001", "유효하지 않은 위도 값입니다."),
+    INVALID_LONGITUDE("L002", "유효하지 않은 경도 값입니다."),
+
+    // Category 관련
+    CATEGORY_NOT_FOUND("CT001", "입력된 카테고리 ID에 해당하는 값을 찾을 수 없는 경우"),
 
     // Error
     INTERNAL_SERVER_ERROR("ER001", "예기치 못한 예외가 발생한 경우"),

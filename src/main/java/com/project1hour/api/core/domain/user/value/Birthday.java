@@ -31,7 +31,7 @@ public record Birthday(
     private void validate(final LocalDate birthday) {
         if (MINIMUM_ADULT_BIRTH.isBefore(birthday)) {
             String message = String.format("성인만 가입할 수 있습니다. 최소년생 = %d", MINIMUM_ADULT_BIRTH.getYear());
-            throw new BadRequestException(message, ErrorCode.INVALID_AGE_LIMIT);
+            throw new BadRequestException(message, ErrorCode.INVALID_MEMBER_AGE_LIMIT);
         }
     }
 }

@@ -1,47 +1,34 @@
 package com.project1hour.api.core.domain.bungae.entity;
 
+import com.project1hour.api.core.domain.AbstractDomainEntity;
 import com.project1hour.api.core.domain.bungae.value.BungaeRole;
-import com.project1hour.api.global.entity.AbstractEntity;
-import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.Table;
-import jakarta.persistence.UniqueConstraint;
+import com.project1hour.api.core.domain.bungae.value.ParticipantId;
+import com.project1hour.api.core.domain.user.value.UserId;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
+
 @Getter
-@Table(
-        uniqueConstraints = @UniqueConstraint(columnNames = {"user_id", "bungae_id"})
-)
-@SQLDelete(sql = "UPDATE participant SET deleted_at = now() WHERE participant_id = ?")
-@SQLRestriction("deleted_at IS NULL")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class Participant extends AbstractEntity<Long> {
+public class Participant extends AbstractDomainEntity<ParticipantId> {
 
-    @Id
-    @Tsid
-    @Column(name = "participant_id")
-    private Long id;
+    private ParticipantId id;
 
-    @Column(nullable = false)
-    private Long userId;
+    private UserId userId;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "bungae_id")
-    private Bungae bungae;
-
-    @Enumerated(value = EnumType.STRING)
-    @Column(nullable = false)
     private BungaeRole role;
+
+    @Builder(access = AccessLevel.PROTECTED, toBuilder = true)
+    public Participant(final ParticipantId id, final UserId userId, final BungaeRole role) {
+        this.id = id;
+        this.userId = userId;
+        this.role = role;
+    }
+
+    public static Participant createHostParticipant(final UserId userId, final Bungae bungae) {
+        return Participant.builder()
+                .userId(userId)
+                .role(BungaeRole.HOST)
+                .build();
+    }
 }

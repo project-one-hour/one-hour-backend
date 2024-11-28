@@ -1,11 +1,12 @@
 package com.project1hour.api.core.domain.image.value;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Embeddable;
+import java.util.UUID;
 
-@Embeddable
-public record ImageName(
-        @Column(name = "image_name", length = 50, nullable = false, unique = true)
-        String value
-) {
+public record ImageName(String value) {
+
+    public static ImageName generatedRandom(final String imageExtension) {
+        String randomImageName = UUID.randomUUID().toString();
+        String extension = imageExtension.startsWith(".") ? imageExtension : "." + imageExtension;
+        return new ImageName(randomImageName + extension);
+    }
 }

@@ -1,86 +1,52 @@
 package com.project1hour.api.core.domain.user.entity;
 
-import static com.project1hour.api.core.domain.user.value.ProfileImageType.PRIMARY;
-import static com.project1hour.api.core.domain.user.value.ProfileImageType.SECONDARY;
-
+import com.project1hour.api.core.domain.AbstractDomainEntity;
+import com.project1hour.api.core.domain.image.value.ImageId;
 import com.project1hour.api.core.domain.user.value.Birthday;
 import com.project1hour.api.core.domain.user.value.Gender;
+import com.project1hour.api.core.domain.user.value.InterestId;
 import com.project1hour.api.core.domain.user.value.MarketingConsent;
 import com.project1hour.api.core.domain.user.value.Mbti;
 import com.project1hour.api.core.domain.user.value.Nickname;
 import com.project1hour.api.core.domain.user.value.NotificationConsent;
+import com.project1hour.api.core.domain.user.value.ProfileImageType;
 import com.project1hour.api.core.domain.user.value.SignUpStatus;
-import com.project1hour.api.global.entity.AbstractEntity;
-import io.hypersistence.utils.hibernate.id.Tsid;
-import jakarta.persistence.Column;
-import jakarta.persistence.Embedded;
-import jakarta.persistence.Entity;
-import jakarta.persistence.EnumType;
-import jakarta.persistence.Enumerated;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
-import java.time.LocalDateTime;
-import java.util.ArrayList;
+import com.project1hour.api.core.domain.user.value.UserId;
 import java.util.List;
 import java.util.Optional;
-import java.util.stream.Collectors;
 import lombok.AccessLevel;
 import lombok.Builder;
-import lombok.Builder.ObtainVia;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.SQLRestriction;
 
-@Entity
 @Getter
-@Table(name = "app_user")
-@SQLDelete(sql = "UPDATE app_user SET deleted_at = now() WHERE user_id = ?")
-@SQLRestriction("deleted_at IS NULL")
-@NoArgsConstructor(access = AccessLevel.PROTECTED)
-public class User extends AbstractEntity<Long> {
+@NoArgsConstructor(access = AccessLevel.PROTECTED, force = true)
+public class User extends AbstractDomainEntity<UserId> {
 
-    @Id
-    @Tsid
-    @Column(name = "user_id")
-    private Long id;
+    private final UserId id;
 
-    @Embedded
     private Nickname nickname;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 10)
     private Gender gender;
 
-    @Embedded
     private Birthday birthday;
 
-    @Enumerated(EnumType.STRING)
-    @Column(length = 10)
     private Mbti mbti;
 
-    @Enumerated(EnumType.STRING)
     private MarketingConsent marketingConsent;
 
-    @Enumerated(EnumType.STRING)
     private NotificationConsent notificationConsent;
 
-    @Embedded
-    private UserInterests userInterests;
-
-    @Embedded
-    private ProfileImages profileImages;
-
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
     private SignUpStatus signUpStatus;
 
+    private UserInterests userInterests;
+
+    private ProfileImages profileImages;
+
     @Builder(toBuilder = true)
-    public User(final Long id, final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
+    public User(final UserId id, final Nickname nickname, final Gender gender, final Birthday birthday, final Mbti mbti,
                 final MarketingConsent marketingConsent, final NotificationConsent notificationConsent,
-                final SignUpStatus signUpStatus, final LocalDateTime createdAt, final LocalDateTime updatedAt,
-                @ObtainVia(method = "userInterestsToList") final List<UserInterest> userInterests,
-                @ObtainVia(method = "profileImagesToList") final List<ProfileImage> profileImages) {
+                final SignUpStatus signUpStatus, final UserInterests userInterests, final ProfileImages profileImages) {
         this.id = id;
         this.nickname = nickname;
         this.gender = gender;
@@ -89,79 +55,70 @@ public class User extends AbstractEntity<Long> {
         this.marketingConsent = marketingConsent;
         this.notificationConsent = notificationConsent;
         this.signUpStatus = signUpStatus;
-        super.createdAt = createdAt;
-        super.updatedAt = updatedAt;
-        this.userInterests = createUserInterests(userInterests);
-        this.profileImages = createProfileImages(profileImages);
+        this.userInterests = userInterests;
+        this.profileImages = profileImages;
     }
 
-    public static User createPendingUser() {
+    public static User createAuthenticatedUser() {
         User user = new User();
         user.signUpStatus = SignUpStatus.AUTHENTICATED;
         return user;
     }
 
     public boolean isProfileRequired() {
-        return SignUpStatus.AUTHENTICATED.equals(signUpStatus);
+        return signUpStatus.isAuthenticated();
     }
 
-    private ProfileImages createProfileImages(final List<ProfileImage> profileImages) {
-        if (profileImages == null) {
-            return null;
-        }
-
-        return profileImages.stream()
-                .map(profileImage -> profileImage.toBuilder().user(this).build())
-                .collect(Collectors.collectingAndThen(Collectors.toList(), ProfileImages::new));
+    public List<UserInterest> getUserInterestsToList() {
+        return List.copyOf(userInterests.getUserInterestList());
     }
 
-    private List<ProfileImage> profileImagesToList() {
-        return Optional.ofNullable(profileImages)
-                .map(profileImages -> new ArrayList<>(profileImages.getProfileImageList()))
-                .orElseGet(ArrayList::new);
-    }
-
-    private UserInterests createUserInterests(final List<UserInterest> userInterests) {
-        if (userInterests == null) {
-            return null;
-        }
-
-        return userInterests.stream()
-                .map(userInterest -> userInterest.toBuilder().user(this).build())
-                .collect(Collectors.collectingAndThen(Collectors.toList(), UserInterests::new));
-    }
-
-    private List<UserInterest> userInterestsToList() {
-        return Optional.ofNullable(userInterests)
-                .map(userInterests -> new ArrayList<>(userInterests.getUserInterestList()))
-                .orElseGet(ArrayList::new);
+    public List<ProfileImage> getProfileImagesToList() {
+        return List.copyOf(profileImages.getProfileImageList());
     }
 
     public static class UserBuilder {
 
-        public UserBuilder userInterest(final Long interestId) {
-            if (this.userInterests == null) {
-                this.userInterests = new ArrayList<>();
+        private ProfileImages.ProfileImagesBuilder profileImagesBuilder;
+        private UserInterests.UserInterestsBuilder userInterestsBuilder;
+
+        public UserBuilder userInterest(final InterestId interestId) {
+            if (userInterestsBuilder == null) {
+                userInterestsBuilder = Optional.ofNullable(userInterests)
+                        .map(UserInterests::toBuilder)
+                        .orElseGet(UserInterests::builder);
             }
 
-            UserInterest userInterest = UserInterest.builder()
-                    .interestId(interestId)
-                    .build();
-            this.userInterests.add(userInterest);
+            UserInterest userInterest = UserInterest.createNewUserInterest(interestId);
+            userInterestsBuilder.userInterest(userInterest);
             return this;
         }
 
-        public UserBuilder profileImage(final Long imageId, final boolean isPrimaryImage) {
-            if (this.profileImages == null) {
-                this.profileImages = new ArrayList<>();
+        public UserBuilder profileImage(final ImageId imageId, final boolean isPrimaryImage) {
+            if (profileImagesBuilder == null) {
+                profileImagesBuilder = Optional.ofNullable(profileImages)
+                        .map(ProfileImages::toBuilder)
+                        .orElseGet(ProfileImages::builder);
             }
 
-            ProfileImage profileImage = ProfileImage.builder()
-                    .imageId(imageId)
-                    .profileImageType(isPrimaryImage ? PRIMARY : SECONDARY)
-                    .build();
-            this.profileImages.add(profileImage);
+            ProfileImageType profileImageType = isPrimaryImage ? ProfileImageType.PRIMARY : ProfileImageType.SECONDARY;
+            ProfileImage profileImage = ProfileImage.createNewProfileImage(imageId, profileImageType);
+            profileImagesBuilder.profileImage(profileImage);
             return this;
+        }
+
+        public UserBuilder profileImage(final boolean isPrimaryImage) {
+            return profileImage(null, isPrimaryImage);
+        }
+
+        public User buildWithAggregation() {
+            userInterests = Optional.ofNullable(userInterestsBuilder)
+                    .map(UserInterests.UserInterestsBuilder::build)
+                    .orElse(userInterests);
+            profileImages = Optional.ofNullable(profileImagesBuilder)
+                    .map(ProfileImages.ProfileImagesBuilder::build)
+                    .orElse(profileImages);
+            return build();
         }
     }
 }

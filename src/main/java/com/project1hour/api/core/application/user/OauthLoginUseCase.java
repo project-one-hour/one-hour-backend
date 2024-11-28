@@ -5,7 +5,7 @@ import com.project1hour.api.core.application.user.imports.OauthRestClient;
 import com.project1hour.api.core.application.user.imports.OauthRestClientFactory;
 import com.project1hour.api.core.application.user.imports.OpenIDConnectManager;
 import com.project1hour.api.core.application.user.imports.OpenIDConnectManagerFactory;
-import com.project1hour.api.core.application.user.imports.UserApplicationRepository;
+import com.project1hour.api.core.application.user.imports.UserCommandPort;
 import com.project1hour.api.core.application.user.model.TokenPackage;
 import com.project1hour.api.core.application.user.model.TokenPair;
 import com.project1hour.api.core.application.user.model.UserDetail;
@@ -26,13 +26,14 @@ public class OauthLoginUseCase implements OauthLoginService {
 
     private final OauthRestClientFactory oauthRestClientFactory;
     private final OpenIDConnectManagerFactory openIDConnectManagerFactory;
-    private final UserApplicationRepository userApplicationRepository;
+    private final UserCommandPort userCommandPort;
+
 
     @Override
     public Response login(final Request request) {
         User authenticatedUser = oauthLogin(request.provider(), request.authorizationCode());
 
-        UserDetail userDetail = new UserDetail(authenticatedUser.getId());
+        UserDetail userDetail = new UserDetail(authenticatedUser.getId().id());
         TokenPair tokens = tokenIssuanceUseCase.createTokens(userDetail);
         return new Response(tokens.accessToken(), tokens.refreshToken(), authenticatedUser.isProfileRequired());
     }
@@ -45,6 +46,7 @@ public class OauthLoginUseCase implements OauthLoginService {
         List<WebKey> webKeys = oauthRestClient.requestWebKeys();
         UserSocialInfo userSocialInfo = openIDConnectManager.parseIdTokenByWebKeys(tokenPackage.idToken(), webKeys);
 
-        return userApplicationRepository.saveUserOauthInfo(provider, userSocialInfo.userSocialId(), tokenPackage);
+        return userCommandPort.saveUserOauthInfo(provider, userSocialInfo, tokenPackage)
+                .orElseGet(() -> userCommandPort.saveAuthenticatedUser(User.createAuthenticatedUser()));
     }
 }

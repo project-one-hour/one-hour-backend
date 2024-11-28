@@ -1,7 +1,7 @@
 package com.project1hour.api.core.domain.user.value;
 
-import com.project1hour.api.global.advice.BadRequestException;
 import com.project1hour.api.global.advice.ErrorCode;
+import com.project1hour.api.global.advice.NotFoundException;
 import java.util.Arrays;
 
 /**
@@ -18,7 +18,7 @@ public enum Gender {
                 .findFirst()
                 .orElseThrow(() -> {
                     String message = String.format("일치하는 성별을 찾을 수 없습니다. 입력성별 = %s", upperCaseValue);
-                    return new BadRequestException(message, ErrorCode.INVALID_GENDER_VALUE);
+                    return new NotFoundException(message, ErrorCode.INVALID_GENDER_VALUE);
                 });
     }
 }

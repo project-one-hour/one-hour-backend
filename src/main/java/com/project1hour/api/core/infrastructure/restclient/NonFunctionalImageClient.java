@@ -4,7 +4,6 @@ import com.project1hour.api.core.application.image.imports.ImageClient;
 import com.project1hour.api.global.support.IOUtils;
 import jakarta.annotation.PostConstruct;
 import java.io.InputStream;
-import java.util.UUID;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.context.annotation.Profile;
@@ -21,9 +20,9 @@ public class NonFunctionalImageClient implements ImageClient {
     }
 
     @Override
-    public String uploadImage(final InputStream image, final String imageExtension) {
+    public String uploadImage(final InputStream image, final String imageName) {
         log.info("업로드 이미지 스트림 : {}", image);
-        log.info("이미지 확장자 : {}", imageExtension);
+        log.info("이미지 이름 : {}", imageName);
         try {
             log.info("이미지 크기 : {}", image.available());
         } catch (Exception e) {
@@ -31,6 +30,6 @@ public class NonFunctionalImageClient implements ImageClient {
             IOUtils.closeQuietly(image);
         }
         IOUtils.closeQuietly(image);
-        return UUID.randomUUID() + "." + imageExtension;
+        return "localhost:8080/";
     }
 }

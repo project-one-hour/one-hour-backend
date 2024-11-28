@@ -8,12 +8,11 @@ import io.awspring.cloud.s3.S3Resource;
 import io.awspring.cloud.s3.S3Template;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.UUID;
-import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Profile;
 import org.springframework.stereotype.Component;
 
+// TODO : 배포 전 마지막에 확인
 @Component
 @Profile("prod")
 public class S3ImageClient implements ImageClient {
@@ -34,17 +33,12 @@ public class S3ImageClient implements ImageClient {
     }
 
     @Override
-    public String uploadImage(final InputStream image, final String imageExtension) {
-        try (image) {
-            S3Resource resource = s3Template.upload(bucket, generateFilePath(imageExtension), image);
-            return cdnUrl + resource.getFilename();
+    public String uploadImage(final InputStream imageInput, final String imageName) {
+        try (imageInput) {
+            S3Resource resource = s3Template.upload(bucket, imageName, imageInput);
+            return cdnUrl + savePath;
         } catch (S3Exception | IOException e) {
             throw new InfraStructureException("S3 버킷에 이미지를 업로드할 수 없습니다.", ErrorCode.CAN_NOT_UPLOAD_IMAGE_TO_S3);
         }
-    }
-
-    private String generateFilePath(String extension) {
-        String randomFileName = StringUtils.join(UUID.randomUUID(), ".", extension);
-        return StringUtils.join(savePath, randomFileName);
     }
 }

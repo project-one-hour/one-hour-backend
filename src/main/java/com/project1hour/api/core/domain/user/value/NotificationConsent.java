@@ -6,4 +6,8 @@ public enum NotificationConsent {
     public static NotificationConsent fromBoolean(final boolean allow) {
         return allow ? ALLOW : NOT_ALLOW;
     }
+
+    public boolean isNotificationAllow() {
+        return this == ALLOW;
+    }
 }

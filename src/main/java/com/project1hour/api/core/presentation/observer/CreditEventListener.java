@@ -1,8 +1,8 @@
 package com.project1hour.api.core.presentation.observer;
 
-import com.project1hour.api.core.application.credit.export.WelcomeRewardEventHandler;
-import com.project1hour.api.core.application.credit.export.WelcomeRewardEventHandler.Payload;
-import com.project1hour.api.core.application.user.model.event.UserRegisteredEvent;
+import com.project1hour.api.core.application.credit.exports.WelcomeRewardEventHandler;
+import com.project1hour.api.core.application.credit.exports.WelcomeRewardEventHandler.Payload;
+import com.project1hour.api.core.application.user.model.event.UserUpdatedEvent;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.event.EventListener;
 import org.springframework.stereotype.Component;
@@ -13,9 +13,9 @@ public class CreditEventListener {
 
     private final WelcomeRewardEventHandler welcomeRewardEventHandler;
 
-    @EventListener(UserRegisteredEvent.class)
-    public void rewardWelcomeCreditForNewUser(final UserRegisteredEvent event) {
-        Payload payload = new Payload(event.newUserId());
+    @EventListener(classes = UserUpdatedEvent.class, condition = "#event.isNew()")
+    public void rewardWelcomeCreditForNewUser(final UserUpdatedEvent event) {
+        Payload payload = new Payload(event.userId());
         welcomeRewardEventHandler.rewardWelcomeCredit(payload);
     }
 }
