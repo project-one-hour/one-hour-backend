@@ -9,7 +9,7 @@ public record ProfileImageConfiguredEvents(
         LocalDateTime occurredAt
 ) implements UserDomainEvent {
 
-    public ProfileImageConfiguredEvents(List<ProfileImageConfiguredEvent> eventList) {
+    public ProfileImageConfiguredEvents(final List<ProfileImageConfiguredEvent> eventList) {
         this(eventList, LocalDateTime.now());
     }
 }

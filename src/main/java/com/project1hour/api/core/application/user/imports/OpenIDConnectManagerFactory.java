@@ -12,7 +12,7 @@ public class OpenIDConnectManagerFactory {
 
     private final List<OpenIDConnectManager> openIDConnectManagers;
 
-    public OpenIDConnectManager getOIDCManagerByProvider(String provider) {
+    public OpenIDConnectManager getOIDCManagerByProvider(final String provider) {
         return openIDConnectManagers.stream()
                 .filter(manager -> manager.isSupport(provider))
                 .findAny()

@@ -12,7 +12,7 @@ public class OauthRestClientFactory {
 
     private final List<OauthRestClient> oauthRestClients;
 
-    public OauthRestClient getOauthRestClientByProvider(String provider) {
+    public OauthRestClient getOauthRestClientByProvider(final String provider) {
         return oauthRestClients.stream()
                 .filter(client -> client.isSupport(provider))
                 .findAny()
