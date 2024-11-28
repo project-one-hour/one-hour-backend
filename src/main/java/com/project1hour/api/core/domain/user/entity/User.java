@@ -107,10 +107,6 @@ public class User extends AbstractDomainEntity<UserId> {
             return this;
         }
 
-        public UserBuilder profileImage(final boolean isPrimaryImage) {
-            return profileImage(null, isPrimaryImage);
-        }
-
         public User buildWithAggregation() {
             userInterests = Optional.ofNullable(userInterestsBuilder)
                     .map(UserInterests.UserInterestsBuilder::build)
