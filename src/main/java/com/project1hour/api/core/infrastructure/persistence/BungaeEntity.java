@@ -81,6 +81,9 @@ public class BungaeEntity extends BaseEntity {
     @Column(columnDefinition = "POINT")
     private Polygon<G2D> location;
 
+    @Column(name = "capacity")
+    private Integer capacity;
+
     @Column(nullable = false, updatable = false)
     private LocalDateTime startAt;
 }
