@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.Optional;
 
 public interface BungaeMeetCreationService {
-    void createMeetingBungae(Request request);
+    void createMeetBungae(Request request);
 
     interface Request {
 
@@ -31,10 +31,10 @@ public interface BungaeMeetCreationService {
 
         double longitude();
 
-        int maxParticipants();
+        int capacity();
 
         LocalDateTime startAt();
 
-        Optional<InputStream> optionalImage();
+        Optional<InputStream> optionalImageInput();
     }
 }
