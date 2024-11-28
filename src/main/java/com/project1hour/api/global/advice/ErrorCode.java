@@ -58,8 +58,8 @@ public enum ErrorCode {
     CAN_NOT_UPLOAD_IMAGE_TO_S3("I005", "이미지 업로드시, AWS S3에 이미지를 업로드할 수 없는 경우"),
 
     // 번개 관련
-    INVALID_PARTICIPANTS_COUNT_MIN("B000", "번개 모집 인원 수가 최소 인원 수보다 적을 경우"),
-    INVALID_PARTICIPANTS_COUNT_MAX("B001", "번개 모집 인원 수가 최대 인원 수보다 많을 경우"),
+    INVALID_CAPACITY_COUNT_MIN("B000", "번개 모집 인원 수가 최소 인원 수보다 적을 경우"),
+    INVALID_CAPACITY_COUNT_MAX("B001", "번개 모집 인원 수가 최대 인원 수보다 많을 경우"),
     EMPTY_BUNGAE_PARTICIPANT_LIST("B002", "번개 참가자 목록이 없는 경우"),
     EXCEEDED_BUNGAE_PARTICIPANT_LIST_SIZE("B003", "번개 참가자 목록이 최대 인원 수를 초과할 경우"),
     INVALID_BUNGAE_TITLE_LENGTH("B004", "번개 제목이 최대 길이를 초과할 경우"),
